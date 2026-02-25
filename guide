@@ -1,0 +1,15 @@
+Color guide line 
+Primary: Asphalt Gray #2F2F2F
+Secondary: White #FFFFFF
+Accent: Parking Yellow #FACC15
+Smart Mobility / EV Parking
+Primary: Teal #0D9488
+Secondary: Mint #5EEAD4
+Accent: Electric Blue #2563EB
+Background: Soft White #F8FAFC
+
+Buttons → Green (Pay / Confirm)
+Available slot → Green
+Occupied slot → Red
+Reserved slot → Yellow
+Timer / Active parking → Blue
