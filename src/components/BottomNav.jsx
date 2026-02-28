@@ -1,15 +1,25 @@
-import { useState } from 'react';
 import { Home, Compass, PlugZap, User, MapPin } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const BottomNav = () => {
-    const [activeTab, setActiveTab] = useState('home');
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Determine active tab based on path
+    const getActiveTab = () => {
+        if (location.pathname.includes('/charging')) return 'charge';
+        if (location.pathname === '/' || location.pathname === '') return 'home';
+        return 'home';
+    };
+
+    const activeTab = getActiveTab();
 
     const navItems = [
-        { id: 'home', icon: Home, label: 'Home' },
-        { id: 'parking', icon: MapPin, label: 'Parking' },
-        { id: 'charge', icon: PlugZap, label: 'Charge' },
-        { id: 'explore', icon: Compass, label: 'Explore' },
-        { id: 'profile', icon: User, label: 'Profile' },
+        { id: 'home', icon: Home, label: 'Home', path: '/' },
+        { id: 'parking', icon: MapPin, label: 'Parking', path: '/' },
+        { id: 'charge', icon: PlugZap, label: 'Charge', path: '/charging/1' },
+        { id: 'explore', icon: Compass, label: 'Explore', path: '/' },
+        { id: 'profile', icon: User, label: 'Profile', path: '/' },
     ];
 
     return (
@@ -22,7 +32,7 @@ const BottomNav = () => {
                     return (
                         <button
                             key={item.id}
-                            onClick={() => setActiveTab(item.id)}
+                            onClick={() => navigate(item.path)}
                             className="flex flex-col items-center justify-center gap-1 group relative transition-all duration-300 w-12"
                         >
                             {/* Highlight background pill */}

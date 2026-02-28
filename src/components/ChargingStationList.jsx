@@ -1,4 +1,5 @@
 import { BatteryCharging, MapPin, Zap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const stations = [
     { id: 1, name: "Junction City EV", distance: "0.5 km", available: 2, total: 4, power: "150kW", fast: true },
@@ -7,6 +8,8 @@ const stations = [
 ];
 
 const ChargingStationList = () => {
+    const navigate = useNavigate();
+
     return (
         <section className="mb-8">
             <div className="flex justify-between items-end mb-4">
@@ -58,10 +61,12 @@ const ChargingStationList = () => {
                         </div>
 
                         {/* Action button */}
-                        <button className={`mt-5 w-full py-2.5 rounded-xl text-sm font-bold transition-colors shadow-sm
+                        <button
+                            onClick={() => station.available > 0 && navigate(`/charging/${station.id}`)}
+                            className={`mt-5 w-full py-2.5 rounded-xl text-sm font-bold transition-colors shadow-sm
               ${station.available > 0
-                                ? 'bg-ev-primary text-secondary hover:bg-teal-700'
-                                : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+                                    ? 'bg-ev-primary text-secondary hover:bg-teal-700'
+                                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
                         >
                             {station.available > 0 ? 'Reserve Slot' : 'Full'}
                         </button>
