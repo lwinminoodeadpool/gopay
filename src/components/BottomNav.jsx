@@ -8,6 +8,7 @@ const BottomNav = () => {
     // Determine active tab based on path
     const getActiveTab = () => {
         if (location.pathname.includes('/charging')) return 'charge';
+        if (location.pathname === '/explore') return 'explore';
         if (location.pathname === '/' || location.pathname === '') return 'home';
         return 'home';
     };
@@ -18,7 +19,7 @@ const BottomNav = () => {
         { id: 'home', icon: Home, label: 'Home', path: '/' },
         { id: 'parking', icon: MapPin, label: 'Parking', path: '/' },
         { id: 'charge', icon: PlugZap, label: 'Charge', path: '/charging/1' },
-        { id: 'explore', icon: Compass, label: 'Explore', path: '/' },
+        { id: 'explore', icon: Compass, label: 'Explore', path: '/explore' },
         { id: 'profile', icon: User, label: 'Profile', path: '/' },
     ];
 
