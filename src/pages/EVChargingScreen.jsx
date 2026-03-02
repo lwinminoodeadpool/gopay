@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BatteryCharging, MapPin, Zap, ArrowLeft, Clock, Activity, CreditCard, Navigation, Star } from 'lucide-react';
+import { BatteryCharging, MapPin, Zap, ArrowLeft, Clock, Activity, CreditCard, Navigation, Star, Search, X } from 'lucide-react';
 
 const yangonStations = [
     { id: 1, name: "Junction City EV", location: "Downtown Yangon", distance: "0.5 km", available: 2, total: 4, power: "150kW", fast: true, rating: 4.8 },
@@ -30,6 +30,7 @@ const EVChargingScreen = () => {
     const [energy, setEnergy] = useState(0.00); // kWh
     const [totalCost, setTotalCost] = useState(0);
     const [percentage, setPercentage] = useState(24); // Starting percentage
+    const [searchQuery, setSearchQuery] = useState('');
 
     // Timer and calculation effect
     useEffect(() => {
@@ -95,39 +96,70 @@ const EVChargingScreen = () => {
                         </a>
                     </div>
 
-                    <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory pt-2 pl-2 -ml-2 pr-2">
-                        {yangonStations.filter(s => s.id.toString() !== id).map((station) => (
-                            <div
-                                key={station.id}
-                                onClick={() => {
-                                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                                    navigate(`/charging/${station.id}`);
-                                }}
-                                className="min-w-[280px] bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col gap-3 cursor-pointer hover:shadow-md transition-all snap-center group transform hover:-translate-y-1"
+                    {/* Search Box */}
+                    <div className="relative mb-6">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                            <Search size={18} />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Search station name..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="block w-full pl-10 pr-10 py-3 bg-white border border-gray-100 rounded-2xl text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-ev-primary/20 focus:border-ev-primary transition-all shadow-sm"
+                        />
+                        {searchQuery && (
+                            <button
+                                onClick={() => setSearchQuery('')}
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary transition-colors"
                             >
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${station.fast ? 'bg-accent/10 text-accent' : 'bg-ev-secondary/10 text-ev-secondary'}`}>
-                                        <Zap size={24} />
-                                    </div>
+                                <X size={18} />
+                            </button>
+                        )}
+                    </div>
 
-                                    <div className="flex-1 min-w-0">
-                                        <h4 className="font-bold text-primary truncate group-hover:text-ev-primary transition-colors">{station.name}</h4>
-                                        <div className="flex items-center text-xs text-gray-500 gap-2 mt-0.5">
-                                            <span className="flex items-center gap-1"><MapPin size={12} /> {station.distance}</span>
-                                            <span>•</span>
-                                            <span className="flex items-center gap-1 text-orange-400"><Star size={12} fill="currentColor" /> {station.rating}</span>
+                    <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory pt-2 pl-2 -ml-2 pr-2">
+                        {yangonStations
+                            .filter(s => s.id.toString() !== id)
+                            .filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                            .map((station) => (
+                                <div
+                                    key={station.id}
+                                    onClick={() => {
+                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                        navigate(`/charging/${station.id}`);
+                                    }}
+                                    className="min-w-[280px] bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col gap-3 cursor-pointer hover:shadow-md transition-all snap-center group transform hover:-translate-y-1"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${station.fast ? 'bg-accent/10 text-accent' : 'bg-ev-secondary/10 text-ev-secondary'}`}>
+                                            <Zap size={24} />
+                                        </div>
+
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-bold text-primary truncate group-hover:text-ev-primary transition-colors">{station.name}</h4>
+                                            <div className="flex items-center text-xs text-gray-500 gap-2 mt-0.5">
+                                                <span className="flex items-center gap-1"><MapPin size={12} /> {station.distance}</span>
+                                                <span>•</span>
+                                                <span className="flex items-center gap-1 text-orange-400"><Star size={12} fill="currentColor" /> {station.rating}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div className="flex items-center justify-between pt-2 border-t border-gray-50">
-                                    <span className="text-xs font-bold text-primary bg-gray-50 px-2 py-1 rounded-md">{station.power}</span>
-                                    <span className={`text-[10px] font-bold ${station.available > 0 ? 'text-status-success bg-status-success/10' : 'text-status-danger bg-status-danger/10'} px-2 py-1 rounded-md`}>
-                                        {station.available}/{station.total} Available
-                                    </span>
+                                    <div className="flex items-center justify-between pt-2 border-t border-gray-50">
+                                        <span className="text-xs font-bold text-primary bg-gray-50 px-2 py-1 rounded-md">{station.power}</span>
+                                        <span className={`text-[10px] font-bold ${station.available > 0 ? 'text-status-success bg-status-success/10' : 'text-status-danger bg-status-danger/10'} px-2 py-1 rounded-md`}>
+                                            {station.available}/{station.total} Available
+                                        </span>
+                                    </div>
                                 </div>
+                            ))}
+                        {yangonStations.filter(s => s.id.toString() !== id).filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
+                            <div className="w-full py-10 flex flex-col items-center justify-center text-center">
+                                <Search size={40} className="text-gray-200 mb-2" />
+                                <p className="text-gray-400 text-sm italic">No stations found matching "{searchQuery}"</p>
                             </div>
-                        ))}
+                        )}
                     </div>
                 </div>
 
@@ -171,7 +203,10 @@ const EVChargingScreen = () => {
                     </button>
 
                     {!isCharging && energy > 0 && (
-                        <button className="w-full py-4 rounded-2xl font-bold text-lg bg-[#0052CC] text-white hover:bg-[#0047b3] transition-all shadow-lg shadow-[#0052CC]/25 flex items-center justify-center gap-2 transform active:scale-[0.98]">
+                        <button
+                            onClick={() => navigate('/checkout', { state: { station, energy, totalCost } })}
+                            className="w-full py-4 rounded-2xl font-bold text-lg bg-ev-primary text-secondary hover:bg-teal-700 transition-all shadow-lg shadow-ev-primary/25 flex items-center justify-center gap-2 transform active:scale-[0.98]"
+                        >
                             <CreditCard size={20} />
                             Pay with KBZPay
                         </button>
