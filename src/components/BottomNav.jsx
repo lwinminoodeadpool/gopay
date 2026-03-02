@@ -1,26 +1,34 @@
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Home, Compass, PlugZap, User, MapPin } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
 
 const BottomNav = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Determine active tab based on path
+    // Determine active tab based on current path
     const getActiveTab = () => {
-        if (location.pathname.includes('/charging')) return 'charge';
-        if (location.pathname === '/explore') return 'explore';
-        if (location.pathname === '/' || location.pathname === '') return 'home';
+        const path = location.pathname;
+        if (path === '/') return 'home';
+        if (path.startsWith('/parking')) return 'parking';
+        if (path.startsWith('/charge') || path.startsWith('/charging')) return 'charge';
+        if (path.startsWith('/explore')) return 'explore';
+        if (path.startsWith('/profile')) return 'profile';
         return 'home';
     };
 
     const activeTab = getActiveTab();
 
+    const handleNavigation = (path) => {
+        navigate(path);
+    };
+
     const navItems = [
         { id: 'home', icon: Home, label: 'Home', path: '/' },
-        { id: 'parking', icon: MapPin, label: 'Parking', path: '/' },
-        { id: 'charge', icon: PlugZap, label: 'Charge', path: '/charging/1' },
+        { id: 'parking', icon: MapPin, label: 'Parking', path: '/parking' },
+        { id: 'charge', icon: PlugZap, label: 'Charge', path: '/charge' },
         { id: 'explore', icon: Compass, label: 'Explore', path: '/explore' },
-        { id: 'profile', icon: User, label: 'Profile', path: '/' },
+        { id: 'profile', icon: User, label: 'Profile', path: '/profile' },
     ];
 
     return (
@@ -33,7 +41,7 @@ const BottomNav = () => {
                     return (
                         <button
                             key={item.id}
-                            onClick={() => navigate(item.path)}
+                            onClick={() => handleNavigation(item.path)}
                             className="flex flex-col items-center justify-center gap-1 group relative transition-all duration-300 w-12"
                         >
                             {/* Highlight background pill */}
