@@ -1,0 +1,160 @@
+import { useState } from 'react';
+import {
+    Bell,
+    ChevronDown,
+    ChevronRight,
+    CircleHelp,
+    CreditCard,
+    LogOut,
+    Settings,
+    ShieldCheck,
+    UserRound,
+    Wallet,
+    Car,
+    SquarePen,
+} from 'lucide-react';
+import PaymentHistory from '../components/PaymentHistory';
+
+const profileActions = [
+    { id: 'account', label: 'Account Settings', icon: Settings },
+    { id: 'payment', label: 'Payment Methods', icon: CreditCard },
+    { id: 'security', label: 'Security', icon: ShieldCheck },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'help', label: 'Help Center', icon: CircleHelp },
+];
+
+const vehicleTypes = ['SUV', 'Sedan', 'Hatchback', 'MPV', 'Pickup Trunk', 'EV'];
+
+const Profile = () => {
+    const [selectedVehicleType, setSelectedVehicleType] = useState('SUV');
+    const [showVehicleDetails, setShowVehicleDetails] = useState(false);
+    const [carNumberPlate, setCarNumberPlate] = useState('YGN-12-4821');
+    const [isEditingPlate, setIsEditingPlate] = useState(false);
+
+    return (
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-6">
+            <div className="px-2 pt-2">
+                <header className="bg-white rounded-3xl p-5 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.08)] border border-gray-100 mb-6">
+                    <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-full bg-ev-primary text-secondary flex items-center justify-center font-black text-xl border-2 border-white shadow-md">
+                            JD
+                        </div>
+                        <div className="flex-1">
+                            <h1 className="text-2xl font-black tracking-tight text-primary">John Doe</h1>
+                            <p className="text-sm text-gray-500">john.doe@gopay.app</p>
+                        </div>
+                        <button className="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-primary">
+                            <UserRound size={18} />
+                        </button>
+                    </div>
+
+                    <div className="mt-5 bg-gradient-to-r from-ev-primary to-ev-secondary text-secondary rounded-2xl p-4">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-xs font-semibold text-white/80">Wallet Balance</p>
+                                <p className="text-2xl font-black tracking-tight">MMK 250,000</p>
+                            </div>
+                            <div className="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center">
+                                <Wallet size={20} />
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <section className="bg-white rounded-3xl p-3 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.08)] border border-gray-100 mb-6">
+                    <button
+                        onClick={() => setShowVehicleDetails((prev) => !prev)}
+                        className="w-full flex items-center justify-between px-3 py-4 rounded-2xl text-left hover:bg-gray-50 transition-colors border-b border-gray-50"
+                    >
+                        <span className="flex items-center gap-3">
+                            <span className="w-10 h-10 rounded-xl bg-gray-50 text-primary flex items-center justify-center border border-gray-100">
+                                <Car size={18} />
+                            </span>
+                            <span className="font-semibold text-primary">My Vehicles</span>
+                        </span>
+                        <ChevronDown
+                            size={18}
+                            className={`text-gray-400 transition-transform ${showVehicleDetails ? 'rotate-180' : ''}`}
+                        />
+                    </button>
+
+                    {showVehicleDetails && (
+                        <div className="px-3 py-4 mb-2 bg-gray-50 rounded-2xl mt-3">
+                            <div className="bg-white border border-gray-100 rounded-2xl p-4 mb-4">
+                                <p className="text-xs text-gray-500 font-semibold mb-1">Car Number Plate</p>
+                                <div className="flex items-center justify-between">
+                                    {isEditingPlate ? (
+                                        <input
+                                            type="text"
+                                            value={carNumberPlate}
+                                            onChange={(e) => setCarNumberPlate(e.target.value.toUpperCase())}
+                                            onBlur={() => setIsEditingPlate(false)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    setIsEditingPlate(false);
+                                                }
+                                            }}
+                                            className="flex-1 min-w-0 mr-3 text-lg font-black tracking-tight text-primary bg-transparent outline-none border-b border-ev-primary"
+                                            autoFocus
+                                        />
+                                    ) : (
+                                        <p className="text-lg font-black tracking-tight text-primary">{carNumberPlate}</p>
+                                    )}
+                                    <button
+                                        onClick={() => setIsEditingPlate((prev) => !prev)}
+                                        className="w-9 h-9 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-primary hover:bg-gray-100 transition-colors"
+                                        aria-label="Edit car number plate"
+                                    >
+                                        <SquarePen size={16} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p className="text-xs text-gray-500 font-semibold mb-2">Vehicle Type</p>
+                                <select
+                                    value={selectedVehicleType}
+                                    onChange={(e) => setSelectedVehicleType(e.target.value)}
+                                    className="w-full px-3 py-3 rounded-xl text-sm font-semibold border border-gray-200 bg-white text-primary outline-none focus:border-ev-primary"
+                                >
+                                    {vehicleTypes.map((type) => (
+                                        <option key={type} value={type}>
+                                            {type}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                    )}
+
+                    {profileActions.map((item, index) => {
+                        const Icon = item.icon;
+                        return (
+                            <button
+                                key={item.id}
+                                className={`w-full flex items-center justify-between px-3 py-4 rounded-2xl text-left hover:bg-gray-50 transition-colors ${index !== profileActions.length - 1 ? 'border-b border-gray-50' : ''}`}
+                            >
+                                <span className="flex items-center gap-3">
+                                    <span className="w-10 h-10 rounded-xl bg-gray-50 text-primary flex items-center justify-center border border-gray-100">
+                                        <Icon size={18} />
+                                    </span>
+                                    <span className="font-semibold text-primary">{item.label}</span>
+                                </span>
+                                <ChevronRight size={18} className="text-gray-400" />
+                            </button>
+                        );
+                    })}
+                </section>
+
+                <PaymentHistory />
+
+                <button className="w-full mt-3 bg-white text-status-danger rounded-2xl py-4 font-bold border border-red-100 hover:bg-red-50 transition-colors flex items-center justify-center gap-2">
+                    <LogOut size={18} />
+                    Log Out
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default Profile;

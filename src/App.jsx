@@ -6,10 +6,8 @@ import Explore from './pages/Explore';
 import Checkout from './pages/Checkout';
 import PaymentSuccess from './pages/PaymentSuccess';
 import DigitalReceipt from './pages/DigitalReceipt';
-<<<<<<< HEAD
-=======
 import ParkingPage from './pages/ParkingPage';
->>>>>>> aa70e17 (feat: Implement EV charging payment flow with dedicated checkout, payment success, and digital receipt pages.)
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -22,10 +20,8 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/receipt" element={<DigitalReceipt />} />
-<<<<<<< HEAD
-=======
           <Route path="/parking" element={<ParkingPage />} />
->>>>>>> aa70e17 (feat: Implement EV charging payment flow with dedicated checkout, payment success, and digital receipt pages.)
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </MainLayout>
     </Router>
