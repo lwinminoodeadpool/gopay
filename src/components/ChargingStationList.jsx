@@ -62,7 +62,7 @@ const ChargingStationList = () => {
 
                         {/* Action button */}
                         <button
-                            onClick={() => station.available > 0 && navigate(`/charging/${station.id}`)}
+                            onClick={() => station.available > 0 && navigate('/charge')}
                             className={`mt-5 w-full py-2.5 rounded-xl text-sm font-bold transition-colors shadow-sm
               ${station.available > 0
                                     ? 'bg-ev-primary text-secondary hover:bg-teal-700'

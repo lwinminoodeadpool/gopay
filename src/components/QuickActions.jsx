@@ -7,7 +7,7 @@ const QuickActions = () => {
     return (
         <div className="grid grid-cols-3 gap-3 mb-8">
             <button
-                onClick={() => navigate('/charging/1')}
+                onClick={() => navigate('/charge')}
                 className="bg-ev-primary text-secondary p-4 rounded-3xl flex flex-col items-center justify-center gap-2 shadow-lg shadow-ev-primary/20 hover:-translate-y-1 transition-transform"
             >
                 <div className="bg-white/20 p-3 rounded-full">

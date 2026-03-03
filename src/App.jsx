@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import Home from './pages/Home';
-import EVChargingScreen from './pages/EVChargingScreen';
+import EVFilterScreen from './pages/EVFilterScreen';
+import EVStationList from './pages/EVStationList';
+import EVStationDetails from './pages/EVStationDetails';
 import Explore from './pages/Explore';
 import Checkout from './pages/Checkout';
 import PaymentSuccess from './pages/PaymentSuccess';
@@ -15,8 +17,9 @@ function App() {
       <MainLayout>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/charge" element={<EVChargingScreen />} />
-          <Route path="/charging/:id" element={<EVChargingScreen />} />
+          <Route path="/charge" element={<EVFilterScreen />} />
+          <Route path="/station-list" element={<EVStationList />} />
+          <Route path="/station-details/:id" element={<EVStationDetails />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
