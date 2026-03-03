@@ -15,6 +15,7 @@ function App() {
       <MainLayout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/charge" element={<EVChargingScreen />} />
           <Route path="/charging/:id" element={<EVChargingScreen />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/checkout" element={<Checkout />} />
