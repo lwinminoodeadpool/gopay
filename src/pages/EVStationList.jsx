@@ -73,7 +73,7 @@ const EVStationList = () => {
             {/* Info */}
             <div className="flex-1 flex flex-col justify-between py-1">
                 <div>
-                    <h3 className="text-[#47D496] font-bold text-[15px] leading-tight group-hover:text-[#3dbf87] transition-colors">
+                    <h3 className="text-ev-primary font-bold text-[15px] leading-tight group-hover:text-teal-700 transition-colors">
                         {station.name}
                     </h3>
                     <div className="flex items-center gap-1 mt-0.5">
@@ -84,7 +84,7 @@ const EVStationList = () => {
 
                 <div className="space-y-0.5">
                     <p className="text-gray-700 font-black text-xs">{station.time}</p>
-                    <p className="text-[#47D496] font-extrabold text-xs">{station.distance}</p>
+                    <p className="text-ev-primary font-extrabold text-xs">{station.distance}</p>
                 </div>
             </div>
 
@@ -92,7 +92,7 @@ const EVStationList = () => {
             <div className="flex items-center">
                 <button
                     onClick={() => navigate(`/station-details/${station.id}`)}
-                    className="border-2 border-gray-200 text-gray-700 w-20 py-2 rounded-2xl text-xs font-black shadow-sm active:scale-95 transition-all bg-white hover:border-[#47D496] hover:text-[#47D496] hover:shadow-md"
+                    className="border-2 border-gray-200 text-gray-700 w-20 py-2 rounded-2xl text-xs font-black shadow-sm active:scale-95 transition-all bg-white hover:border-ev-primary hover:text-ev-primary hover:shadow-md"
                 >
                     View
                 </button>
@@ -123,14 +123,14 @@ const EVStationList = () => {
             </header>
 
             {/* Teal Count Bar */}
-            <div className="bg-[#47D496] py-3 px-4 text-center sticky top-[57px] z-40 border-b border-white/10 shadow-[0_4px_12px_-4px_rgba(71,212,150,0.3)]">
+            <div className="bg-ev-primary py-3 px-4 text-center sticky top-[57px] z-40 border-b border-white/10 shadow-[0_4px_12px_-4px_rgba(13,148,136,0.3)]">
                 <div className="flex flex-col items-center">
-                    <h2 className="text-[#1D1D1B] font-black text-lg tracking-tight">Stations ({totalCount})</h2>
+                    <h2 className="text-white font-black text-lg tracking-tight">Stations ({totalCount})</h2>
                     {selectedRegion && (
                         <div className="flex items-center gap-2 mt-0.5">
-                            <div className="h-[1px] w-4 bg-[#1D1D1B]/20"></div>
-                            <p className="text-[#1D1D1B] text-[9px] font-black uppercase tracking-[0.2em]">{regionLabel}</p>
-                            <div className="h-[1px] w-4 bg-[#1D1D1B]/20"></div>
+                            <div className="h-[1px] w-4 bg-white/20"></div>
+                            <p className="text-white text-[9px] font-black uppercase tracking-[0.2em]">{regionLabel}</p>
+                            <div className="h-[1px] w-4 bg-white/20"></div>
                         </div>
                     )}
                 </div>
@@ -157,7 +157,7 @@ const EVStationList = () => {
                         </div>
                         <h3 className="text-gray-800 font-black text-lg mb-2">No results found</h3>
                         <p className="text-gray-400 font-medium text-sm leading-relaxed px-6">
-                            We couldn't find any stations in <span className="text-[#47D496] font-bold">{regionLabel}</span> right now.
+                            We couldn't find any stations in <span className="text-ev-primary font-bold">{regionLabel}</span> right now.
                         </p>
                         <button
                             onClick={() => navigate(-1)}

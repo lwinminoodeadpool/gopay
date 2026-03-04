@@ -137,14 +137,14 @@ const ParkingPage = () => {
                     <div className="animate-in slide-in-from-bottom-6 fade-in duration-500 flex-1 flex flex-col relative z-10 mt-2">
                         <div className="bg-white rounded-[2rem] p-6 shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden flex-1 flex flex-col">
                             {/* Top accent line */}
-                            <div className={`absolute top-0 left-0 right-0 h-1.5 ${parkingData.status === 'ENTERED' ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
+                            <div className={`absolute top-0 left-0 right-0 h-1.5 ${parkingData.status === 'ENTERED' ? 'bg-amber-500' : 'bg-ev-primary'}`}></div>
 
                             <div className="flex justify-between items-start mb-8 mt-2">
                                 <div>
                                     <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Status</p>
                                     <div className="flex items-center gap-2">
-                                        <div className={`w-3 h-3 rounded-full ${parkingData.status === 'ENTERED' ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)] animate-pulse' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]'}`}></div>
-                                        <h3 className={`text-xl font-black ${parkingData.status === 'ENTERED' ? 'text-amber-600' : 'text-emerald-600'}`}>
+                                        <div className={`w-3 h-3 rounded-full ${parkingData.status === 'ENTERED' ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)] animate-pulse' : 'bg-ev-primary shadow-[0_0_8px_rgba(13,148,136,0.6)]'}`}></div>
+                                        <h3 className={`text-xl font-black ${parkingData.status === 'ENTERED' ? 'text-amber-600' : 'text-ev-primary'}`}>
                                             {parkingData.status === 'ENTERED' ? 'Currently Parked' : 'Checked Out'}
                                         </h3>
                                     </div>
@@ -156,7 +156,7 @@ const ParkingPage = () => {
 
                             <div className="space-y-4 mb-8 flex-1">
                                 <div className="flex bg-slate-50/80 rounded-2xl p-4 items-center gap-5 border border-slate-100 hover:border-slate-200 transition-colors">
-                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${parkingData.status === 'ENTERED' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'}`}>
+                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${parkingData.status === 'ENTERED' ? 'bg-amber-100 text-amber-600' : 'bg-ev-primary/10 text-ev-primary'}`}>
                                         <Clock size={24} />
                                     </div>
                                     <div>
@@ -168,7 +168,7 @@ const ParkingPage = () => {
                                 </div>
 
                                 <div className="flex bg-slate-50/80 rounded-2xl p-4 items-center gap-5 border border-slate-100 hover:border-slate-200 transition-colors">
-                                    <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                                    <div className="w-12 h-12 rounded-full bg-ev-primary/10 flex items-center justify-center text-ev-primary shrink-0">
                                         <CreditCard size={24} />
                                     </div>
                                     <div>
@@ -190,9 +190,9 @@ const ParkingPage = () => {
                                 <button
                                     onClick={handlePayment}
                                     disabled={loading}
-                                    className="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-[0.98] text-white font-black py-4 rounded-2xl shadow-lg shadow-emerald-500/30 transition-all duration-200 flex items-center justify-center gap-2 mt-auto text-lg overflow-hidden relative group"
+                                    className="w-full bg-ev-primary hover:bg-teal-700 active:scale-[0.98] text-white font-black py-4 rounded-2xl shadow-lg shadow-ev-primary/30 transition-all duration-200 flex items-center justify-center gap-2 mt-auto text-lg overflow-hidden relative group"
                                 >
-                                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                                    <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                                     {loading ? (
                                         <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin relative z-10"></div>
                                     ) : (
@@ -209,11 +209,11 @@ const ParkingPage = () => {
                 {/* Success State */}
                 {paymentSuccess && !loading && (
                     <div className="animate-in slide-in-from-bottom-8 fade-in duration-500 flex-1 flex flex-col justify-center items-center text-center p-8 bg-white rounded-[2.5rem] shadow-2xl shadow-emerald-500/10 border border-emerald-100 mb-6 mt-4 relative overflow-hidden z-10">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-400/20 rounded-full mix-blend-multiply blur-3xl -z-10"></div>
-                        <div className="absolute bottom-0 left-0 w-32 h-32 bg-teal-400/20 rounded-full mix-blend-multiply blur-3xl -z-10"></div>
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-ev-primary/20 rounded-full mix-blend-multiply blur-3xl -z-10"></div>
+                        <div className="absolute bottom-0 left-0 w-32 h-32 bg-ev-primary/20 rounded-full mix-blend-multiply blur-3xl -z-10"></div>
 
-                        <div className="w-24 h-24 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-full flex items-center justify-center text-emerald-500 mb-8 shadow-inner border border-emerald-200/50 relative">
-                            <div className="absolute inset-0 rounded-full animate-ping bg-emerald-400/20"></div>
+                        <div className="w-24 h-24 bg-gradient-to-br from-ev-primary/20 to-ev-primary/5 rounded-full flex items-center justify-center text-ev-primary mb-8 shadow-inner border border-ev-primary/20 relative">
+                            <div className="absolute inset-0 rounded-full animate-ping bg-ev-primary/20"></div>
                             <CheckCircle2 size={48} className="relative z-10 drop-shadow-sm" />
                         </div>
                         <h2 className="text-3xl font-black text-slate-800 mb-3 tracking-tight">Payment Successful!</h2>

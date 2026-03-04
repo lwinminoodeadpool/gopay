@@ -201,7 +201,7 @@ const EVStationDetails = () => {
                 {/* Carousel indicators dot (visual only) */}
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 opacity-80">
                     <div className="w-2 h-2 rounded-full bg-white opacity-40"></div>
-                    <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
+                    <div className="w-2 h-2 rounded-full bg-ev-primary shadow-[0_0_8px_rgba(13,148,136,0.6)]"></div>
                     <div className="w-2 h-2 rounded-full bg-white opacity-40"></div>
                 </div>
             </div>
@@ -212,9 +212,9 @@ const EVStationDetails = () => {
                     <div className="flex justify-between items-start mb-6">
                         <div>
                             <h2 className="text-2xl font-black text-primary leading-tight">{station.name}</h2>
-                            <p className="text-emerald-500 font-bold text-lg mt-0.5">{station.location}</p>
+                            <p className="text-ev-primary font-bold text-lg mt-0.5">{station.location}</p>
                         </div>
-                        <button className="bg-gradient-to-r from-emerald-400 to-emerald-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20 active:scale-95 transition-all">
+                        <button className="bg-ev-primary text-white px-8 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-ev-primary/20 active:scale-95 transition-all">
                             Call
                         </button>
                     </div>
@@ -225,7 +225,7 @@ const EVStationDetails = () => {
                     <div className="grid grid-cols-2 gap-y-6 gap-x-4">
                         <div className="flex items-center gap-3">
                             <div className="text-gray-400"><Telescope size={20} /></div>
-                            <span className="text-emerald-500 font-black text-sm">{station.distance}</span>
+                            <span className="text-ev-primary font-black text-sm">{station.distance}</span>
                         </div>
                         <div className="flex items-center gap-3">
                             <div className="text-gray-400"><Briefcase size={20} /></div>
@@ -241,7 +241,7 @@ const EVStationDetails = () => {
                         </div>
                         <div className="flex items-center gap-3">
                             <div className="text-gray-400"><CircleDollarSign size={20} /></div>
-                            <span className="text-emerald-500 font-black text-sm">{station.price}</span>
+                            <span className="text-ev-primary font-black text-sm">{station.price}</span>
                         </div>
                         <div className="flex items-center gap-3">
                             <div className="text-gray-400"><Utensils size={20} /></div>
@@ -261,7 +261,7 @@ const EVStationDetails = () => {
                                 သင်၏တည်နေရာမှ အားသွင်းရုံသို့ သွားရန် လမ်းကြောင်းအား Google Map တွင် ကြည့်ရန်
                             </p>
                         </div>
-                        <button className="bg-gradient-to-r from-emerald-400 to-emerald-500 text-white px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 shadow-sm whitespace-nowrap active:scale-95 transition-all">
+                        <button className="bg-ev-primary text-white px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 shadow-sm whitespace-nowrap active:scale-95 transition-all">
                             <ArrowRightCircle size={14} />
                             Directions
                         </button>
@@ -280,7 +280,7 @@ const EVStationDetails = () => {
                                 </div>
 
                                 <div className="flex flex-col items-center mr-8">
-                                    <div className="text-emerald-500 bg-emerald-50 p-1.5 rounded-full mb-1">
+                                    <div className="text-ev-primary bg-ev-primary/10 p-1.5 rounded-full mb-1">
                                         <Zap size={18} fill="currentColor" />
                                     </div>
                                     <span className="text-[10px] font-black text-gray-400 tracking-tighter">{point.type}</span>
@@ -291,9 +291,9 @@ const EVStationDetails = () => {
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                    <span className="text-emerald-500 font-black text-xs uppercase tracking-wider">{point.status}</span>
-                                    <div className="w-5 h-5 rounded-full border-2 border-emerald-400 flex items-center justify-center">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
+                                    <span className="text-ev-primary font-black text-xs uppercase tracking-wider">{point.status}</span>
+                                    <div className="w-5 h-5 rounded-full border-2 border-ev-primary flex items-center justify-center">
+                                        <div className="w-2.5 h-2.5 rounded-full bg-ev-primary"></div>
                                     </div>
                                 </div>
                             </div>
