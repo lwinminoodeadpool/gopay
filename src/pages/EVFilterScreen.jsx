@@ -67,6 +67,19 @@ const PlugTypeIcon = ({ type, colorClass = "text-ev-primary" }) => {
 const EVFilterScreen = () => {
   const navigate = useNavigate();
   const [selectedPlug, setSelectedPlug] = useState(null);
+  const [selectedServices, setSelectedServices] = useState([]);
+  const services = [
+    { label: 'Self Charge', Icon: BatteryCharging },
+    { label: 'Accessories', Icon: ShoppingBag }
+  ];
+
+  const toggleService = (label) => {
+    setSelectedServices(prev =>
+      prev.includes(label)
+        ? prev.filter(s => s !== label)
+        : [...prev, label]
+    );
+  };
 
   const plugTypes = ['AC GBT', 'AC Type 2', 'DC GBT', 'DC CCS2'];
 
@@ -75,6 +88,7 @@ const EVFilterScreen = () => {
   const getResultCount = () => {
     let count = 235; // Base count
     if (selectedPlug) count -= 40;
+    count -= (selectedServices.length * 15);
     return Math.max(0, count);
   };
 
@@ -83,6 +97,7 @@ const EVFilterScreen = () => {
     navigate(targetPath, {
       state: {
         plug: selectedPlug,
+        services: selectedServices,
         view: viewType
       }
     });
@@ -102,10 +117,12 @@ const EVFilterScreen = () => {
         {/* Results Button moved to top */}
         <button
           onClick={() => handleShowResults('list')}
-          className="w-full bg-ev-primary text-secondary py-5 rounded-2xl font-black shadow-xl shadow-ev-primary/30 flex flex-col items-center justify-center leading-none active:scale-[0.98] transition-all border-b-4 border-black/10 mb-2"
+          className="w-full bg-white text-primary py-5 px-6 rounded-2xl font-bold shadow-lg flex flex-row items-center justify-between leading-none active:scale-[0.98] transition-all border border-ev-primary mb-8 group"
         >
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80 mb-1.5">Show Charging Stations</span>
-          <span className="text-lg">Show Results ({getResultCount()})</span>
+          <span className="text-lg">Charging Stations</span>
+          <div className="bg-ev-primary/10 p-2 rounded-full text-ev-primary group-active:scale-95 transition-transform">
+            <BatteryCharging size={20} />
+          </div>
         </button>
 
         {/* Plug Type Section */}
@@ -116,14 +133,43 @@ const EVFilterScreen = () => {
               <button
                 key={type}
                 onClick={() => setSelectedPlug(type === selectedPlug ? null : type)}
-                className={`flex flex-col items-center justify-center p-4 border-gray-100 transition-all ${index % 2 === 0 ? 'border-r' : ''
-                  } ${index < 2 ? 'border-b' : ''} ${selectedPlug === type ? 'bg-ev-primary/10 ring-2 ring-inset ring-ev-primary' : 'bg-white hover:bg-gray-50'
+                className={`flex flex-col items-center justify-center p-4 border-gray-100 border-b-2 border-b-ev-primary transition-all ${index % 2 === 0 ? 'border-r' : ''
+                  } ${selectedPlug === type ? 'bg-ev-primary/10 ring-2 ring-inset ring-ev-primary' : 'bg-white hover:bg-gray-50'
                   }`}
               >
                 <div className="mb-3">
                   <PlugTypeIcon type={type} colorClass={selectedPlug === type ? 'text-ev-primary' : 'text-gray-400'} />
                 </div>
                 <span className={`text-[10px] font-bold uppercase ${selectedPlug === type ? 'text-ev-primary' : 'text-gray-500'}`}>{type}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Available Service Section */}
+        <section>
+          <h2 className="text-sm font-bold text-gray-800 mb-4 px-1">Available Service</h2>
+          <div className="grid grid-cols-2 border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+            {services.map((service, index) => (
+              <button
+                key={service.label}
+                onClick={() => {
+                  if (service.label === 'Accessories') {
+                    navigate('/explore');
+                  } else if (service.label === 'Self Charge') {
+                    navigate('/station-list');
+                  } else {
+                    toggleService(service.label);
+                  }
+                }}
+                className={`flex flex-col items-center justify-center p-4 border-gray-100 border-b-2 border-b-ev-primary transition-all ${index % 2 === 0 ? 'border-r' : ''
+                  } ${selectedServices.includes(service.label) ? 'bg-ev-primary/10 ring-2 ring-inset ring-ev-primary' : 'bg-white hover:bg-gray-50'
+                  }`}
+              >
+                <div className="mb-3">
+                  <service.Icon size={40} className={selectedServices.includes(service.label) ? 'text-ev-primary' : 'text-gray-400'} />
+                </div>
+                <span className={`text-[10px] font-bold uppercase ${selectedServices.includes(service.label) ? 'text-ev-primary' : 'text-gray-500'}`}>{service.label}</span>
               </button>
             ))}
           </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
     ChevronLeft,
@@ -8,7 +8,8 @@ import {
     Zap,
     Search,
     Filter,
-    Star
+    Star,
+    X
 } from 'lucide-react';
 
 // Map region IDs to Burmese names for the sub-header
@@ -25,7 +26,7 @@ const regionNames = {
     sagaing: 'စစ်ကိုင်း (Sagaing)',
     tanintharyi: 'တနင်္သာရီ (Tanintharyi)',
     rakhine: 'ရခိုင် (Rakhine)',
-    kachin: 'ကချင် (Kachin)',
+    kachin: 'ကယား (Kachin)',
     kayah: 'ကယား (Kayah)',
     kayin: 'ကရင် (Kayin)',
     chin: 'ချင်း (Chin)'
@@ -49,6 +50,7 @@ const EVStationList = () => {
     const location = useLocation();
     const filters = location.state || {};
     const selectedRegion = filters.region;
+    const [searchQuery, setSearchQuery] = useState('');
 
     // List item component for consistency
     const StationItem = ({ station }) => (
@@ -100,14 +102,16 @@ const EVStationList = () => {
         </div>
     );
 
-    // Filter stations based on selection
-    const filteredStations = selectedRegion
-        ? allStations.filter(s => s.region === selectedRegion)
-        : allStations;
+    // Filter stations based on selection and search query
+    const filteredStations = allStations.filter(station => {
+        const matchesRegion = selectedRegion ? station.region === selectedRegion : true;
+        const matchesSearch = station.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            station.location.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesRegion && matchesSearch;
+    });
 
     // Region label for the sub-header
     const regionLabel = selectedRegion ? regionNames[selectedRegion] : 'All Regions';
-    const totalCount = selectedRegion ? filteredStations.length : filteredStations.length + 80;
 
     return (
         <div className="min-h-screen bg-white font-sans text-primary">
@@ -122,16 +126,26 @@ const EVStationList = () => {
                 <h1 className="flex-1 text-center text-lg font-black text-primary pr-8 uppercase tracking-tighter">EV charging station</h1>
             </header>
 
-            {/* Teal Count Bar */}
-            <div className="bg-ev-primary py-3 px-4 text-center sticky top-[57px] z-40 border-b border-white/10 shadow-[0_4px_12px_-4px_rgba(13,148,136,0.3)]">
-                <div className="flex flex-col items-center">
-                    <h2 className="text-white font-black text-lg tracking-tight">Stations ({totalCount})</h2>
-                    {selectedRegion && (
-                        <div className="flex items-center gap-2 mt-0.5">
-                            <div className="h-[1px] w-4 bg-white/20"></div>
-                            <p className="text-white text-[9px] font-black uppercase tracking-[0.2em]">{regionLabel}</p>
-                            <div className="h-[1px] w-4 bg-white/20"></div>
-                        </div>
+            {/* Search Bar Section */}
+            <div className="p-4 bg-white sticky top-[57px] z-30 border-b border-gray-50 shadow-sm">
+                <div className="relative group">
+                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-ev-primary transition-colors">
+                        <Search size={18} />
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Search stations, cities, locations..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-gray-100 border-none rounded-2xl py-3.5 pl-12 pr-12 text-sm font-bold text-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-ev-primary/20 focus:bg-white transition-all outline-none"
+                    />
+                    {searchQuery && (
+                        <button
+                            onClick={() => setSearchQuery('')}
+                            className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-primary transition-colors"
+                        >
+                            <X size={18} />
+                        </button>
                     )}
                 </div>
             </div>

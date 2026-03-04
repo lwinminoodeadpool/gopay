@@ -27,10 +27,6 @@ const stationsData = {
         service: "Self Charge",
         address: "No.44(B), Nat Mauk Road, Bahan, Yangon.",
         image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80",
-        chargingPoints: [
-            { id: 1, name: "Café JJ 1", type: "AC GBT", power: "7 kW", status: "Available" },
-            { id: 2, name: "Café JJ 2", type: "AC GBT", power: "7 kW", status: "Available" }
-        ]
     },
     2: {
         name: "12 INYA Fusion & Lounge",
@@ -43,10 +39,6 @@ const stationsData = {
         service: "Restaurant",
         address: "No.12, Inya Lake Side, Mayangone, Yangon.",
         image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
-        chargingPoints: [
-            { id: 1, name: "INYA 1", type: "DC CCS2", power: "60 kW", status: "Available" },
-            { id: 2, name: "INYA 2", type: "AC GBT", power: "22 kW", status: "Offline" }
-        ]
     },
     3: {
         name: "Melia Yangon Hotel",
@@ -59,10 +51,6 @@ const stationsData = {
         service: "Hotel / Lobby",
         address: "No.192, Kaba Aye Pagoda Road, Bahan, Yangon.",
         image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80",
-        chargingPoints: [
-            { id: 1, name: "Melia Pad 1", type: "DC CCS2", power: "120 kW", status: "Available" },
-            { id: 2, name: "Melia Pad 2", type: "DC CCS2", power: "120 kW", status: "Occupied" }
-        ]
     },
     4: {
         name: "Mandalay Hill Resort",
@@ -75,9 +63,6 @@ const stationsData = {
         service: "Hotel / Mall",
         address: "No.9, Kwin (413), Near Mandalay Hill, Mandalay.",
         image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
-        chargingPoints: [
-            { id: 1, name: "MDY-1", type: "AC GBT", power: "7 kW", status: "Available" }
-        ]
     },
     5: {
         name: "Capital EV Hub",
@@ -90,10 +75,6 @@ const stationsData = {
         service: "Shopping",
         address: "No.1, Yaza Thingaha Road, Ottarathiri, Nay Pyi Taw.",
         image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80",
-        chargingPoints: [
-            { id: 1, name: "HUB 1", type: "DC CHAdeMO", power: "50 kW", status: "Available" },
-            { id: 2, name: "HUB 2", type: "DC CCS2", power: "50 kW", status: "Available" }
-        ]
     },
     6: {
         name: "115 Miles Stop",
@@ -106,10 +87,6 @@ const stationsData = {
         service: "Self Charge",
         address: "115 Miles, Yangon-Mandalay Expressway.",
         image: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800&q=80",
-        chargingPoints: [
-            { id: 1, name: "EXPWY A", type: "DC CCS2", power: "180 kW", status: "Available" },
-            { id: 2, name: "EXPWY B", type: "DC CCS2", power: "180 kW", status: "Available" }
-        ]
     },
     7: {
         name: "Bago Royal Station",
@@ -122,9 +99,6 @@ const stationsData = {
         service: "Self Charge",
         address: "Main Road, Near Bago Railway Station, Bago.",
         image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80",
-        chargingPoints: [
-            { id: 1, name: "BAGO-1", type: "AC GBT", power: "11 kW", status: "Available" }
-        ]
     },
     8: {
         name: "Sky Suites",
@@ -137,9 +111,6 @@ const stationsData = {
         service: "Hotel / Mall",
         address: "Bahan Tower, Link Road, Yangon.",
         image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
-        chargingPoints: [
-            { id: 1, name: "SKY 1", type: "DC CCS2", power: "30 kW", status: "Occupied" }
-        ]
     },
     9: {
         name: "MG Yangon",
@@ -152,9 +123,6 @@ const stationsData = {
         service: "Self Charge",
         address: "MG Showroom, Kaba Aye Pagoda Road, Yangon.",
         image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80",
-        chargingPoints: [
-            { id: 1, name: "MG-A", type: "AC GBT", power: "7 kW", status: "Available" }
-        ]
     },
     10: {
         name: "Essential Motors",
@@ -167,9 +135,6 @@ const stationsData = {
         service: "Self Charge",
         address: "Ahlone Road, Dagon Township, Yangon.",
         image: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800&q=80",
-        chargingPoints: [
-            { id: 1, name: "EM-1", type: "DC CCS2", power: "60 kW", status: "Available" }
-        ]
     }
 };
 
@@ -255,51 +220,15 @@ const EVStationDetails = () => {
                     </div>
 
                     {/* Directions Section */}
-                    <div className="mt-8 bg-[#F8F9FA] rounded-[2rem] p-5 flex items-center justify-between border border-gray-100">
-                        <div className="flex-1 mr-4">
-                            <p className="text-gray-600 text-xs font-bold leading-relaxed">
-                                သင်၏တည်နေရာမှ အားသွင်းရုံသို့ သွားရန် လမ်းကြောင်းအား Google Map တွင် ကြည့်ရန်
-                            </p>
-                        </div>
-                        <button className="bg-ev-primary text-white px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 shadow-sm whitespace-nowrap active:scale-95 transition-all">
-                            <ArrowRightCircle size={14} />
+                    <div className="mt-8 bg-[#F8F9FA] rounded-[2rem] p-5 flex items-center justify-center border border-gray-100">
+                        <button className="bg-ev-primary text-white px-8 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 shadow-sm whitespace-nowrap active:scale-95 transition-all">
+                            <ArrowRightCircle size={16} />
                             Directions
                         </button>
                     </div>
                 </div>
 
-                {/* Charging Points Section */}
-                <div className="mt-6">
-                    <h3 className="text-xl font-black text-primary px-2 mb-4 tracking-tight">Charging Points</h3>
 
-                    <div className="space-y-4">
-                        {station.chargingPoints.map((point) => (
-                            <div key={point.id} className="bg-white rounded-2xl p-4 flex items-center shadow-sm border border-gray-100 group">
-                                <div className="border border-gray-200 rounded-lg px-4 py-2 font-black text-sm text-primary mr-6 bg-white shadow-sm group-hover:border-emerald-400 transition-colors">
-                                    {point.name}
-                                </div>
-
-                                <div className="flex flex-col items-center mr-8">
-                                    <div className="text-ev-primary bg-ev-primary/10 p-1.5 rounded-full mb-1">
-                                        <Zap size={18} fill="currentColor" />
-                                    </div>
-                                    <span className="text-[10px] font-black text-gray-400 tracking-tighter">{point.type}</span>
-                                </div>
-
-                                <div className="flex-1">
-                                    <p className="text-lg font-black text-primary leading-none">{point.power}</p>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                    <span className="text-ev-primary font-black text-xs uppercase tracking-wider">{point.status}</span>
-                                    <div className="w-5 h-5 rounded-full border-2 border-ev-primary flex items-center justify-center">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-ev-primary"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
             </main>
         </div>
     );
