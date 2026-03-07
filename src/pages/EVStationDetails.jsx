@@ -171,64 +171,94 @@ const EVStationDetails = () => {
                 </div>
             </div>
 
-            <main className="p-4 -mt-4 relative">
-                {/* Station Info Card */}
+            <main className="p-4 -mt-6 relative z-10 flex flex-col gap-5">
+                {/* Header Info Card */}
                 <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-                    <div className="flex justify-between items-start mb-6">
+                    <div className="flex justify-between items-start mb-4">
                         <div>
                             <h2 className="text-2xl font-black text-primary leading-tight">{station.name}</h2>
-                            <p className="text-ev-primary font-bold text-lg mt-0.5">{station.location}</p>
+                            <p className="text-ev-primary font-bold text-base mt-1">{station.location}</p>
                         </div>
-                        <button className="bg-ev-primary text-white px-8 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-ev-primary/20 active:scale-95 transition-all">
-                            Call
+                        {/* Availability Badge */}
+                        <div className="bg-green-100 text-green-700 px-3 py-1.5 rounded-2xl font-bold text-xs flex items-center gap-1.5">
+                            <Zap size={14} className="fill-current" /> Available
+                        </div>
+                    </div>
+
+                    <div className="flex items-start gap-3 mb-6 bg-[#F8F9FA] p-4 rounded-2xl border border-gray-50">
+                        <div className="text-ev-primary mt-0.5"><MapPin size={20} /></div>
+                        <p className="text-gray-600 font-semibold text-sm leading-relaxed">{station.address}</p>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-3">
+                        <button className="flex-1 bg-ev-primary/10 text-ev-primary py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 active:scale-95 transition-all">
+                            <Phone size={18} /> Call
                         </button>
-                    </div>
-
-                    <div className="h-[1px] bg-gray-50 w-full mb-6" />
-
-                    {/* Info Grid */}
-                    <div className="grid grid-cols-2 gap-y-6 gap-x-4">
-                        <div className="flex items-center gap-3">
-                            <div className="text-gray-400"><Telescope size={20} /></div>
-                            <span className="text-ev-primary font-black text-sm">{station.distance}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="text-gray-400"><Briefcase size={20} /></div>
-                            <span className="text-gray-600 font-bold text-sm tracking-tight truncate">{station.business}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="text-gray-400"><Clock size={20} /></div>
-                            <span className="text-gray-600 font-bold text-sm">{station.hours}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="text-gray-400"><Phone size={20} /></div>
-                            <span className="text-gray-600 font-bold text-sm">{station.phone}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="text-gray-400"><CircleDollarSign size={20} /></div>
-                            <span className="text-ev-primary font-black text-sm">{station.price}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="text-gray-400"><Utensils size={20} /></div>
-                            <span className="text-gray-600 font-bold text-sm">{station.service}</span>
-                        </div>
-                    </div>
-
-                    <div className="flex items-start gap-3 mt-6">
-                        <div className="text-gray-400 mt-0.5"><MapPin size={20} /></div>
-                        <p className="text-gray-600 font-bold text-sm leading-relaxed">{station.address}</p>
-                    </div>
-
-                    {/* Directions Section */}
-                    <div className="mt-8 bg-[#F8F9FA] rounded-[2rem] p-5 flex items-center justify-center border border-gray-100">
-                        <button className="bg-ev-primary text-white px-8 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 shadow-sm whitespace-nowrap active:scale-95 transition-all">
-                            <ArrowRightCircle size={16} />
-                            Directions
+                        <button className="flex-1 bg-ev-primary text-white py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-sm shadow-ev-primary/20 active:scale-95 transition-all">
+                            <Navigation size={18} /> Directions
                         </button>
                     </div>
                 </div>
 
+                {/* Details Grid Card */}
+                <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+                    <h3 className="font-bold text-lg text-primary mb-4">Station Details</h3>
+                    <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-blue-50 p-2.5 rounded-xl text-blue-500"><Telescope size={20} /></div>
+                            <div>
+                                <p className="text-gray-400 text-xs font-semibold mb-0.5">Distance</p>
+                                <p className="text-gray-900 font-bold text-sm">{station.distance}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="bg-purple-50 p-2.5 rounded-xl text-purple-500"><Briefcase size={20} /></div>
+                            <div className="min-w-0">
+                                <p className="text-gray-400 text-xs font-semibold mb-0.5">Business</p>
+                                <p className="text-gray-900 font-bold text-sm truncate">{station.business}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="bg-orange-50 p-2.5 rounded-xl text-orange-500"><Clock size={20} /></div>
+                            <div>
+                                <p className="text-gray-400 text-xs font-semibold mb-0.5">Hours</p>
+                                <p className="text-gray-900 font-bold text-sm">{station.hours}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="bg-indigo-50 p-2.5 rounded-xl text-indigo-500"><Phone size={20} /></div>
+                            <div>
+                                <p className="text-gray-400 text-xs font-semibold mb-0.5">Contact</p>
+                                <p className="text-gray-900 font-bold text-sm">{station.phone}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="bg-green-50 p-2.5 rounded-xl text-green-500"><Utensils size={20} /></div>
+                            <div>
+                                <p className="text-gray-400 text-xs font-semibold mb-0.5">Service</p>
+                                <p className="text-gray-900 font-bold text-sm">{station.service}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                {/* Pricing & KBZPay Card */}
+                <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 mb-6">
+                    <div className="flex items-center justify-between mb-5">
+                        <h3 className="font-bold text-lg text-primary">Charging Rate</h3>
+                        <div className="flex items-center gap-2 bg-ev-primary/10 px-4 py-2 rounded-xl text-ev-primary">
+                            <CircleDollarSign size={20} />
+                            <span className="font-black text-lg">{station.price}</span>
+                        </div>
+                    </div>
+
+                    {/* KBZPay Button */}
+                    <button className="w-full bg-[#0055A6] text-white py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-3 shadow-lg shadow-blue-900/20 active:scale-95 transition-all mt-2">
+                        <div className="px-2 py-0.5 bg-white text-[#0055A6] rounded text-xs italic font-black">KBZPay</div>
+                        Pay with KBZPay
+                    </button>
+                </div>
             </main>
         </div>
     );

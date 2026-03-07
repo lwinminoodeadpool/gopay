@@ -9,15 +9,15 @@ import {
   Bed,
   User,
   ChevronRight,
-  BatteryCharging
+  BatteryCharging,
+  CircleDollarSign
 } from 'lucide-react';
 
 const PlugTypeIcon = ({ type, colorClass = "text-ev-primary" }) => {
-  // Simple representation of plug types as requested in the design
   switch (type) {
     case 'AC GBT':
       return (
-        <svg viewBox="0 0 24 24" className={`w-12 h-12 ${colorClass}`} fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg viewBox="0 0 24 24" className={`w-10 h-10 ${colorClass}`} fill="none" stroke="currentColor" strokeWidth="1.5">
           <rect x="6" y="6" width="12" height="12" rx="4" />
           <circle cx="9" cy="9" r="1" fill="currentColor" />
           <circle cx="15" cy="9" r="1" fill="currentColor" />
@@ -28,7 +28,7 @@ const PlugTypeIcon = ({ type, colorClass = "text-ev-primary" }) => {
       );
     case 'AC Type 2':
       return (
-        <svg viewBox="0 0 24 24" className={`w-12 h-12 ${colorClass}`} fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg viewBox="0 0 24 24" className={`w-10 h-10 ${colorClass}`} fill="none" stroke="currentColor" strokeWidth="1.5">
           <circle cx="12" cy="12" r="7" />
           <circle cx="12" cy="8" r="1" fill="currentColor" />
           <circle cx="9" cy="10" r="1" fill="currentColor" />
@@ -40,7 +40,7 @@ const PlugTypeIcon = ({ type, colorClass = "text-ev-primary" }) => {
       );
     case 'DC GBT':
       return (
-        <svg viewBox="0 0 24 24" className={`w-12 h-12 ${colorClass}`} fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg viewBox="0 0 24 24" className={`w-10 h-10 ${colorClass}`} fill="none" stroke="currentColor" strokeWidth="1.5">
           <rect x="7" y="5" width="10" height="14" rx="3" />
           <circle cx="10" cy="8" r="1" fill="currentColor" />
           <circle cx="14" cy="8" r="1" fill="currentColor" />
@@ -52,7 +52,7 @@ const PlugTypeIcon = ({ type, colorClass = "text-ev-primary" }) => {
       );
     case 'DC CCS2':
       return (
-        <svg viewBox="0 0 24 24" className={`w-12 h-12 ${colorClass}`} fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg viewBox="0 0 24 24" className={`w-10 h-10 ${colorClass}`} fill="none" stroke="currentColor" strokeWidth="1.5">
           <circle cx="12" cy="12" r="8" />
           <circle cx="10" cy="9" r="1.5" fill="currentColor" />
           <circle cx="14" cy="9" r="1.5" fill="currentColor" />
@@ -60,7 +60,7 @@ const PlugTypeIcon = ({ type, colorClass = "text-ev-primary" }) => {
         </svg>
       );
     default:
-      return <Zap size={48} className={colorClass} />;
+      return <Zap size={40} className={colorClass} />;
   }
 };
 
@@ -83,10 +83,8 @@ const EVFilterScreen = () => {
 
   const plugTypes = ['AC GBT', 'AC Type 2', 'DC GBT', 'DC CCS2'];
 
-
-  // Calculate mocked result counts based on selection
   const getResultCount = () => {
-    let count = 235; // Base count
+    let count = 235;
     if (selectedPlug) count -= 40;
     count -= (selectedServices.length * 15);
     return Math.max(0, count);
@@ -104,78 +102,126 @@ const EVFilterScreen = () => {
   };
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 min-h-screen bg-white pb-40 pt-4">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 min-h-screen bg-[#F8F9FA] pb-40">
       {/* Header */}
-      <header className="flex items-center px-4 py-2 border-b border-gray-100">
-        <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-primary">
+      <header className="bg-[#1D1D1B] px-4 pt-5 pb-4 flex items-center sticky top-0 z-50">
+        <button onClick={() => navigate(-1)} className="text-white p-1">
           <ArrowLeft size={24} />
         </button>
-        <h1 className="flex-1 text-center text-lg font-bold text-primary pr-8">EV Charging Selection</h1>
+        <h1 className="flex-1 text-center text-white font-bold text-lg pr-8">EV Charging</h1>
       </header>
 
-      <main className="p-4 space-y-6">
-        {/* Results Button moved to top */}
-        <button
-          onClick={() => handleShowResults('list')}
-          className="w-full bg-white text-primary py-5 px-6 rounded-2xl font-bold shadow-lg flex flex-row items-center justify-between leading-none active:scale-[0.98] transition-all border border-ev-primary mb-8 group"
-        >
-          <span className="text-lg">Charging Stations</span>
-          <div className="bg-ev-primary/10 p-2 rounded-full text-ev-primary group-active:scale-95 transition-transform">
-            <BatteryCharging size={20} />
+      <main className="p-4 flex flex-col gap-5">
+
+        {/* Hero Card - Charging Stations CTA */}
+        <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h2 className="text-primary font-black text-lg leading-tight">Find a Station</h2>
+              <p className="text-gray-400 text-xs font-semibold mt-0.5">Browse all nearby EV chargers</p>
+            </div>
+            <div className="bg-ev-primary/10 p-3 rounded-2xl">
+              <BatteryCharging size={28} className="text-ev-primary" />
+            </div>
           </div>
-        </button>
+
+          {/* Pricing Info */}
+          <div className="flex items-center gap-2 bg-[#F8F9FA] rounded-2xl p-3 mb-4 border border-gray-50">
+            <CircleDollarSign size={18} className="text-ev-primary flex-shrink-0" />
+            <div>
+              <p className="text-gray-400 text-[10px] font-semibold uppercase tracking-wide">Starting Rate</p>
+              <p className="text-ev-primary font-black text-sm">1,500 MMK / kWh</p>
+            </div>
+          </div>
+
+          {/* Show All Stations Button */}
+          <button
+            onClick={() => handleShowResults('list')}
+            className="w-full bg-ev-primary text-white py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-ev-primary/20 active:scale-95 transition-all"
+          >
+            <BatteryCharging size={18} />
+            View Charging Stations
+            <ChevronRight size={16} />
+          </button>
+
+          {/* KBZPay Payment Button */}
+          <button className="w-full mt-3 bg-[#0055A6] text-white py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 shadow-lg shadow-blue-900/20 active:scale-95 transition-all">
+            <div className="px-2 py-0.5 bg-white text-[#0055A6] rounded text-xs italic font-black">KBZPay</div>
+            Pay with KBZPay
+          </button>
+        </div>
 
         {/* Plug Type Section */}
-        <section>
-          <h2 className="text-sm font-bold text-gray-800 mb-4 px-1">Plug Type</h2>
-          <div className="grid grid-cols-2 border border-gray-100 rounded-xl overflow-hidden shadow-sm">
-            {plugTypes.map((type, index) => (
-              <button
-                key={type}
-                onClick={() => setSelectedPlug(type === selectedPlug ? null : type)}
-                className={`flex flex-col items-center justify-center p-4 border-gray-100 border-b-2 border-b-ev-primary transition-all ${index % 2 === 0 ? 'border-r' : ''
-                  } ${selectedPlug === type ? 'bg-ev-primary/10 ring-2 ring-inset ring-ev-primary' : 'bg-white hover:bg-gray-50'
-                  }`}
-              >
-                <div className="mb-3">
-                  <PlugTypeIcon type={type} colorClass={selectedPlug === type ? 'text-ev-primary' : 'text-gray-400'} />
-                </div>
-                <span className={`text-[10px] font-bold uppercase ${selectedPlug === type ? 'text-ev-primary' : 'text-gray-500'}`}>{type}</span>
-              </button>
-            ))}
+        <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
+          <h2 className="text-sm font-black text-primary mb-1 uppercase tracking-tight">Plug Type</h2>
+          <p className="text-gray-400 text-xs font-semibold mb-4">Select your vehicle's connector</p>
+          <div className="grid grid-cols-2 gap-3">
+            {plugTypes.map((type) => {
+              const isSelected = selectedPlug === type;
+              return (
+                <button
+                  key={type}
+                  onClick={() => setSelectedPlug(type === selectedPlug ? null : type)}
+                  className={`flex flex-col items-center justify-center p-5 rounded-2xl border-2 transition-all active:scale-95 ${isSelected
+                      ? 'bg-ev-primary/10 border-ev-primary'
+                      : 'bg-[#F8F9FA] border-transparent hover:border-gray-200'
+                    }`}
+                >
+                  <div className="mb-3">
+                    <PlugTypeIcon type={type} colorClass={isSelected ? 'text-ev-primary' : 'text-gray-400'} />
+                  </div>
+                  <span className={`text-[11px] font-bold uppercase tracking-wide ${isSelected ? 'text-ev-primary' : 'text-gray-500'}`}>
+                    {type}
+                  </span>
+                  {isSelected && (
+                    <div className="mt-2 w-4 h-1 bg-ev-primary rounded-full" />
+                  )}
+                </button>
+              );
+            })}
           </div>
-        </section>
+        </div>
 
         {/* Available Service Section */}
-        <section>
-          <h2 className="text-sm font-bold text-gray-800 mb-4 px-1">Available Service</h2>
-          <div className="grid grid-cols-2 border border-gray-100 rounded-xl overflow-hidden shadow-sm">
-            {services.map((service, index) => (
-              <button
-                key={service.label}
-                onClick={() => {
-                  if (service.label === 'Accessories') {
-                    navigate('/explore');
-                  } else if (service.label === 'Self Charge') {
-                    navigate('/station-list');
-                  } else {
-                    toggleService(service.label);
-                  }
-                }}
-                className={`flex flex-col items-center justify-center p-4 border-gray-100 border-b-2 border-b-ev-primary transition-all ${index % 2 === 0 ? 'border-r' : ''
-                  } ${selectedServices.includes(service.label) ? 'bg-ev-primary/10 ring-2 ring-inset ring-ev-primary' : 'bg-white hover:bg-gray-50'
-                  }`}
-              >
-                <div className="mb-3">
-                  <service.Icon size={40} className={selectedServices.includes(service.label) ? 'text-ev-primary' : 'text-gray-400'} />
-                </div>
-                <span className={`text-[10px] font-bold uppercase ${selectedServices.includes(service.label) ? 'text-ev-primary' : 'text-gray-500'}`}>{service.label}</span>
-              </button>
-            ))}
+        <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
+          <h2 className="text-sm font-black text-primary mb-1 uppercase tracking-tight">Available Service</h2>
+          <p className="text-gray-400 text-xs font-semibold mb-4">Filter by service type</p>
+          <div className="grid grid-cols-2 gap-3">
+            {services.map((service) => {
+              const isSelected = selectedServices.includes(service.label);
+              return (
+                <button
+                  key={service.label}
+                  onClick={() => {
+                    if (service.label === 'Accessories') {
+                      navigate('/explore');
+                    } else if (service.label === 'Self Charge') {
+                      navigate('/station-list');
+                    } else {
+                      toggleService(service.label);
+                    }
+                  }}
+                  className={`flex flex-col items-center justify-center p-5 rounded-2xl border-2 transition-all active:scale-95 ${isSelected
+                      ? 'bg-ev-primary/10 border-ev-primary'
+                      : 'bg-[#F8F9FA] border-transparent hover:border-gray-200'
+                    }`}
+                >
+                  <div className="mb-3">
+                    <service.Icon size={40} className={isSelected ? 'text-ev-primary' : 'text-gray-400'} />
+                  </div>
+                  <span className={`text-[11px] font-bold uppercase tracking-wide ${isSelected ? 'text-ev-primary' : 'text-gray-500'}`}>
+                    {service.label}
+                  </span>
+                  {isSelected && (
+                    <div className="mt-2 w-4 h-1 bg-ev-primary rounded-full" />
+                  )}
+                </button>
+              );
+            })}
           </div>
-        </section>
-      </main>
+        </div>
 
+      </main>
     </div>
   );
 };
