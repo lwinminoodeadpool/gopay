@@ -2,7 +2,6 @@ import { Bell, Search } from 'lucide-react';
 import ParkingManagement from '../components/ParkingManagement';
 import ChargingStationList from '../components/ChargingStationList';
 import EVAccessories from '../components/EVAccessories';
-import RewardSection from '../components/RewardSection';
 import PaymentHistory from '../components/PaymentHistory';
 
 const Home = () => {
@@ -34,7 +33,6 @@ const Home = () => {
             <div className="px-2">
                 <ParkingManagement />
                 <ChargingStationList />
-                <RewardSection />
                 <EVAccessories />
                 <PaymentHistory />
             </div>

@@ -2,18 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
-  MapPin,
   Zap,
-  UtensilsCrossed,
   ShoppingBag,
-  Bed,
-  User,
   ChevronRight,
   BatteryCharging,
   CircleDollarSign
 } from 'lucide-react';
 
-const PlugTypeIcon = ({ type, colorClass = "text-ev-primary" }) => {
+const PlugTypeIcon = ({ type, colorClass = 'text-ev-primary' }) => {
   switch (type) {
     case 'AC GBT':
       return (
@@ -64,40 +60,42 @@ const PlugTypeIcon = ({ type, colorClass = "text-ev-primary" }) => {
   }
 };
 
+/* Unique color palette per plug type */
+const plugColorMap = {
+  'AC GBT': { bg: 'bg-blue-50', border: 'border-blue-500', iconOn: 'text-blue-600', iconOff: 'text-blue-500', label: 'text-blue-600', dot: 'bg-blue-500' },
+  'AC Type 2': { bg: 'bg-emerald-50', border: 'border-emerald-500', iconOn: 'text-emerald-600', iconOff: 'text-emerald-500', label: 'text-emerald-600', dot: 'bg-emerald-500' },
+  'DC GBT': { bg: 'bg-orange-50', border: 'border-orange-500', iconOn: 'text-orange-600', iconOff: 'text-orange-500', label: 'text-orange-600', dot: 'bg-orange-500' },
+  'DC CCS2': { bg: 'bg-purple-50', border: 'border-purple-500', iconOn: 'text-purple-600', iconOff: 'text-purple-500', label: 'text-purple-600', dot: 'bg-purple-500' },
+};
+
+/* Unique color palette per service */
+const serviceColorMap = {
+  'Self Charge': { bg: 'bg-teal-50', border: 'border-teal-500', iconOn: 'text-teal-600', iconOff: 'text-teal-500', label: 'text-teal-600', dot: 'bg-teal-500' },
+  'Accessories': { bg: 'bg-rose-50', border: 'border-rose-500', iconOn: 'text-rose-600', iconOff: 'text-rose-500', label: 'text-rose-600', dot: 'bg-rose-500' },
+};
+
 const EVFilterScreen = () => {
   const navigate = useNavigate();
   const [selectedPlug, setSelectedPlug] = useState(null);
   const [selectedServices, setSelectedServices] = useState([]);
+
   const services = [
     { label: 'Self Charge', Icon: BatteryCharging },
-    { label: 'Accessories', Icon: ShoppingBag }
+    { label: 'Accessories', Icon: ShoppingBag },
   ];
 
   const toggleService = (label) => {
     setSelectedServices(prev =>
-      prev.includes(label)
-        ? prev.filter(s => s !== label)
-        : [...prev, label]
+      prev.includes(label) ? prev.filter(s => s !== label) : [...prev, label]
     );
   };
 
   const plugTypes = ['AC GBT', 'AC Type 2', 'DC GBT', 'DC CCS2'];
 
-  const getResultCount = () => {
-    let count = 235;
-    if (selectedPlug) count -= 40;
-    count -= (selectedServices.length * 15);
-    return Math.max(0, count);
-  };
-
   const handleShowResults = (viewType) => {
     const targetPath = viewType === 'list' ? '/station-list' : '/explore';
     navigate(targetPath, {
-      state: {
-        plug: selectedPlug,
-        services: selectedServices,
-        view: viewType
-      }
+      state: { plug: selectedPlug, services: selectedServices, view: viewType },
     });
   };
 
@@ -113,7 +111,7 @@ const EVFilterScreen = () => {
 
       <main className="p-4 flex flex-col gap-5">
 
-        {/* Hero Card - Charging Stations CTA */}
+        {/* Hero Card */}
         <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between mb-3">
             <div>
@@ -158,24 +156,23 @@ const EVFilterScreen = () => {
           <div className="grid grid-cols-2 gap-3">
             {plugTypes.map((type) => {
               const isSelected = selectedPlug === type;
+              const c = plugColorMap[type];
               return (
                 <button
                   key={type}
                   onClick={() => setSelectedPlug(type === selectedPlug ? null : type)}
                   className={`flex flex-col items-center justify-center p-5 rounded-2xl border-2 transition-all active:scale-95 ${isSelected
-                      ? 'bg-ev-primary/10 border-ev-primary'
+                      ? `${c.bg} ${c.border}`
                       : 'bg-[#F8F9FA] border-transparent hover:border-gray-200'
                     }`}
                 >
                   <div className="mb-3">
-                    <PlugTypeIcon type={type} colorClass={isSelected ? 'text-ev-primary' : 'text-gray-400'} />
+                    <PlugTypeIcon type={type} colorClass={isSelected ? c.iconOn : c.iconOff} />
                   </div>
-                  <span className={`text-[11px] font-bold uppercase tracking-wide ${isSelected ? 'text-ev-primary' : 'text-gray-500'}`}>
+                  <span className={`text-[11px] font-bold uppercase tracking-wide ${isSelected ? c.label : 'text-gray-500'}`}>
                     {type}
                   </span>
-                  {isSelected && (
-                    <div className="mt-2 w-4 h-1 bg-ev-primary rounded-full" />
-                  )}
+                  {isSelected && <div className={`mt-2 w-4 h-1 ${c.dot} rounded-full`} />}
                 </button>
               );
             })}
@@ -189,32 +186,27 @@ const EVFilterScreen = () => {
           <div className="grid grid-cols-2 gap-3">
             {services.map((service) => {
               const isSelected = selectedServices.includes(service.label);
+              const c = serviceColorMap[service.label];
               return (
                 <button
                   key={service.label}
                   onClick={() => {
-                    if (service.label === 'Accessories') {
-                      navigate('/explore');
-                    } else if (service.label === 'Self Charge') {
-                      navigate('/station-list');
-                    } else {
-                      toggleService(service.label);
-                    }
+                    if (service.label === 'Accessories') navigate('/explore');
+                    else if (service.label === 'Self Charge') navigate('/station-list');
+                    else toggleService(service.label);
                   }}
                   className={`flex flex-col items-center justify-center p-5 rounded-2xl border-2 transition-all active:scale-95 ${isSelected
-                      ? 'bg-ev-primary/10 border-ev-primary'
+                      ? `${c.bg} ${c.border}`
                       : 'bg-[#F8F9FA] border-transparent hover:border-gray-200'
                     }`}
                 >
                   <div className="mb-3">
-                    <service.Icon size={40} className={isSelected ? 'text-ev-primary' : 'text-gray-400'} />
+                    <service.Icon size={40} className={isSelected ? c.iconOn : c.iconOff} />
                   </div>
-                  <span className={`text-[11px] font-bold uppercase tracking-wide ${isSelected ? 'text-ev-primary' : 'text-gray-500'}`}>
+                  <span className={`text-[11px] font-bold uppercase tracking-wide ${isSelected ? c.label : 'text-gray-500'}`}>
                     {service.label}
                   </span>
-                  {isSelected && (
-                    <div className="mt-2 w-4 h-1 bg-ev-primary rounded-full" />
-                  )}
+                  {isSelected && <div className={`mt-2 w-4 h-1 ${c.dot} rounded-full`} />}
                 </button>
               );
             })}
