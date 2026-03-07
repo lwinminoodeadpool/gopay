@@ -24,9 +24,9 @@ const BottomNav = () => {
     };
 
     const navItems = [
-        { id: 'home', icon: Home, label: 'Home', path: '/' },
         { id: 'parking', icon: MapPin, label: 'Parking', path: '/parking' },
         { id: 'charge', icon: PlugZap, label: 'Charge', path: '/charge' },
+        { id: 'home', icon: Home, label: 'Home', path: '/', isCenter: true },
         { id: 'explore', icon: Compass, label: 'Explore', path: '/explore' },
         { id: 'profile', icon: User, label: 'Profile', path: '/profile' },
     ];
@@ -38,31 +38,52 @@ const BottomNav = () => {
                     const Icon = item.icon;
                     const isActive = activeTab === item.id;
 
-                    return (
-                        <button
-                            key={item.id}
-                            onClick={() => handleNavigation(item.path)}
-                            className="flex flex-col items-center justify-center gap-1 group relative transition-all duration-300 w-12"
-                        >
-                            {/* Highlight background pill */}
-                            <div
-                                className={`absolute inset-0 bg-ev-secondary/20 rounded-xl transition-all duration-300 -z-10
-                ${isActive ? 'opacity-100 scale-125' : 'opacity-0 scale-50 group-hover:opacity-50 group-hover:scale-100'}`}
-                            />
-
-                            <Icon
-                                size={24}
-                                className={`transition-colors duration-300 drop-shadow-sm
-                  ${isActive ? 'text-ev-primary stroke-[2.5px]' : 'text-gray-400 group-hover:text-gray-600'}`}
-                            />
-                            <span
-                                className={`text-[10px] font-medium transition-all duration-300
-                  ${isActive ? 'text-ev-primary translate-y-0.5' : 'text-gray-400 -translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0'}`}
+                    if (item.isCenter) {
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => handleNavigation(item.path)}
+                                className="flex flex-col items-center justify-center gap-1 group relative transition-all duration-300 w-16 -mt-8"
                             >
-                                {item.label}
-                            </span>
-                        </button>
-                    );
+                                <div className="absolute -inset-2 bg-white rounded-full -z-20 shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:scale-105" />
+                                <div className="w-16 h-16 bg-[#0D9488] rounded-full flex items-center justify-center text-white shadow-lg z-10 transition-all duration-300 group-hover:bg-teal-700 group-hover:-translate-y-1 group-hover:shadow-[0_8px_16px_rgba(13,148,136,0.4)]">
+                                    <Icon size={32} className="stroke-[2px]" />
+                                </div>
+                                <span
+                                    className={`font-bold transition-all duration-300 mt-1
+                  ${isActive ? 'text-[#0D9488] text-[12px]' : 'text-gray-400 text-[11px] group-hover:text-teal-600 group-hover:text-[12px]'}`}
+                                >
+                                    {item.label}
+                                </span>
+                            </button>
+                        );
+                    } else {
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => handleNavigation(item.path)}
+                                className="flex flex-col items-center justify-center gap-1 group relative transition-all duration-300 w-12"
+                            >
+                                {/* Highlight background pill */}
+                                <div
+                                    className={`absolute inset-0 bg-ev-secondary/20 rounded-xl transition-all duration-300 -z-10
+                ${isActive ? 'opacity-100 scale-125' : 'opacity-0 scale-50 group-hover:opacity-50 group-hover:scale-100'}`}
+                                />
+
+                                <Icon
+                                    size={24}
+                                    className={`transition-colors duration-300 drop-shadow-sm
+                  ${isActive ? 'text-ev-primary stroke-[2.5px]' : 'text-gray-400 group-hover:text-gray-600'}`}
+                                />
+                                <span
+                                    className={`text-[10px] font-medium transition-all duration-300
+                  ${isActive ? 'text-ev-primary translate-y-0.5' : 'text-gray-400 -translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0'}`}
+                                >
+                                    {item.label}
+                                </span>
+                            </button>
+                        );
+                    }
                 })}
             </div>
         </div>
