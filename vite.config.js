@@ -8,4 +8,14 @@ export default defineConfig({
     tailwindcss(),
     react()
   ],
+  server: {
+    proxy: {
+      '/kbzpay': {
+        target: 'https://uat-miniapp.kbzpay.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/kbzpay/, ''),
+        secure: false,
+      },
+    },
+  },
 })
