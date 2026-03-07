@@ -72,18 +72,16 @@ const ParkingPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-blue-500/30">
+        <div className="min-h-screen bg-background-soft flex flex-col font-sans">
             {/* Header */}
-            <header className="flex items-center p-4 bg-white/80 backdrop-blur-md sticky top-0 z-10 border-b border-gray-100 h-16 shadow-sm">
+            <header className="bg-white px-6 pt-12 pb-6 shadow-sm sticky top-0 z-10 border-b border-gray-50 flex items-center gap-4">
                 <button
                     onClick={() => navigate('/')}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors text-slate-700 absolute left-4 z-20"
+                    className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-primary border border-gray-100 active:scale-95 transition-all"
                 >
-                    <ArrowLeft size={24} />
+                    <ArrowLeft size={20} />
                 </button>
-                <div className="w-full flex justify-center absolute left-0 right-0 z-10">
-                    <h1 className="text-lg font-black text-slate-800 tracking-tight">Smart Parking checkout</h1>
-                </div>
+                <h1 className="text-xl font-black text-primary tracking-tight">Parking Checkout</h1>
             </header>
 
             <main className="flex-1 flex flex-col p-6 max-w-md w-full mx-auto relative">
@@ -114,7 +112,7 @@ const ParkingPage = () => {
                         <button
                             onClick={checkStatus}
                             disabled={loading || !plateNumber}
-                            className="absolute right-2 top-2 bottom-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-xl px-4 transition-all duration-200 disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed flex items-center justify-center shadow-md shadow-blue-500/30"
+                            className="absolute right-2 top-2 bottom-2 bg-ev-primary hover:bg-teal-700 active:scale-95 text-secondary rounded-xl px-4 transition-all duration-200 disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed flex items-center justify-center shadow-md shadow-ev-primary/20"
                         >
                             {loading ? (
                                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -190,7 +188,7 @@ const ParkingPage = () => {
                                 <button
                                     onClick={handlePayment}
                                     disabled={loading}
-                                    className="w-full bg-ev-primary hover:bg-teal-700 active:scale-[0.98] text-white font-black py-4 rounded-2xl shadow-lg shadow-ev-primary/30 transition-all duration-200 flex items-center justify-center gap-2 mt-auto text-lg overflow-hidden relative group"
+                                    className="w-full bg-ev-primary hover:bg-teal-700 active:scale-95 text-secondary font-black py-4 rounded-2xl shadow-lg shadow-ev-primary/30 transition-all flex items-center justify-center gap-2 mt-auto text-lg"
                                 >
                                     <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                                     {loading ? (

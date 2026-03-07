@@ -144,15 +144,18 @@ const EVStationDetails = () => {
     const station = stationsData[id] || stationsData[1]; // Fallback for demo
 
     return (
-        <div className="min-h-screen bg-[#F8F9FA] pb-10">
-            {/* Dark Header */}
-            <header className="bg-[#1D1D1B] pt-4 pb-2 px-4 flex items-center sticky top-0 z-50">
-                <button onClick={() => navigate(-1)} className="text-white p-1">
-                    <ChevronLeft size={28} strokeWidth={2.5} />
+        <div className="min-h-screen bg-background-soft pb-10">
+            {/* Header */}
+            <header className="bg-white px-6 pt-12 pb-6 shadow-sm sticky top-0 z-50 border-b border-gray-50 flex items-center gap-4">
+                <button
+                    onClick={() => navigate(-1)}
+                    className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-primary border border-gray-100 active:scale-95 transition-all"
+                >
+                    <ChevronLeft size={20} />
                 </button>
-                <h1 className="flex-1 text-center text-white font-bold text-lg">{station.name}</h1>
-                <button className="text-white p-1">
-                    <Heart size={24} />
+                <h1 className="text-xl font-black text-primary tracking-tight flex-1">{station.name}</h1>
+                <button className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-primary border border-gray-100 active:scale-95 transition-all">
+                    <Heart size={18} />
                 </button>
             </header>
 
@@ -192,11 +195,11 @@ const EVStationDetails = () => {
 
                     {/* Action Buttons */}
                     <div className="flex gap-3">
-                        <button className="flex-1 bg-ev-primary/10 text-ev-primary py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 active:scale-95 transition-all">
+                        <button className="flex-1 bg-ev-primary/10 text-ev-primary py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 active:scale-95 transition-all border border-ev-primary/20">
                             <Phone size={18} /> Call
                         </button>
-                        <button className="flex-1 bg-ev-primary text-white py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-sm shadow-ev-primary/20 active:scale-95 transition-all">
-                            <Navigation size={18} /> Directions
+                        <button className="flex-[2] bg-ev-primary text-secondary py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-lg shadow-ev-primary/20 active:scale-95 transition-all">
+                            <Navigation size={18} /> Get Directions
                         </button>
                     </div>
                 </div>

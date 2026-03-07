@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom';
 import { ChevronRight, ShoppingBag } from 'lucide-react';
 
 const accessories = [
-    { id: 1, name: "Type 2 Cable", price: "199,000 MMK", imgColor: "bg-blue-100", label: "Best Seller" },
-    { id: 2, name: "Portable Charger", price: "299,000 MMK", imgColor: "bg-green-100", label: "New" },
-    { id: 3, name: "Wall Connector", price: "450,000 MMK", imgColor: "bg-gray-100", label: "Premium" },
+    { id: 2, name: "Type 2 Cable", price: "199,000 MMK", imgColor: "bg-blue-100", label: "Best Seller" },
+    { id: 6, name: "Portable Charger", price: "299,000 MMK", imgColor: "bg-green-100", label: "New" },
+    { id: 7, name: "Wall Connector", price: "450,000 MMK", imgColor: "bg-gray-100", label: "Premium" },
 ];
 
 const EVAccessories = () => {
@@ -11,9 +12,9 @@ const EVAccessories = () => {
         <section className="mb-8">
             <div className="flex justify-between items-end mb-4">
                 <h2 className="text-xl font-bold text-primary">EV Accessories</h2>
-                <button className="text-sm font-bold text-ev-primary hover:text-ev-primary/80 transition-colors flex items-center pr-2">
+                <Link to="/explore" className="text-sm font-bold text-ev-primary hover:text-ev-primary/80 transition-colors flex items-center pr-2">
                     Shop All <ChevronRight size={16} className="ml-0.5 relative top-[1px]" />
-                </button>
+                </Link>
             </div>
 
             <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory pl-2 -ml-2 pr-2 hide-scrollbar">
@@ -39,9 +40,12 @@ const EVAccessories = () => {
                         <h3 className="font-bold text-sm text-primary leading-tight line-clamp-2 min-h-[40px]">{item.name}</h3>
                         <p className="font-black text-lg mt-1 text-ev-primary">{item.price}</p>
 
-                        <button className="mt-3 bg-gray-50 text-primary py-2 rounded-xl text-xs font-bold hover:bg-gray-100 transition-colors transition-all duration-300 group-hover:bg-primary group-hover:text-white">
+                        <Link
+                            to={`/explore?productId=${item.id}`}
+                            className="mt-3 bg-gray-50 text-primary py-2 rounded-xl text-xs font-bold hover:bg-primary hover:text-white transition-all duration-300 transform active:scale-95 flex items-center justify-center"
+                        >
                             Add to Cart
-                        </button>
+                        </Link>
                     </div>
                 ))}
             </div>

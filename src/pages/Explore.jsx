@@ -4,6 +4,7 @@ import {
     Share2, Heart, Search, Filter, Plus, Minus, CheckCircle2,
     Download, ArrowRight, Loader2, Wallet, X, Bell
 } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 
 const Explore = () => {
     // View State: 'list', 'detail', 'confirm', 'processing', 'success', 'receipt'
@@ -21,6 +22,8 @@ const Explore = () => {
         { id: 2, title: 'Promo', message: 'Get 10% off on all Car Care items!', read: false }
     ]);
     const [showNotifications, setShowNotifications] = useState(false);
+    const [orderNote, setOrderNote] = useState('');
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const categories = ['All', 'Car Care', 'EV Charging', 'Interior Accessories', 'Safety', 'Smart Gadgets'];
 
@@ -110,6 +113,40 @@ const Explore = () => {
             desc: 'Ultra HD 4K dash camera with wide-angle lens and Sony sensor. Includes parking monitor and loop recording.',
             features: ['4K UHD Video', 'WiFi App Connect', 'Loop Recording'],
             compatibility: 'All Vehicles'
+        },
+        {
+            id: 6,
+            name: 'Portable Charger',
+            price: 299000,
+            rating: 4.7,
+            reviews: 67,
+            stock: 'In stock',
+            category: 'EV Charging',
+            images: [
+                '/assets/ev_cable.png',
+                '/assets/ev_cable.png',
+                '/assets/ev_cable.png'
+            ],
+            desc: 'Universal portable EV charger. Compact design with adjustable current and multiple safety protections.',
+            features: ['Adjustable Current', 'Portable Design', 'LCD Display'],
+            compatibility: 'Universal EV'
+        },
+        {
+            id: 7,
+            name: 'Wall Connector',
+            price: 450000,
+            rating: 4.9,
+            reviews: 156,
+            stock: 'In stock',
+            category: 'EV Charging',
+            images: [
+                '/assets/ev_cable.png',
+                '/assets/ev_cable.png',
+                '/assets/ev_cable.png'
+            ],
+            desc: 'High-power home charging solution. Fast and reliable, providing up to 44 miles of range per hour of charging.',
+            features: ['Fast Charging', 'Wi-Fi Connected', 'Sleek Design'],
+            compatibility: 'All EVs'
         }
     ];
 
@@ -119,9 +156,33 @@ const Explore = () => {
         return matchesCategory && matchesSearch;
     });
 
+    useEffect(() => {
+        const productId = searchParams.get('productId');
+        const action = searchParams.get('action');
+
+        if (productId && action === 'cart') {
+            const product = products.find(p => p.id === parseInt(productId));
+            if (product) {
+                setSelectedProduct(product);
+                setQuantity(1);
+                setOrderNote('');
+                setImgIndex(0);
+                setView('confirm');
+                // Optional: Clear params to avoid reopening on refresh
+                // setSearchParams({}, { replace: true });
+            }
+        } else if (productId) {
+            const product = products.find(p => p.id === parseInt(productId));
+            if (product) {
+                openProduct(product);
+            }
+        }
+    }, [searchParams]);
+
     const openProduct = (product) => {
         setSelectedProduct(product);
         setQuantity(1);
+        setOrderNote('');
         setImgIndex(0);
         setView('detail');
         window.scrollTo(0, 0);
@@ -147,14 +208,14 @@ const Explore = () => {
     // --- SHARED COMPONENTS ---
 
     const TopAppBar = ({ title, showBack = false, onBack = () => setView('list') }) => (
-        <header className="flex justify-between items-center mb-6 px-4 pt-4 sticky top-0 bg-secondary/80 backdrop-blur-md z-50">
-            <div className="flex items-center gap-3">
+        <header className="bg-white px-6 pt-12 pb-6 shadow-sm sticky top-0 z-10 border-b border-gray-50 flex justify-between items-center mb-6">
+            <div className="flex items-center gap-4">
                 {showBack ? (
                     <button
                         onClick={onBack}
-                        className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-primary hover:bg-gray-50 transition-colors border border-gray-100"
+                        className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-primary border border-gray-100 active:scale-95 transition-all"
                     >
-                        <ChevronLeft size={24} />
+                        <ChevronLeft size={20} />
                     </button>
                 ) : (
                     <div className="bg-ev-primary p-2 rounded-xl shadow-lg shadow-ev-primary/20">
@@ -397,7 +458,7 @@ const Explore = () => {
                 </div>
 
                 {/* Sticky Buy Bar (Smallest Version) */}
-                <div className="fixed bottom-[80px] w-full max-w-md left-1/2 -translate-x-1/2 bg-secondary border-t border-gray-100 pt-3 pb-4 px-4 flex items-center justify-between gap-3 z-50 shadow-[0_-15px_40px_rgba(0,0,0,0.08)] rounded-t-[2.5rem]">
+                <div className="fixed bottom-[105px] w-full max-w-md left-1/2 -translate-x-1/2 bg-secondary border-t border-gray-100 pt-3 pb-4 px-4 flex items-center justify-between gap-3 z-50 shadow-[0_-15px_40px_rgba(0,0,0,0.08)] rounded-t-[2.5rem]">
                     <div className="flex items-center gap-2 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
                         <button
                             onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -417,7 +478,7 @@ const Explore = () => {
                         onClick={() => setView('confirm')}
                         className="flex-1 bg-ev-primary text-secondary py-3 rounded-xl font-black shadow-lg shadow-ev-primary/20 flex flex-col items-center justify-center leading-none active:scale-[0.98] transition-all"
                     >
-                        <span className="text-[8px] font-bold uppercase tracking-widest opacity-80 mb-0.5">Pay with KBZPay</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-1">Add to Cart</span>
                         <span className="text-sm">{(selectedProduct.price * quantity).toLocaleString()} MMK</span>
                     </button>
                 </div>
@@ -431,12 +492,12 @@ const Explore = () => {
         return (
             <div className="fixed inset-0 z-[100] flex items-end justify-center">
                 <div className="absolute inset-0 max-w-md left-1/2 -translate-x-1/2 bg-primary/40 backdrop-blur-sm transition-all duration-500" onClick={() => setView('detail')} />
-                <div className="relative w-full max-w-md bg-secondary rounded-t-[3rem] shadow-2xl animate-in slide-in-from-bottom duration-500 overflow-hidden border-t-2 border-white/50">
+                <div className="relative w-full max-w-md bg-secondary rounded-t-[3rem] shadow-2xl animate-in slide-in-from-bottom duration-500 overflow-hidden border-t-2 border-white/50 max-h-[90vh] overflow-y-auto">
                     <div className="w-16 h-1.5 bg-gray-200 rounded-full mx-auto my-5" />
 
                     <div className="px-8 pb-12">
                         <div className="flex items-center justify-between mb-8">
-                            <h2 className="text-2xl font-black text-primary tracking-tight">Checkout</h2>
+                            <h2 className="text-2xl font-black text-primary tracking-tight">Shopping Cart</h2>
                             <button onClick={() => setView('detail')} className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 border border-gray-100"><X size={20} /></button>
                         </div>
 
@@ -463,9 +524,21 @@ const Explore = () => {
                                         <Wallet size={16} /> MMK {walletBalance.toLocaleString()}
                                     </div>
                                 </div>
+
+                                {/* Note Section */}
+                                <div className="pt-4 border-t border-gray-50">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">Order Note</label>
+                                    <textarea
+                                        value={orderNote}
+                                        onChange={(e) => setOrderNote(e.target.value)}
+                                        placeholder="Add any specific requirements..."
+                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-xs font-bold text-primary focus:outline-none focus:ring-2 focus:ring-ev-primary/20 transition-all resize-none h-24"
+                                    />
+                                </div>
+
                                 <div className="h-px bg-gray-50 flex-1 my-2" />
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Total Pay</span>
+                                    <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Subtotal</span>
                                     <span className="text-3xl font-black text-primary">{total.toLocaleString()} <span className="text-xs">MMK</span></span>
                                 </div>
                             </div>
@@ -475,11 +548,11 @@ const Explore = () => {
                                 className="w-full bg-ev-primary text-secondary py-5 rounded-[2rem] font-black shadow-xl shadow-ev-primary/30 flex items-center justify-center gap-3 active:scale-[0.98] transition-all border-b-4 border-black/10"
                             >
                                 <ShieldCheck size={22} strokeWidth={3} />
-                                Confirm & Pay
+                                Pay Now
                             </button>
 
                             <p className="text-center text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] opacity-40">
-                                Protected by KBZPay Security
+                                Secure Checkout by KBZPay
                             </p>
                         </div>
                     </div>

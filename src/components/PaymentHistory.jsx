@@ -1,4 +1,5 @@
 import { ArrowDownLeft, ArrowUpRight, Coffee, Zap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const history = [
     { id: 1, type: "charge", title: "EV Charging - Junction City", date: "Today, 10:30 AM", amount: "-12,500 MMK", isNegative: true, icon: Zap },
@@ -8,11 +9,17 @@ const history = [
 ];
 
 const PaymentHistory = () => {
+    const navigate = useNavigate();
     return (
         <section className="mb-8">
             <div className="flex justify-between items-end mb-4">
                 <h2 className="text-xl font-bold text-primary">Recent Activity</h2>
-                <button className="text-sm font-bold text-gray-500 hover:text-primary transition-colors pr-2">See All</button>
+                <button
+                    onClick={() => navigate('/activity')}
+                    className="text-sm font-bold text-gray-400 hover:text-ev-primary transition-colors pr-2 active:scale-95"
+                >
+                    See All
+                </button>
             </div>
 
             <div className="bg-white rounded-3xl p-5 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.05)] border border-gray-100">

@@ -46,12 +46,12 @@ const BottomNav = () => {
                                 className="flex flex-col items-center justify-center gap-1 group relative transition-all duration-300 w-16 -mt-8"
                             >
                                 <div className="absolute -inset-2 bg-white rounded-full -z-20 shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:scale-105" />
-                                <div className="w-16 h-16 bg-[#0D9488] rounded-full flex items-center justify-center text-white shadow-lg z-10 transition-all duration-300 group-hover:bg-teal-700 group-hover:-translate-y-1 group-hover:shadow-[0_8px_16px_rgba(13,148,136,0.4)]">
+                                <div className="w-16 h-16 bg-ev-primary rounded-full flex items-center justify-center text-white shadow-lg z-10 transition-all duration-300 group-hover:bg-teal-700 group-hover:-translate-y-1 group-hover:shadow-[0_8px_16px_rgba(13,148,136,0.4)]">
                                     <Icon size={32} className="stroke-[2px]" />
                                 </div>
                                 <span
                                     className={`font-bold transition-all duration-300 mt-1
-                  ${isActive ? 'text-[#0D9488] text-[12px]' : 'text-gray-400 text-[11px] group-hover:text-teal-600 group-hover:text-[12px]'}`}
+                                    ${isActive ? 'text-ev-primary text-[12px]' : 'text-gray-400 text-[11px] group-hover:text-teal-600 group-hover:text-[12px]'}`}
                                 >
                                     {item.label}
                                 </span>

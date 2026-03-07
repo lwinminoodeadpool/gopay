@@ -100,13 +100,16 @@ const EVFilterScreen = () => {
   };
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 min-h-screen bg-[#F8F9FA] pb-40">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 min-h-screen bg-background-soft pb-40">
       {/* Header */}
-      <header className="bg-[#1D1D1B] px-4 pt-5 pb-4 flex items-center sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="text-white p-1">
-          <ArrowLeft size={24} />
+      <header className="bg-white px-6 pt-12 pb-6 shadow-sm sticky top-0 z-50 border-b border-gray-50 flex items-center gap-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-primary border border-gray-100 active:scale-95 transition-all"
+        >
+          <ArrowLeft size={20} />
         </button>
-        <h1 className="flex-1 text-center text-white font-bold text-lg pr-8">EV Charging</h1>
+        <h1 className="text-xl font-black text-primary tracking-tight">EV Charging</h1>
       </header>
 
       <main className="p-4 flex flex-col gap-5">
@@ -135,7 +138,7 @@ const EVFilterScreen = () => {
           {/* Show All Stations Button */}
           <button
             onClick={() => handleShowResults('list')}
-            className="w-full bg-ev-primary text-white py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-ev-primary/20 active:scale-95 transition-all"
+            className="w-full bg-ev-primary text-secondary py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-xl shadow-ev-primary/20 active:scale-95 transition-all"
           >
             <BatteryCharging size={18} />
             View Charging Stations
@@ -162,8 +165,8 @@ const EVFilterScreen = () => {
                   key={type}
                   onClick={() => setSelectedPlug(type === selectedPlug ? null : type)}
                   className={`flex flex-col items-center justify-center p-5 rounded-2xl border-2 transition-all active:scale-95 ${isSelected
-                      ? `${c.bg} ${c.border}`
-                      : 'bg-[#F8F9FA] border-transparent hover:border-gray-200'
+                    ? `${c.bg} ${c.border}`
+                    : 'bg-[#F8F9FA] border-transparent hover:border-gray-200'
                     }`}
                 >
                   <div className="mb-3">
@@ -196,8 +199,8 @@ const EVFilterScreen = () => {
                     else toggleService(service.label);
                   }}
                   className={`flex flex-col items-center justify-center p-5 rounded-2xl border-2 transition-all active:scale-95 ${isSelected
-                      ? `${c.bg} ${c.border}`
-                      : 'bg-[#F8F9FA] border-transparent hover:border-gray-200'
+                    ? `${c.bg} ${c.border}`
+                    : 'bg-[#F8F9FA] border-transparent hover:border-gray-200'
                     }`}
                 >
                   <div className="mb-3">

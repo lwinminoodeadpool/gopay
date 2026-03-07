@@ -114,16 +114,16 @@ const EVStationList = () => {
     const regionLabel = selectedRegion ? regionNames[selectedRegion] : 'All Regions';
 
     return (
-        <div className="min-h-screen bg-white font-sans text-primary">
+        <div className="min-h-screen bg-background-soft font-sans text-primary">
             {/* Header */}
-            <header className="bg-white border-b border-gray-100 py-3.5 px-4 flex items-center sticky top-0 z-50">
+            <header className="bg-white px-6 pt-12 pb-6 shadow-sm sticky top-0 z-50 border-b border-gray-50 flex items-center gap-4">
                 <button
                     onClick={() => navigate(-1)}
-                    className="text-primary p-1.5 -ml-1.5 hover:bg-gray-100 rounded-full transition-colors"
+                    className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-primary border border-gray-100 active:scale-95 transition-all"
                 >
-                    <ChevronLeft size={26} strokeWidth={2.5} />
+                    <ChevronLeft size={20} />
                 </button>
-                <h1 className="flex-1 text-center text-lg font-black text-primary pr-8 uppercase tracking-tighter">EV charging station</h1>
+                <h1 className="text-xl font-black text-primary tracking-tight">EV Charging Stations</h1>
             </header>
 
             {/* Search Bar Section */}

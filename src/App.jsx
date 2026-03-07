@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import EVFilterScreen from './pages/EVFilterScreen';
 import EVStationList from './pages/EVStationList';
@@ -10,10 +11,14 @@ import PaymentSuccess from './pages/PaymentSuccess';
 import DigitalReceipt from './pages/DigitalReceipt';
 import ParkingPage from './pages/ParkingPage';
 import Profile from './pages/Profile';
+import TermsAndConditions from './pages/TermsAndConditions';
+import FAQ from './pages/FAQ';
+import ActivityPage from './pages/ActivityPage';
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <MainLayout>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -26,6 +31,9 @@ function App() {
           <Route path="/receipt" element={<DigitalReceipt />} />
           <Route path="/parking" element={<ParkingPage />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/terms" element={<TermsAndConditions />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/activity" element={<ActivityPage />} />
         </Routes>
       </MainLayout>
     </Router>

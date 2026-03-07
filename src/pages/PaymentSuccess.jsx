@@ -82,7 +82,7 @@ const PaymentSuccess = () => {
             <div className="pb-10 space-y-4">
                 <button
                     onClick={() => navigate('/')}
-                    className="w-full py-4 rounded-2xl font-bold bg-primary text-white hover:bg-gray-800 transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-2 transform active:scale-[0.98]"
+                    className="w-full py-5 rounded-3xl font-black bg-ev-primary text-secondary hover:bg-teal-700 transition-all shadow-xl shadow-ev-primary/20 flex items-center justify-center gap-2 active:scale-95"
                 >
                     <Home size={20} />
                     Back to Home

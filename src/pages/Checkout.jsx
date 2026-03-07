@@ -19,17 +19,14 @@ const Checkout = () => {
     return (
         <div className="animate-in fade-in slide-in-from-right-4 duration-500 pb-10 min-h-screen bg-gray-50 flex flex-col pt-14 px-4">
             {/* Header */}
-            <header className="flex items-center mb-8 sticky top-0 bg-gray-50 z-10 py-2">
+            <header className="bg-white px-6 pt-12 pb-6 shadow-sm sticky top-0 z-10 border-b border-gray-50 flex items-center gap-4">
                 <button
                     onClick={() => navigate(-1)}
-                    className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-primary hover:bg-gray-100 transition-colors border border-gray-100"
+                    className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-primary border border-gray-100 active:scale-95 transition-all"
                 >
                     <ArrowLeft size={20} />
                 </button>
-                <div className="flex-1 text-center">
-                    <h1 className="text-xl font-bold text-primary">Checkout</h1>
-                </div>
-                <div className="w-10 h-10"></div>
+                <h1 className="text-xl font-black text-primary tracking-tight">Checkout</h1>
             </header>
 
             <main className="space-y-6 flex-1">
@@ -97,7 +94,7 @@ const Checkout = () => {
             <div className="mt-8">
                 <button
                     onClick={handleConfirmPayment}
-                    className="w-full py-4 rounded-2xl font-bold text-lg bg-ev-primary text-secondary hover:bg-teal-700 transition-all shadow-lg shadow-ev-primary/25 flex items-center justify-center gap-2 transform active:scale-[0.98]"
+                    className="w-full py-5 rounded-3xl font-black text-lg bg-ev-primary text-secondary hover:bg-teal-700 transition-all shadow-xl shadow-ev-primary/20 flex items-center justify-center gap-2 active:scale-95"
                 >
                     <CreditCard size={20} />
                     Confirm Payment
