@@ -1,54 +1,10 @@
 import { useEffect, useState } from 'react';
-import { MapPin, Loader2, AlertCircle } from 'lucide-react';
-
-const TOKEN_URL = '/kbzpay/baas/auth/v1.0/oauth2/token';
-const PARKING_FETCH_URL = '/kbzpay/service/Bill_Payments__copay/0.0.1/parking_fetch';
-
-const CLIENT_ID = 'c7d8640f6a20cce91bb1f670a41c8ffb';
-const CLIENT_SECRET = 'b83dc4306aa20f8c349ce07ec3e7520e6b55723e5a52eeab';
-
-async function fetchAccessToken() {
-    const body = new URLSearchParams({
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        grant_type: 'client_credentials',
-    });
-
-    const res = await fetch(TOKEN_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body.toString(),
-    });
-
-    if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(`Token request failed: ${res.status} — ${errText}`);
-    }
-    const data = await res.json();
-    console.log('[ParkingManagement] Token response:', data); // debug — check field names
-    // KBZPay may return access_token or token
-    const token = data.access_token ?? data.token ?? data.data?.access_token ?? data.data?.token;
-    if (!token) throw new Error('Token field not found in response: ' + JSON.stringify(data));
-    return token;
-}
-
-async function fetchParkingData(token) {
-    const res = await fetch(PARKING_FETCH_URL, {
-        method: 'GET',
-        headers: {
-            'access-token': token,
-        },
-    });
-
-    if (!res.ok) {
-        const errText = await res.text();
-        console.error('[ParkingManagement] parking_fetch error body:', errText);
-        throw new Error(`Parking fetch failed: ${res.status} — ${errText}`);
-    }
-    return res.json();
-}
+import { MapPin, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { apiGet, ENDPOINTS } from '../services/apiClient';
 
 const ParkingManagement = () => {
+    const navigate = useNavigate();
     const [parkingList, setParkingList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -60,11 +16,9 @@ const ParkingManagement = () => {
             try {
                 setLoading(true);
                 setError(null);
-                const token = await fetchAccessToken();
-                const data = await fetchParkingData(token);
+                const data = await apiGet(ENDPOINTS.PARKING);
 
                 if (!cancelled) {
-                    // API returns { resCode: '0', result: { data: [...] } }
                     const list = data?.result?.data ?? data?.data ?? (Array.isArray(data) ? data : []);
                     setParkingList(list);
                 }
@@ -78,6 +32,9 @@ const ParkingManagement = () => {
         load();
         return () => { cancelled = true; };
     }, []);
+
+    const visibleSpots = parkingList.slice(0, 3);
+    const hasMore = parkingList.length > 3;
 
     return (
         <section className="mb-8">
@@ -106,9 +63,9 @@ const ParkingManagement = () => {
                     </div>
                 )}
 
-                {!loading && !error && parkingList.map((spot, index) => {
-                    const name = spot.Bill_Payments__name__CST ?? spot.name ?? spot.parking_name ?? `Spot #${index + 1}`;
-                    const address = spot.Bill_Payments__address__CST ?? spot.address ?? spot.location ?? '';
+                {!loading && !error && visibleSpots.map((spot, index) => {
+                    const name = spot.Bill_Payments__name__CST ?? spot.name ?? `Spot #${index + 1}`;
+                    const address = spot.Bill_Payments__address__CST ?? spot.address ?? '';
                     const price = spot.Bill_Payments__price__CST ?? spot.price ?? '';
 
                     return (
@@ -116,26 +73,36 @@ const ParkingManagement = () => {
                             key={spot._id ?? spot.id ?? index}
                             className="flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
                         >
-                            <div className="flex items-center gap-3">
-                                <div className="bg-ev-primary/10 p-2 rounded-lg text-ev-primary">
+                            <div className="flex items-center gap-3 min-w-0 pr-2">
+                                <div className="bg-ev-primary/10 p-2 rounded-lg text-ev-primary shrink-0">
                                     <MapPin size={20} />
                                 </div>
-                                <div>
-                                    <p className="font-bold text-primary">{name}</p>
+                                <div className="truncate">
+                                    <p className="font-bold text-primary truncate">{name}</p>
                                     {address && (
-                                        <p className="text-xs text-gray-500">{address}</p>
+                                        <p className="text-xs text-gray-500 truncate">{address}</p>
                                     )}
                                 </div>
                             </div>
 
                             {price && (
-                                <div className="bg-ev-primary/10 px-3 py-1 rounded-full">
+                                <div className="bg-ev-primary/10 px-3 py-1 rounded-full whitespace-nowrap shrink-0">
                                     <span className="text-xs font-bold text-ev-primary">{price} MMK/hr</span>
                                 </div>
                             )}
                         </div>
                     );
                 })}
+
+                {!loading && !error && hasMore && (
+                    <button
+                        onClick={() => navigate('/parking')}
+                        className="w-full mt-2 py-3 bg-white border border-gray-100 rounded-2xl text-ev-primary font-bold text-sm shadow-sm hover:shadow hover:bg-ev-primary/5 transition-all flex items-center justify-center gap-2"
+                    >
+                        See More
+                        <ArrowRight size={16} />
+                    </button>
+                )}
             </div>
         </section>
     );

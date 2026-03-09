@@ -2,7 +2,6 @@ import { Bell, Search } from 'lucide-react';
 import ParkingManagement from '../components/ParkingManagement';
 import ChargingStationList from '../components/ChargingStationList';
 import EVAccessories from '../components/EVAccessories';
-import PaymentHistory from '../components/PaymentHistory';
 
 const Home = () => {
     return (
@@ -34,7 +33,6 @@ const Home = () => {
                 <ParkingManagement />
                 <ChargingStationList />
                 <EVAccessories />
-                <PaymentHistory />
             </div>
         </div>
     );

@@ -1,103 +1,55 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  ArrowLeft,
-  Zap,
-  ShoppingBag,
-  ChevronRight,
-  BatteryCharging,
-  CircleDollarSign
-} from 'lucide-react';
-
-const PlugTypeIcon = ({ type, colorClass = 'text-ev-primary' }) => {
-  switch (type) {
-    case 'AC GBT':
-      return (
-        <svg viewBox="0 0 24 24" className={`w-10 h-10 ${colorClass}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="6" y="6" width="12" height="12" rx="4" />
-          <circle cx="9" cy="9" r="1" fill="currentColor" />
-          <circle cx="15" cy="9" r="1" fill="currentColor" />
-          <circle cx="12" cy="12" r="1" fill="currentColor" />
-          <circle cx="9" cy="15" r="1" fill="currentColor" />
-          <circle cx="15" cy="15" r="1" fill="currentColor" />
-        </svg>
-      );
-    case 'AC Type 2':
-      return (
-        <svg viewBox="0 0 24 24" className={`w-10 h-10 ${colorClass}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <circle cx="12" cy="12" r="7" />
-          <circle cx="12" cy="8" r="1" fill="currentColor" />
-          <circle cx="9" cy="10" r="1" fill="currentColor" />
-          <circle cx="15" cy="10" r="1" fill="currentColor" />
-          <circle cx="9" cy="14" r="1" fill="currentColor" />
-          <circle cx="15" cy="14" r="1" fill="currentColor" />
-          <circle cx="12" cy="16" r="1" fill="currentColor" />
-        </svg>
-      );
-    case 'DC GBT':
-      return (
-        <svg viewBox="0 0 24 24" className={`w-10 h-10 ${colorClass}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="7" y="5" width="10" height="14" rx="3" />
-          <circle cx="10" cy="8" r="1" fill="currentColor" />
-          <circle cx="14" cy="8" r="1" fill="currentColor" />
-          <circle cx="12" cy="11" r="1" fill="currentColor" />
-          <circle cx="10" cy="14" r="1" fill="currentColor" />
-          <circle cx="14" cy="14" r="1" fill="currentColor" />
-          <circle cx="12" cy="16" r="1" fill="currentColor" />
-        </svg>
-      );
-    case 'DC CCS2':
-      return (
-        <svg viewBox="0 0 24 24" className={`w-10 h-10 ${colorClass}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <circle cx="12" cy="12" r="8" />
-          <circle cx="10" cy="9" r="1.5" fill="currentColor" />
-          <circle cx="14" cy="9" r="1.5" fill="currentColor" />
-          <rect x="9" y="13" width="6" height="3" rx="1.5" fill="currentColor" />
-        </svg>
-      );
-    default:
-      return <Zap size={40} className={colorClass} />;
-  }
-};
-
-/* Unique color palette per plug type */
-const plugColorMap = {
-  'AC GBT': { bg: 'bg-blue-50', border: 'border-blue-500', iconOn: 'text-blue-600', iconOff: 'text-blue-500', label: 'text-blue-600', dot: 'bg-blue-500' },
-  'AC Type 2': { bg: 'bg-emerald-50', border: 'border-emerald-500', iconOn: 'text-emerald-600', iconOff: 'text-emerald-500', label: 'text-emerald-600', dot: 'bg-emerald-500' },
-  'DC GBT': { bg: 'bg-orange-50', border: 'border-orange-500', iconOn: 'text-orange-600', iconOff: 'text-orange-500', label: 'text-orange-600', dot: 'bg-orange-500' },
-  'DC CCS2': { bg: 'bg-purple-50', border: 'border-purple-500', iconOn: 'text-purple-600', iconOff: 'text-purple-500', label: 'text-purple-600', dot: 'bg-purple-500' },
-};
-
-/* Unique color palette per service */
-const serviceColorMap = {
-  'Self Charge': { bg: 'bg-teal-50', border: 'border-teal-500', iconOn: 'text-teal-600', iconOff: 'text-teal-500', label: 'text-teal-600', dot: 'bg-teal-500' },
-  'Accessories': { bg: 'bg-rose-50', border: 'border-rose-500', iconOn: 'text-rose-600', iconOff: 'text-rose-500', label: 'text-rose-600', dot: 'bg-rose-500' },
-};
+import { ArrowLeft, MapPin, BatteryCharging, Clock, Phone, Loader2, AlertCircle } from 'lucide-react';
+import { apiGet, ENDPOINTS } from '../services/apiClient';
 
 const EVFilterScreen = () => {
   const navigate = useNavigate();
-  const [selectedPlug, setSelectedPlug] = useState(null);
-  const [selectedServices, setSelectedServices] = useState([]);
+  const [stations, setStations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const services = [
-    { label: 'Self Charge', Icon: BatteryCharging },
-    { label: 'Accessories', Icon: ShoppingBag },
-  ];
+  useEffect(() => {
+    let cancelled = false;
 
-  const toggleService = (label) => {
-    setSelectedServices(prev =>
-      prev.includes(label) ? prev.filter(s => s !== label) : [...prev, label]
-    );
-  };
+    const load = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await apiGet(ENDPOINTS.EV_STATIONS);
 
-  const plugTypes = ['AC GBT', 'AC Type 2', 'DC GBT', 'DC CCS2'];
+        if (!cancelled) {
+          const list = data?.result?.data ?? data?.data ?? (Array.isArray(data) ? data : []);
 
-  const handleShowResults = (viewType) => {
-    const targetPath = viewType === 'list' ? '/station-list' : '/explore';
-    navigate(targetPath, {
-      state: { plug: selectedPlug, services: selectedServices, view: viewType },
-    });
-  };
+          const mapped = list.map((item, index) => {
+            let costStr = item.Bill_Payments__price__CST ?? '0';
+            if (typeof costStr === 'string') costStr = costStr.replace(/[^\d.]/g, '');
+            const price = parseFloat(costStr) || 0;
+
+            return {
+              id: item.id ?? item._id ?? String(index),
+              name: item.name ?? `Station #${index + 1}`,
+              address: item.Bill_Payments__address__CST ?? 'Location unknown',
+              chargingType: item.Bill_Payments__chargingType__CST ?? 'Standard',
+              direction: item.Bill_Payments__direction__CST ?? '',
+              openTime: item.Bill_Payments__open_time__CST ?? 'Check hours',
+              phone: item.Bill_Payments__phone_Number__CST ?? 'N/A',
+              price,
+            };
+          });
+
+          setStations(mapped);
+        }
+      } catch (err) {
+        if (!cancelled) setError('Failed to load stations. Please try again.');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    load();
+    return () => { cancelled = true; };
+  }, []);
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 min-h-screen bg-background-soft pb-40">
@@ -109,113 +61,83 @@ const EVFilterScreen = () => {
         >
           <ArrowLeft size={20} />
         </button>
-        <h1 className="text-xl font-black text-primary tracking-tight">EV Charging</h1>
+        <h1 className="text-xl font-black text-primary tracking-tight">EV Stations</h1>
       </header>
 
-      <main className="p-4 flex flex-col gap-5">
+      <main className="p-4 flex flex-col gap-4">
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-3">
+            <Loader2 size={32} className="animate-spin text-ev-primary" />
+            <span className="text-sm font-bold">Scanning for networks...</span>
+          </div>
+        )}
 
-        {/* Hero Card */}
-        <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
-          <div className="flex items-center justify-between mb-3">
+        {error && (
+          <div className="flex flex-col items-center justify-center py-16 px-4 bg-red-50 rounded-3xl border border-red-100 text-red-500 text-center mx-2 gap-3">
+            <AlertCircle size={32} className="text-red-400" />
             <div>
-              <h2 className="text-primary font-black text-lg leading-tight">Find a Station</h2>
-              <p className="text-gray-400 text-xs font-semibold mt-0.5">Browse all nearby EV chargers</p>
-            </div>
-            <div className="bg-ev-primary/10 p-3 rounded-2xl">
-              <BatteryCharging size={28} className="text-ev-primary" />
+              <p className="font-bold text-lg mb-1">Connection Error</p>
+              <p className="text-xs text-red-400/80">{error}</p>
             </div>
           </div>
+        )}
 
-          {/* Pricing Info */}
-          <div className="flex items-center gap-2 bg-[#F8F9FA] rounded-2xl p-3 mb-4 border border-gray-50">
-            <CircleDollarSign size={18} className="text-ev-primary flex-shrink-0" />
-            <div>
-              <p className="text-gray-400 text-[10px] font-semibold uppercase tracking-wide">Starting Rate</p>
-              <p className="text-ev-primary font-black text-sm">1,500 MMK / kWh</p>
+        {!loading && !error && stations.length === 0 && (
+          <div className="text-center py-16 text-gray-400 flex flex-col items-center gap-3">
+            <BatteryCharging size={48} className="text-gray-200" />
+            <p className="text-sm font-bold">No stations found in the area.</p>
+          </div>
+        )}
+
+        {!loading && !error && stations.map((station) => (
+          <div key={station.id} className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 flex flex-col">
+            {/* Station header */}
+            <div className="flex justify-between items-start mb-3">
+              <div className="min-w-0 pr-3">
+                <h3 className="font-bold text-lg text-primary truncate">{station.name}</h3>
+                <div className="flex items-center gap-1.5 text-gray-400 mt-1">
+                  <MapPin size={12} className="shrink-0" />
+                  <span className="text-xs font-semibold truncate">{station.address}</span>
+                </div>
+              </div>
+              <div className="bg-ev-primary/10 text-ev-primary px-3 py-1 rounded-2xl shrink-0 border border-ev-primary/20">
+                <span className="text-[10px] font-black uppercase tracking-wider">{station.chargingType}</span>
+              </div>
+            </div>
+
+            {/* Info grid */}
+            <div className="grid grid-cols-2 gap-3 mb-4 mt-2">
+              <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-2xl">
+                <Clock size={16} className="text-primary/40 shrink-0" />
+                <div>
+                  <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wide">Hours</p>
+                  <p className="text-xs font-black text-primary">{station.openTime}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-2xl">
+                <Phone size={16} className="text-primary/40 shrink-0" />
+                <div>
+                  <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wide">Contact</p>
+                  <p className="text-xs font-black text-primary truncate">{station.phone}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Rate row */}
+            <div className="flex items-center justify-between border-t border-gray-50 pt-4">
+              <div>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wide mb-0.5">Rate</p>
+                <p className="font-black text-lg text-ev-primary tracking-tight">
+                  1 Unit / {station.price.toLocaleString()} Ks
+                </p>
+              </div>
+              {station.direction && (
+                <span className="text-xs font-bold text-gray-400">{station.direction}</span>
+              )}
             </div>
           </div>
-
-          {/* Show All Stations Button */}
-          <button
-            onClick={() => handleShowResults('list')}
-            className="w-full bg-ev-primary text-secondary py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-xl shadow-ev-primary/20 active:scale-95 transition-all"
-          >
-            <BatteryCharging size={18} />
-            View Charging Stations
-            <ChevronRight size={16} />
-          </button>
-
-          {/* KBZPay Payment Button */}
-          <button className="w-full mt-3 bg-[#0055A6] text-white py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 shadow-lg shadow-blue-900/20 active:scale-95 transition-all">
-            <div className="px-2 py-0.5 bg-white text-[#0055A6] rounded text-xs italic font-black">KBZPay</div>
-            Pay with KBZPay
-          </button>
-        </div>
-
-        {/* Plug Type Section */}
-        <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
-          <h2 className="text-sm font-black text-primary mb-1 uppercase tracking-tight">Plug Type</h2>
-          <p className="text-gray-400 text-xs font-semibold mb-4">Select your vehicle's connector</p>
-          <div className="grid grid-cols-2 gap-3">
-            {plugTypes.map((type) => {
-              const isSelected = selectedPlug === type;
-              const c = plugColorMap[type];
-              return (
-                <button
-                  key={type}
-                  onClick={() => setSelectedPlug(type === selectedPlug ? null : type)}
-                  className={`flex flex-col items-center justify-center p-5 rounded-2xl border-2 transition-all active:scale-95 ${isSelected
-                    ? `${c.bg} ${c.border}`
-                    : 'bg-[#F8F9FA] border-transparent hover:border-gray-200'
-                    }`}
-                >
-                  <div className="mb-3">
-                    <PlugTypeIcon type={type} colorClass={isSelected ? c.iconOn : c.iconOff} />
-                  </div>
-                  <span className={`text-[11px] font-bold uppercase tracking-wide ${isSelected ? c.label : 'text-gray-500'}`}>
-                    {type}
-                  </span>
-                  {isSelected && <div className={`mt-2 w-4 h-1 ${c.dot} rounded-full`} />}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Available Service Section */}
-        <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
-          <h2 className="text-sm font-black text-primary mb-1 uppercase tracking-tight">Available Service</h2>
-          <p className="text-gray-400 text-xs font-semibold mb-4">Filter by service type</p>
-          <div className="grid grid-cols-2 gap-3">
-            {services.map((service) => {
-              const isSelected = selectedServices.includes(service.label);
-              const c = serviceColorMap[service.label];
-              return (
-                <button
-                  key={service.label}
-                  onClick={() => {
-                    if (service.label === 'Accessories') navigate('/explore');
-                    else if (service.label === 'Self Charge') navigate('/station-list');
-                    else toggleService(service.label);
-                  }}
-                  className={`flex flex-col items-center justify-center p-5 rounded-2xl border-2 transition-all active:scale-95 ${isSelected
-                    ? `${c.bg} ${c.border}`
-                    : 'bg-[#F8F9FA] border-transparent hover:border-gray-200'
-                    }`}
-                >
-                  <div className="mb-3">
-                    <service.Icon size={40} className={isSelected ? c.iconOn : c.iconOff} />
-                  </div>
-                  <span className={`text-[11px] font-bold uppercase tracking-wide ${isSelected ? c.label : 'text-gray-500'}`}>
-                    {service.label}
-                  </span>
-                  {isSelected && <div className={`mt-2 w-4 h-1 ${c.dot} rounded-full`} />}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
+        ))}
       </main>
     </div>
   );

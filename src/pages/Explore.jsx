@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import {
     Star, ShoppingCart, ChevronLeft, ChevronRight, ShieldCheck, CreditCard,
     Share2, Heart, Search, Filter, Plus, Minus, CheckCircle2,
-    Download, ArrowRight, Loader2, Wallet, X, Bell
+    Download, ArrowRight, Loader2, Wallet, X, Bell, AlertCircle
 } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
+import { apiGet, ENDPOINTS } from '../services/apiClient';
 
 const Explore = () => {
     // View State: 'list', 'detail', 'confirm', 'processing', 'success', 'receipt'
     const [view, setView] = useState('list');
-    const [selectedCategory, setSelectedCategory] = useState('All');
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [imgIndex, setImgIndex] = useState(0);
@@ -25,143 +25,89 @@ const Explore = () => {
     const [orderNote, setOrderNote] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const categories = ['All', 'Car Care', 'EV Charging', 'Interior Accessories', 'Safety', 'Smart Gadgets'];
+    // API States
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // 100% Verified Product Mappings
-    const products = [
-        {
-            id: 1,
-            name: 'Gravity Car Phone Holder',
-            price: 15000,
-            rating: 4.8,
-            reviews: 124,
-            stock: 'In stock',
-            category: 'Interior Accessories',
-            images: [
-                '/assets/phone_holder.png',
-                '/assets/phone_holder.png', // Slots ready for perspective views
-                '/assets/phone_holder.png'
-            ],
-            desc: 'High-quality gravity-linkage car phone mount. One-hand operation with 360-degree rotation and secure air vent clip.',
-            features: ['Auto-clamping', 'One-hand use', 'Silicone protection'],
-            compatibility: 'All Smartphone Sizes'
-        },
-        {
-            id: 2,
-            name: 'Type 2 EV Charging Cable',
-            price: 85000,
-            rating: 4.9,
-            reviews: 89,
-            stock: 'In stock',
-            category: 'EV Charging',
-            images: [
-                '/assets/ev_cable.png',
-                '/assets/ev_cable.png',
-                '/assets/ev_cable.png'
-            ],
-            desc: 'Professional Type 2 to Type 2 EV charging cable. 5 meters long, supports up to 22kW fast charging.',
-            features: ['IP55 Waterproof', '22kW Support', '5m Length'],
-            compatibility: 'Type 2 EV Cars'
-        },
-        {
-            id: 3,
-            name: 'Cordless Car Vacuum',
-            price: 25000,
-            rating: 4.5,
-            reviews: 215,
-            stock: 'Low stock',
-            category: 'Car Care',
-            images: [
-                '/assets/car_vacuum.png',
-                '/assets/car_vacuum.png',
-                '/assets/car_vacuum.png'
-            ],
-            desc: 'Powerful handheld cordless car vacuum cleaner. HEPA filtration with multiple attachments for tight spaces.',
-            features: ['Cordless', 'High Suction', 'Washable Filter'],
-            compatibility: 'All Vehicles'
-        },
-        {
-            id: 4,
-            name: '4L Portable Car Fridge',
-            price: 65000,
-            rating: 4.7,
-            reviews: 45,
-            stock: 'In stock',
-            category: 'Smart Gadgets',
-            images: [
-                '/assets/car_fridge.png',
-                '/assets/car_fridge.png',
-                '/assets/car_fridge.png'
-            ],
-            desc: 'Compact 4L car refrigerator for drinks and medication. Features both cooling and warming functions.',
-            features: ['Cooling & Warming', '12V DC Port', 'Ultra Quiet'],
-            compatibility: 'Universal 12V Output'
-        },
-        {
-            id: 5,
-            name: '4K Smart Dash Cam',
-            price: 115000,
-            rating: 4.9,
-            reviews: 312,
-            stock: 'In stock',
-            category: 'Safety',
-            images: [
-                '/assets/dashcam_1.png',
-                '/assets/dashcam_1.png',
-                '/assets/dashcam_1.png'
-            ],
-            desc: 'Ultra HD 4K dash camera with wide-angle lens and Sony sensor. Includes parking monitor and loop recording.',
-            features: ['4K UHD Video', 'WiFi App Connect', 'Loop Recording'],
-            compatibility: 'All Vehicles'
-        },
-        {
-            id: 6,
-            name: 'Portable Charger',
-            price: 299000,
-            rating: 4.7,
-            reviews: 67,
-            stock: 'In stock',
-            category: 'EV Charging',
-            images: [
-                '/assets/ev_cable.png',
-                '/assets/ev_cable.png',
-                '/assets/ev_cable.png'
-            ],
-            desc: 'Universal portable EV charger. Compact design with adjustable current and multiple safety protections.',
-            features: ['Adjustable Current', 'Portable Design', 'LCD Display'],
-            compatibility: 'Universal EV'
-        },
-        {
-            id: 7,
-            name: 'Wall Connector',
-            price: 450000,
-            rating: 4.9,
-            reviews: 156,
-            stock: 'In stock',
-            category: 'EV Charging',
-            images: [
-                '/assets/ev_cable.png',
-                '/assets/ev_cable.png',
-                '/assets/ev_cable.png'
-            ],
-            desc: 'High-power home charging solution. Fast and reliable, providing up to 44 miles of range per hour of charging.',
-            features: ['Fast Charging', 'Wi-Fi Connected', 'Sleek Design'],
-            compatibility: 'All EVs'
-        }
-    ];
+    // 100% Verified Product Mappings fallbacks in case images/data is missing in API
+    const defaultPlaceholderImage = '/assets/phone_holder.png';
 
     const filteredProducts = products.filter(p => {
-        const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
-        const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesCategory && matchesSearch;
+        return p.name.toLowerCase().includes(searchQuery.toLowerCase());
     });
 
     useEffect(() => {
+        let cancelled = false;
+
+        const load = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                const data = await apiGet(ENDPOINTS.PRODUCTS);
+
+                if (!cancelled) {
+                    const list = data?.result?.data ?? data?.data ?? (Array.isArray(data) ? data : []);
+
+                    // Map API products to local component format
+                    const mappedProducts = list.map((item, index) => {
+                        const name = item.Bill_Payments__name__CST ?? item.name ?? item.title ?? `Product #${index + 1}`;
+                        // We are doing parsing since price logic might come as string or number
+                        let costStr = item.Bill_Payments__price__CST ?? item.price ?? item.cost ?? "0";
+                        if (typeof costStr === 'string') {
+                            costStr = costStr.replace(/[^\d.]/g, ''); // Extract only numbers/decimals
+                        }
+                        const price = parseFloat(costStr) || 0;
+                        const desc = item.Bill_Payments__description__CST ?? item.description ?? item.desc ?? 'Great automotive accessories that will amplify my ride.';
+
+                        // Using explicit quantity field or fallback to item.stock if unavailable
+                        const quantityVal = item.Bill_Payments__quantity__CST ?? item.quantity ?? item.stock ?? '0';
+                        const availabilityString = `${quantityVal} Available`;
+
+                        const cats = item.category ?? 'Car Care';
+                        const imageArr = item.images && Array.isArray(item.images) && item.images.length > 0
+                            ? item.images
+                            : [defaultPlaceholderImage, defaultPlaceholderImage, defaultPlaceholderImage];
+
+                        return {
+                            id: item._id ?? item.id ?? Math.random().toString(), // fallback ID
+                            name,
+                            price,
+                            rating: item.rating ?? 4.8,
+                            reviews: item.reviews ?? Math.floor(Math.random() * (400 - 20) + 20),
+                            stock: item.stock_text ?? availabilityString,
+                            quantityNum: parseInt(quantityVal) || 0,
+                            category: cats,
+                            images: imageArr,
+                            desc,
+                            features: Array.isArray(item.features) ? item.features : ['Durable Design', 'Verified Partner', 'Quality Guarantee'],
+                            compatibility: item.compatibility ?? 'Universal compatibility'
+                        };
+                    });
+
+                    setProducts(mappedProducts);
+                }
+            } catch (err) {
+                if (!cancelled) setError('Failed to load products. Please try again later.');
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        };
+
+        load();
+
+        return () => { cancelled = true; };
+    }, []);
+
+    useEffect(() => {
+        if (products.length === 0) return; // wait until products are loaded
+
         const productId = searchParams.get('productId');
         const action = searchParams.get('action');
 
         if (productId && action === 'cart') {
-            const product = products.find(p => p.id === parseInt(productId));
+            // Find by numeric ID or string ID
+            const product = products.find(p => p.id.toString() === productId);
             if (product) {
                 setSelectedProduct(product);
                 setQuantity(1);
@@ -172,12 +118,12 @@ const Explore = () => {
                 // setSearchParams({}, { replace: true });
             }
         } else if (productId) {
-            const product = products.find(p => p.id === parseInt(productId));
+            const product = products.find(p => p.id.toString() === productId);
             if (product) {
                 openProduct(product);
             }
         }
-    }, [searchParams]);
+    }, [searchParams, products]);
 
     const openProduct = (product) => {
         setSelectedProduct(product);
@@ -266,7 +212,7 @@ const Explore = () => {
     if (view === 'list') {
         return (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32">
-                <TopAppBar title="Explore Workshop" />
+                <TopAppBar title="Accessories" />
 
                 <div className="px-4">
                     {/* Search Bar Animation */}
@@ -291,60 +237,67 @@ const Explore = () => {
                         </div>
                     )}
 
-                    {/* Categories */}
-                    <div className="flex overflow-x-auto gap-3 py-2 hide-scrollbar mb-6">
-                        {categories.map((cat) => (
-                            <button
-                                key={cat}
-                                onClick={() => setSelectedCategory(cat)}
-                                className={`px-5 py-2.5 rounded-2xl whitespace-nowrap text-xs font-black transition-all duration-300 shadow-sm border
-                                    ${selectedCategory === cat
-                                        ? 'bg-accent text-primary border-accent'
-                                        : 'bg-white text-gray-500 border-gray-100'
-                                    }`}
-                            >
-                                {cat}
+                    {/* Status & Grid */}
+                    {loading && (
+                        <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-3">
+                            <Loader2 size={32} className="animate-spin text-ev-primary" />
+                            <span className="text-sm font-bold">Loading products...</span>
+                        </div>
+                    )}
+
+                    {error && (
+                        <div className="flex flex-col items-center justify-center p-6 bg-red-50 rounded-[2rem] border border-red-100 text-red-500 mb-4 text-center text-sm font-medium">
+                            <AlertCircle size={28} className="mb-2 opacity-80" />
+                            <span>{error}</span>
+                            <button onClick={() => window.location.reload()} className="mt-4 px-6 py-2 bg-red-100 text-red-700 rounded-xl font-bold active:scale-95 transition-all text-xs">
+                                Try Again
                             </button>
-                        ))}
-                    </div>
+                        </div>
+                    )}
 
-                    {/* Grid */}
-                    <div className="grid grid-cols-2 gap-4">
-                        {filteredProducts.length > 0 ? filteredProducts.map(product => (
-                            <div
-                                key={product.id}
-                                onClick={() => openProduct(product)}
-                                className="bg-white rounded-[2rem] p-3 shadow-sm border border-gray-100 flex flex-col group active:scale-[0.97] transition-all duration-300 relative overflow-hidden"
-                            >
-                                <div className="absolute top-3 left-3 z-10">
-                                    <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded-full text-white bg-primary shadow-sm">
-                                        {product.category === 'EV Charging' ? 'Fast' : 'Top'}
-                                    </span>
-                                </div>
+                    {!loading && !error && (
+                        <div className="grid grid-cols-2 gap-4">
+                            {filteredProducts.length > 0 ? filteredProducts.map(product => (
+                                <div
+                                    key={product.id}
+                                    onClick={() => openProduct(product)}
+                                    className="bg-white rounded-[2rem] p-3 shadow-sm border border-gray-100 flex flex-col group active:scale-[0.97] transition-all duration-300 relative overflow-hidden"
+                                >
+                                    <div className="absolute top-3 left-3 z-10">
+                                        <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded-full text-white bg-primary shadow-sm">
+                                            {product.category === 'EV Charging' ? 'Fast' : 'Top'}
+                                        </span>
+                                    </div>
 
-                                <div className="h-36 bg-gray-50 rounded-2xl mb-3 flex items-center justify-center group-hover:scale-105 transition-transform duration-500 overflow-hidden">
-                                    <img src={product.images[0]} className="w-full h-full object-contain p-4" alt={product.name} />
+                                    <div className="h-36 bg-gray-50 rounded-2xl mb-3 flex items-center justify-center group-hover:scale-105 transition-transform duration-500 overflow-hidden">
+                                        <img src={product.images[0]} className="w-full h-full object-contain p-4" alt={product.name} />
+                                    </div>
+                                    <h3 className="font-bold text-sm text-primary leading-tight line-clamp-2 min-h-[40px] px-1">{product.name}</h3>
+                                    <div className="flex items-center justify-between mt-1 mb-2 px-1">
+                                        <div className="flex items-center gap-1">
+                                            <Star size={10} className="fill-accent text-accent" />
+                                            <span className="text-[10px] text-gray-400 font-bold">{product.rating}</span>
+                                        </div>
+                                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border ${product.quantityNum < 5 ? 'text-status-danger border-status-danger/30 bg-status-danger/5' : 'text-status-success border-status-success/30 bg-status-success/5'}`}>
+                                            {product.stock}
+                                        </span>
+                                    </div>
+                                    <div className="mt-auto pt-2 border-t border-gray-50 flex items-center justify-between px-1">
+                                        <span className="font-black text-lg text-ev-primary">{product.price.toLocaleString()} <span className="text-[10px]">MMK</span></span>
+                                    </div>
+                                    <button className="mt-3 w-full bg-gray-50 text-primary py-2 rounded-xl text-xs font-bold hover:bg-primary hover:text-white transition-all duration-300 transform active:scale-95">
+                                        Shop
+                                    </button>
                                 </div>
-                                <h3 className="font-bold text-sm text-primary leading-tight line-clamp-2 min-h-[40px] px-1">{product.name}</h3>
-                                <div className="flex items-center gap-1 mt-1 mb-2 px-1">
-                                    <Star size={10} className="fill-accent text-accent" />
-                                    <span className="text-[10px] text-gray-400 font-bold">{product.rating}</span>
+                            )) : (
+                                <div className="col-span-2 py-20 text-center flex flex-col items-center">
+                                    <Search size={40} className="text-gray-200 mb-4" />
+                                    <p className="text-gray-400 font-bold">No products found</p>
+                                    <button onClick={() => { setSearchQuery(''); setIsSearchVisible(false) }} className="text-ev-primary text-xs font-bold mt-2">Clear search</button>
                                 </div>
-                                <div className="mt-auto pt-2 border-t border-gray-50 flex items-center justify-between px-1">
-                                    <span className="font-black text-lg text-ev-primary">{product.price.toLocaleString()} <span className="text-[10px]">MMK</span></span>
-                                </div>
-                                <button className="mt-3 w-full bg-gray-50 text-primary py-2 rounded-xl text-xs font-bold hover:bg-primary hover:text-white transition-all duration-300 transform active:scale-95">
-                                    Shop
-                                </button>
-                            </div>
-                        )) : (
-                            <div className="col-span-2 py-20 text-center flex flex-col items-center">
-                                <Search size={40} className="text-gray-200 mb-4" />
-                                <p className="text-gray-400 font-bold">No products found</p>
-                                <button onClick={() => { setSearchQuery(''); setIsSearchVisible(false) }} className="text-ev-primary text-xs font-bold mt-2">Clear search</button>
-                            </div>
-                        )}
-                    </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         );
@@ -418,7 +371,7 @@ const Explore = () => {
                             </div>
                             <div className="bg-accent/10 px-4 py-3 rounded-2xl text-right">
                                 <p className="text-xl font-black text-ev-primary">{selectedProduct.price.toLocaleString()} <span className="text-xs">MMK</span></p>
-                                <p className={`text-[10px] font-bold uppercase mt-1 ${selectedProduct.stock.includes('Low') ? 'text-status-danger' : 'text-status-success'}`}>{selectedProduct.stock}</p>
+                                <p className={`text-[10px] font-bold uppercase mt-1 ${selectedProduct.quantityNum < 5 ? 'text-status-danger' : 'text-status-success'}`}>{selectedProduct.stock}</p>
                             </div>
                         </div>
 

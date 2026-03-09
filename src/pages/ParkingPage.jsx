@@ -1,6 +1,8 @@
-import { useState } from 'react';
-import { ArrowLeft, Car, Clock, CreditCard, Search, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ArrowLeft, Car, Clock, CreditCard, Search, AlertCircle, CheckCircle2, MapPin, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { apiGet, ENDPOINTS } from '../services/apiClient';
+
 
 const ParkingPage = () => {
     const navigate = useNavigate();
@@ -9,6 +11,42 @@ const ParkingPage = () => {
     const [error, setError] = useState('');
     const [parkingData, setParkingData] = useState(null);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+    const [parkingList, setParkingList] = useState([]);
+    const [listLoading, setListLoading] = useState(true);
+    const [listError, setListError] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    useEffect(() => {
+        let cancelled = false;
+
+        const load = async () => {
+            try {
+                setListLoading(true);
+                setListError(null);
+                const data = await apiGet(ENDPOINTS.PARKING);
+
+                if (!cancelled) {
+                    const list = data?.result?.data ?? data?.data ?? (Array.isArray(data) ? data : []);
+                    setParkingList(list);
+                }
+            } catch (err) {
+                if (!cancelled) setListError('Could not fetch available parking spots.');
+            } finally {
+                if (!cancelled) setListLoading(false);
+            }
+        };
+
+        load();
+        return () => { cancelled = true; };
+    }, []);
+
+    const filteredParking = parkingList.filter(spot => {
+        const name = spot.Bill_Payments__name__CST ?? spot.name ?? spot.parking_name ?? '';
+        const address = spot.Bill_Payments__address__CST ?? spot.address ?? spot.location ?? '';
+        const searchLower = searchQuery.toLowerCase();
+        return name.toLowerCase().includes(searchLower) || address.toLowerCase().includes(searchLower);
+    });
 
     const checkStatus = async () => {
         if (!plateNumber.trim()) {
@@ -224,6 +262,81 @@ const ParkingPage = () => {
                         </button>
                     </div>
                 )}
+
+                {/* Available Parking List Section */}
+                <div className="mt-12 mb-4 animate-in slide-in-from-bottom-8 fade-in duration-500 relative z-10 w-full">
+                    <h2 className="text-xl font-black text-slate-800 mb-4 px-2 tracking-tight">Available Go Pay Parking</h2>
+
+                    {/* Search Bar */}
+                    <div className="relative mb-6">
+                        <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                            <Search className="h-5 w-5 text-slate-400" />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Search parking by name or address..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full bg-white/80 backdrop-blur-sm border-2 border-slate-100 rounded-2xl py-4 pr-4 pl-14 text-slate-800 focus:outline-none focus:border-ev-primary focus:ring-4 focus:ring-ev-primary/10 transition-all shadow-sm shadow-slate-200/50 placeholder:text-slate-400 font-medium"
+                        />
+                    </div>
+
+                    {listLoading && (
+                        <div className="flex flex-col items-center justify-center py-12 text-slate-400 bg-white/60 backdrop-blur-md rounded-[2rem] border border-white">
+                            <Loader2 size={32} className="animate-spin mb-3 text-ev-primary" />
+                            <span className="text-sm font-medium">Finding parking spots…</span>
+                        </div>
+                    )}
+
+                    {listError && (
+                        <div className="flex flex-col items-center justify-center p-6 bg-red-50/80 rounded-[2rem] border border-red-100 text-red-500 mb-4 text-center text-sm font-medium">
+                            <AlertCircle size={28} className="mb-2 opacity-80" />
+                            <span>{listError}</span>
+                        </div>
+                    )}
+
+                    {!listLoading && !listError && filteredParking.length === 0 && (
+                        <div className="text-center py-12 bg-white/60 backdrop-blur-md rounded-[2rem] border border-white text-slate-500 text-sm font-medium flex flex-col items-center justify-center">
+                            <Car size={36} className="mb-4 text-slate-300" />
+                            <p>No parking spots match your search.</p>
+                        </div>
+                    )}
+
+                    {!listLoading && !listError && filteredParking.length > 0 && (
+                        <div className="flex flex-col gap-4 pb-8">
+                            {filteredParking.map((spot, index) => {
+                                const name = spot.Bill_Payments__name__CST ?? spot.name ?? spot.parking_name ?? `Spot #${index + 1}`;
+                                const address = spot.Bill_Payments__address__CST ?? spot.address ?? spot.location ?? '';
+                                const price = spot.Bill_Payments__price__CST ?? spot.price ?? '';
+
+                                return (
+                                    <div
+                                        key={spot._id ?? spot.id ?? index}
+                                        className="flex items-center justify-between bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md hover:border-ev-primary/30 transition-all cursor-pointer group"
+                                    >
+                                        <div className="flex items-center gap-4 min-w-0 pr-4">
+                                            <div className="bg-ev-primary/10 w-12 h-12 rounded-xl flex items-center justify-center text-ev-primary shrink-0 group-hover:bg-ev-primary group-hover:text-white transition-colors">
+                                                <MapPin size={22} />
+                                            </div>
+                                            <div className="min-w-0">
+                                                <p className="font-bold text-slate-800 text-[15px] truncate">{name}</p>
+                                                {address && (
+                                                    <p className="text-xs text-slate-500 truncate mt-1 font-medium">{address}</p>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {price && (
+                                            <div className="bg-slate-50 border border-slate-100 px-3.5 py-1.5 rounded-xl shrink-0">
+                                                <span className="text-xs font-black text-ev-primary">{price} MMK/hr</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
             </main>
         </div>
     );
