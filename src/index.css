@@ -1,19 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #2F2F2F;
-  --color-secondary: #FFFFFF;
+  /* Parking & Traffic Theme (Light & Bright) */
+  --color-primary: #111827;
+  --color-secondary: #ffffff;
   --color-accent: #FACC15;
-  
-  --color-ev-primary: #0D9488;
-  --color-ev-secondary: #5EEAD4;
-  --color-ev-accent: #2563EB;
-  
-  --color-background-soft: #F8FAFC;
+
+  --color-ev-primary: #FACC15;
+  --color-ev-secondary: #111827;
+  --color-ev-accent: #FEF3C7;
+
+  --color-background-soft: #F4F5F7;
 
   --color-status-success: #22c55e;
   --color-status-danger: #ef4444;
-  --color-status-warning: #eab308;
+  --color-status-warning: #f59e0b;
   --color-status-info: #3b82f6;
 
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
@@ -22,11 +23,26 @@
 @layer base {
   body {
     @apply bg-background-soft text-primary font-sans antialiased;
-    /* Optional: To mimic mobile app feel on desktop */
     @apply flex justify-center min-h-screen bg-gray-100;
   }
-  
+
   #root {
     @apply w-full max-w-md bg-background-soft min-h-screen relative shadow-2xl overflow-x-hidden;
+  }
+}
+
+@layer utilities {
+
+  /* Force text and icons on yellow buttons to be black, even if they have text-white */
+  .bg-ev-primary,
+  .bg-accent,
+  .bg-status-warning {
+    color: #111827 !important;
+  }
+
+  .bg-ev-primary *,
+  .bg-accent *,
+  .bg-status-warning * {
+    color: #111827 !important;
   }
 }

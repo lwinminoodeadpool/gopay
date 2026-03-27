@@ -1,20 +1,65 @@
 import { Bell, Search } from 'lucide-react';
 import ParkingManagement from '../components/ParkingManagement';
 import ChargingStationList from '../components/ChargingStationList';
+import PromoBanners from '../components/PromoBanners';
 import EVAccessories from '../components/EVAccessories';
+import { useEffect, useState } from 'react';
+import { apiPost, ENDPOINTS } from '../services/apiClient';
 
 const Home = () => {
+    const [userName, setUserName] = useState(localStorage.getItem('userName') || 'John Doe');
+
+    const getInitials = (name) => {
+        return name.split(' ').filter(Boolean).map(n => n[0]).join('').slice(0, 2).toUpperCase();
+    };
+
+    useEffect(() => {
+        const initSDK = async () => {
+            try {
+                window.ma.getAuthCode({
+                    scopes:
+                        ['USER_NICKNAME',
+                            'PLAINTEXT_MOBILE_PHONE'],
+                    success: async function (res) {
+                        console.log(res);
+                        let token = res.authCode;
+                        try {
+                            const response = await apiPost(ENDPOINTS.AUTOLOGIN, {
+                                authCode: token
+                            });
+                            console.log('Autologin response:', response);
+
+                            if (response?.result) {
+                                const fetchedName = response.result.name || 'John Doe';
+                                const fetchedPhone = response.result.Bill_Payments__phoneNumber__CST || '';
+
+                                localStorage.setItem('userName', fetchedName);
+                                localStorage.setItem('userPhone', fetchedPhone);
+                                setUserName(fetchedName);
+                            }
+                        } catch (error) {
+                            console.error('Autologin error:', error);
+                        }
+                    }
+                })
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        initSDK();
+    }, []);
     return (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-6">
             {/* Top App Bar */}
             <header className="flex justify-between items-center mb-8 px-2 pt-2">
                 <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-ev-primary text-secondary rounded-full flex items-center justify-center font-bold text-lg shadow-md border-2 border-white">
-                        JD
+                        {getInitials(userName)}
                     </div>
                     <div>
-                        <p className="text-xs text-gray-500 font-medium">Good Morning,</p>
-                        <h1 className="text-xl font-black text-primary tracking-tight">John Doe</h1>
+                        <p className="text-xs text-gray-500 font-medium">Good Afternoon,</p>
+                        <h1 className="text-xl font-black text-primary tracking-tight">{userName}</h1>
                     </div>
                 </div>
                 <div className="flex gap-3">
@@ -31,6 +76,7 @@ const Home = () => {
             {/* Main Content Sections */}
             <div className="px-2">
                 <ParkingManagement />
+                <PromoBanners />
                 <ChargingStationList />
                 <EVAccessories />
             </div>

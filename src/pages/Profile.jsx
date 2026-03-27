@@ -30,15 +30,17 @@ import {
 import PaymentHistory from '../components/PaymentHistory';
 
 const profileActions = [
-    { id: 'account', label: 'Account Information', icon: Settings },
     { id: 'security', label: 'Security', icon: ShieldCheck },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'help', label: 'Help Center', icon: CircleHelp },
 ];
 
 const vehicleTypes = ['SUV', 'Sedan', 'Hatchback', 'MPV', 'Pickup Trunk', 'EV'];
 
 const Profile = () => {
+    const getInitials = (name) => {
+        return name.split(' ').filter(Boolean).map(n => n[0]).join('').slice(0, 2).toUpperCase();
+    };
+
     const [selectedVehicleType, setSelectedVehicleType] = useState('SUV');
     const [showVehicleDetails, setShowVehicleDetails] = useState(false);
     const [carNumberPlate, setCarNumberPlate] = useState('YGN-12-4821');
@@ -48,18 +50,14 @@ const Profile = () => {
     // Account Settings State
     const [expandedAction, setExpandedAction] = useState(null);
     const [accountData, setAccountData] = useState({
-        name: 'John Doe',
-        goPayId: 'kmini_gopay01',
-        phone: '+95 9 123 456 789',
+        name: localStorage.getItem('userName') || 'John Doe',
+        goPayId: localStorage.getItem('userPhone') || 'kmini_gopay01',
+        phone: localStorage.getItem('userPhone') || '+95 9 123 456 789',
         language: 'English',
         region: 'Yangon, Myanmar'
     });
 
-    const [notificationSettings, setNotificationSettings] = useState({
-        transactions: true,
-        promotions: true,
-        updates: false
-    });
+
 
     return (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-6">
@@ -67,10 +65,10 @@ const Profile = () => {
                 <header className="bg-white rounded-3xl p-5 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.08)] border border-gray-100 mb-6">
                     <div className="flex items-center gap-4">
                         <div className="w-16 h-16 rounded-full bg-ev-primary text-secondary flex items-center justify-center font-black text-xl border-2 border-white shadow-md">
-                            KM
+                            {getInitials(accountData.name)}
                         </div>
                         <div className="flex-1">
-                            <h1 className="text-2xl font-black tracking-tight text-primary">John Doe</h1>
+                            <h1 className="text-2xl font-black tracking-tight text-primary">{accountData.name}</h1>
                             <p className="text-sm text-gray-400 font-bold uppercase tracking-tight">{accountData.goPayId}</p>
                         </div>
                         <button className="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-primary">
@@ -78,17 +76,7 @@ const Profile = () => {
                         </button>
                     </div>
 
-                    <div className="mt-5 bg-gradient-to-r from-ev-primary to-ev-secondary text-secondary rounded-2xl p-4">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-xs font-semibold text-white/80">Wallet Balance</p>
-                                <p className="text-2xl font-black tracking-tight">MMK 250,000</p>
-                            </div>
-                            <div className="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center">
-                                <Wallet size={20} />
-                            </div>
-                        </div>
-                    </div>
+
                 </header>
 
                 <section className="bg-white rounded-3xl p-3 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.08)] border border-gray-100 mb-6">
@@ -179,79 +167,7 @@ const Profile = () => {
                                     />
                                 </button>
 
-                                {isExpanded && item.id === 'account' && (
-                                    <div className="px-3 pb-6 animate-in slide-in-from-top-2 duration-300">
-                                        <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100 space-y-4">
-                                            {/* Personal Info */}
-                                            <div className="space-y-3">
-                                                <div className="flex items-center gap-3 bg-white p-3 rounded-xl border border-gray-100">
-                                                    <UserRound size={16} className="text-gray-400" />
-                                                    <div className="flex-1">
-                                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Full Name</p>
-                                                        <input
-                                                            type="text"
-                                                            value={accountData.name}
-                                                            onChange={(e) => setAccountData({ ...accountData, name: e.target.value })}
-                                                            className="text-sm font-bold text-primary bg-transparent outline-none w-full"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-3 bg-white p-3 rounded-xl border border-gray-100">
-                                                    <Globe size={16} className="text-gray-400" />
-                                                    <div className="flex-1">
-                                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">GoPay ID</p>
-                                                        <input
-                                                            type="text"
-                                                            value={accountData.goPayId}
-                                                            onChange={(e) => setAccountData({ ...accountData, goPayId: e.target.value })}
-                                                            className="text-sm font-bold text-primary bg-transparent outline-none w-full"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-3 bg-white p-3 rounded-xl border border-gray-100">
-                                                    <Phone size={16} className="text-gray-400" />
-                                                    <div className="flex-1">
-                                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Phone Number</p>
-                                                        <input
-                                                            type="text"
-                                                            value={accountData.phone}
-                                                            onChange={(e) => setAccountData({ ...accountData, phone: e.target.value })}
-                                                            className="text-sm font-bold text-primary bg-transparent outline-none w-full"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            {/* Preferences */}
-                                            <div className="pt-2">
-                                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3 px-1">Preferences</p>
-                                                <div className="grid grid-cols-2 gap-3">
-                                                    <div className="bg-white p-3 rounded-xl border border-gray-100">
-                                                        <div className="flex items-center gap-2 mb-1">
-                                                            <Globe size={14} className="text-ev-primary" />
-                                                            <p className="text-[10px] text-gray-400 font-bold">Language</p>
-                                                        </div>
-                                                        <select
-                                                            value={accountData.language}
-                                                            onChange={(e) => setAccountData({ ...accountData, language: e.target.value })}
-                                                            className="text-xs font-black text-primary bg-transparent outline-none w-full appearance-none"
-                                                        >
-                                                            <option>English</option>
-                                                            <option>Myanmar</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="bg-white p-3 rounded-xl border border-gray-100">
-                                                        <div className="flex items-center gap-2 mb-1">
-                                                            <MapPin size={14} className="text-ev-primary" />
-                                                            <p className="text-[10px] text-gray-400 font-bold">Region</p>
-                                                        </div>
-                                                        <p className="text-xs font-black text-primary truncate">{accountData.region}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
 
                                 {isExpanded && item.id === 'security' && (
                                     <div className="px-3 pb-6 animate-in slide-in-from-top-2 duration-300">
@@ -281,43 +197,7 @@ const Profile = () => {
                                     </div>
                                 )}
 
-                                {isExpanded && item.id === 'notifications' && (
-                                    <div className="px-3 pb-6 animate-in slide-in-from-top-2 duration-300">
-                                        <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100 space-y-3">
-                                            {[
-                                                { id: 'transactions', label: 'Transaction Alerts', sub: 'Payments & sessions', icon: Zap },
-                                                { id: 'promotions', label: 'Promo & Offers', sub: 'Exclusive charging deals', icon: TicketPercent },
-                                                { id: 'updates', label: 'App Updates', sub: 'New features & fixes', icon: Info }
-                                            ].map((notif) => {
-                                                const NotifIcon = notif.icon;
-                                                return (
-                                                    <div key={notif.id} className="bg-white p-4 rounded-xl border border-gray-50 flex items-center justify-between">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="w-10 h-10 rounded-xl bg-gray-50 text-ev-primary flex items-center justify-center">
-                                                                <NotifIcon size={18} />
-                                                            </div>
-                                                            <div>
-                                                                <p className="text-sm font-black text-primary">{notif.label}</p>
-                                                                <p className="text-[10px] text-gray-400 font-bold">{notif.sub}</p>
-                                                            </div>
-                                                        </div>
-                                                        <button
-                                                            onClick={() => setNotificationSettings(prev => ({ ...prev, [notif.id]: !prev[notif.id] }))}
-                                                            className="relative w-14 h-8 rounded-full transition-all duration-300"
-                                                        >
-                                                            <div
-                                                                className={`absolute inset-0 rounded-full transition-all duration-300 ${notificationSettings[notif.id] ? 'bg-ev-primary' : 'bg-gray-200'}`}
-                                                            />
-                                                            <div
-                                                                className={`absolute top-1 left-1 w-6 h-6 bg-white rounded-full transition-all duration-300 shadow-sm ${notificationSettings[notif.id] ? 'translate-x-6' : ''}`}
-                                                            />
-                                                        </button>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                )}
+
 
                                 {isExpanded && item.id === 'help' && (
                                     <div className="px-3 pb-6 animate-in slide-in-from-top-2 duration-300">
@@ -371,10 +251,7 @@ const Profile = () => {
 
                 <PaymentHistory />
 
-                <button className="w-full mt-3 bg-white text-status-danger rounded-2xl py-4 font-bold border border-red-100 hover:bg-red-50 transition-colors flex items-center justify-center gap-2">
-                    <LogOut size={18} />
-                    Log Out
-                </button>
+
             </div>
         </div>
     );

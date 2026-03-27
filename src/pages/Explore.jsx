@@ -58,16 +58,24 @@ const Explore = () => {
                             costStr = costStr.replace(/[^\d.]/g, ''); // Extract only numbers/decimals
                         }
                         const price = parseFloat(costStr) || 0;
-                        const desc = item.Bill_Payments__description__CST ?? item.description ?? item.desc ?? 'Great automotive accessories that will amplify my ride.';
+                        const desc = item.Bill_Payments__access_overview__CST ?? item.Bill_Payments__description__CST ?? item.description ?? item.desc ?? '';
 
                         // Using explicit quantity field or fallback to item.stock if unavailable
                         const quantityVal = item.Bill_Payments__quantity__CST ?? item.quantity ?? item.stock ?? '0';
                         const availabilityString = `${quantityVal} Available`;
 
                         const cats = item.category ?? 'Car Care';
-                        const imageArr = item.images && Array.isArray(item.images) && item.images.length > 0
-                            ? item.images
-                            : [defaultPlaceholderImage, defaultPlaceholderImage, defaultPlaceholderImage];
+                        const photoField = item.Bill_Payments__access_photo__CST;
+                        const resolvePhoto = (raw) => {
+                            if (!raw || typeof raw !== 'string' || !raw.trim()) return defaultPlaceholderImage;
+                            const str = raw.trim();
+                            // Already a full URL or data URI — use as-is
+                            if (str.startsWith('http') || str.startsWith('data:')) return str;
+                            // Otherwise treat as raw base64
+                            return `data:image/png;base64,${str}`;
+                        };
+                        const rawPhoto = Array.isArray(photoField) ? photoField[0] : photoField;
+                        const imageArr = [resolvePhoto(rawPhoto)];
 
                         return {
                             id: item._id ?? item.id ?? Math.random().toString(), // fallback ID
@@ -80,8 +88,6 @@ const Explore = () => {
                             category: cats,
                             images: imageArr,
                             desc,
-                            features: Array.isArray(item.features) ? item.features : ['Durable Design', 'Verified Partner', 'Quality Guarantee'],
-                            compatibility: item.compatibility ?? 'Universal compatibility'
                         };
                     });
 
@@ -270,7 +276,12 @@ const Explore = () => {
                                     </div>
 
                                     <div className="h-36 bg-gray-50 rounded-2xl mb-3 flex items-center justify-center group-hover:scale-105 transition-transform duration-500 overflow-hidden">
-                                        <img src={product.images[0]} className="w-full h-full object-contain p-4" alt={product.name} />
+                                        <img
+                                            src={product.images[0]}
+                                            className="w-full h-full object-contain p-4"
+                                            alt={product.name}
+                                            onError={(e) => { e.currentTarget.src = '/assets/phone_holder.png'; }}
+                                        />
                                     </div>
                                     <h3 className="font-bold text-sm text-primary leading-tight line-clamp-2 min-h-[40px] px-1">{product.name}</h3>
                                     <div className="flex items-center justify-between mt-1 mb-2 px-1">
@@ -325,6 +336,7 @@ const Explore = () => {
                                 src={selectedProduct.images[imgIndex]}
                                 className="w-full h-full object-contain drop-shadow-2xl animate-in fade-in zoom-in-95 duration-500"
                                 alt={selectedProduct.name}
+                                onError={(e) => { e.currentTarget.src = '/assets/phone_holder.png'; }}
                             />
 
                             {/* Next Image */}
@@ -355,7 +367,7 @@ const Explore = () => {
                                     onClick={() => setImgIndex(i)}
                                     className={`w-16 h-16 rounded-xl border-2 transition-all p-1 bg-gray-50 flex-shrink-0 cursor-pointer ${imgIndex === i ? 'border-ev-primary bg-ev-primary/5 scale-105' : 'border-transparent opacity-60 hover:opacity-100'}`}
                                 >
-                                    <img src={img} className="w-full h-full object-contain" alt="thumbnail" />
+                                    <img src={img} className="w-full h-full object-contain" alt="thumbnail" onError={(e) => { e.currentTarget.src = '/assets/phone_holder.png'; }} />
                                 </div>
                             ))}
                         </div>
@@ -388,25 +400,6 @@ const Explore = () => {
                             <p className="text-sm text-gray-500 leading-relaxed font-medium">{selectedProduct.desc}</p>
                         </section>
 
-                        <section className="grid grid-cols-2 gap-4 mb-8">
-                            <div className="bg-white p-4 rounded-3xl border border-gray-100 shadow-sm">
-                                <h3 className="text-[10px] font-black text-primary uppercase tracking-widest mb-3 opacity-50">Key Points</h3>
-                                <ul className="space-y-2">
-                                    {selectedProduct.features.map(f => (
-                                        <li key={f} className="text-[11px] text-gray-600 font-bold flex items-center gap-2">
-                                            <div className="w-1.5 h-1.5 bg-ev-primary rounded-full" /> {f}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="bg-white p-4 rounded-3xl border border-gray-100 shadow-sm flex flex-col justify-center items-center text-center">
-                                <h3 className="text-[10px] font-black text-primary uppercase tracking-widest mb-3 opacity-50">Support</h3>
-                                <div className="w-10 h-10 bg-status-info/10 text-status-info rounded-full flex items-center justify-center mb-2">
-                                    <ShieldCheck size={20} />
-                                </div>
-                                <p className="text-[10px] font-bold text-gray-500">{selectedProduct.compatibility}</p>
-                            </div>
-                        </section>
                     </div>
                 </div>
 
@@ -421,8 +414,12 @@ const Explore = () => {
                         </button>
                         <span className="font-black text-primary w-4 text-center text-sm">{quantity}</span>
                         <button
-                            onClick={() => setQuantity(quantity + 1)}
-                            className="w-7 h-7 rounded-lg bg-accent shadow-sm flex items-center justify-center text-primary active:scale-90 transition-all font-bold"
+                            onClick={() => setQuantity(Math.min(selectedProduct.quantityNum, quantity + 1))}
+                            disabled={quantity >= selectedProduct.quantityNum}
+                            className={`w-7 h-7 rounded-lg shadow-sm flex items-center justify-center active:scale-90 transition-all font-bold ${quantity >= selectedProduct.quantityNum
+                                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
+                                    : 'bg-accent text-primary'
+                                }`}
                         >
                             <Plus size={12} strokeWidth={3} />
                         </button>
@@ -458,7 +455,7 @@ const Explore = () => {
                             <div className="flex items-center gap-5 p-5 bg-background-soft rounded-[2rem] border border-gray-100 shadow-sm relative overflow-hidden group">
                                 <div className="absolute inset-y-0 right-0 w-1 bg-ev-primary opacity-20" />
                                 <div className="w-16 h-16 bg-white rounded-2xl overflow-hidden border border-gray-100 flex-shrink-0 shadow-inner">
-                                    <img src={selectedProduct.images[0]} className="w-full h-full object-contain p-2" alt={selectedProduct.name} />
+                                    <img src={selectedProduct.images[0]} className="w-full h-full object-contain p-2" alt={selectedProduct.name} onError={(e) => { e.currentTarget.src = '/assets/phone_holder.png'; }} />
                                 </div>
                                 <div className="flex-1 overflow-hidden">
                                     <p className="font-black text-primary text-lg truncate leading-tight uppercase tracking-tight">{selectedProduct.name}</p>
@@ -607,7 +604,7 @@ const Explore = () => {
                                 <div className="flex justify-between items-start pb-8 border-b border-dashed border-gray-200">
                                     <div className="flex gap-4">
                                         <div className="w-16 h-16 bg-gray-50 rounded-2xl overflow-hidden p-2 flex-shrink-0 border border-gray-100 shadow-inner">
-                                            <img src={selectedProduct.images[0]} className="w-full h-full object-contain" alt={selectedProduct.name} />
+                                            <img src={selectedProduct.images[0]} className="w-full h-full object-contain" alt={selectedProduct.name} onError={(e) => { e.currentTarget.src = '/assets/phone_holder.png'; }} />
                                         </div>
                                         <div className="flex flex-col justify-center">
                                             <p className="text-lg font-black text-primary tracking-tight leading-tight uppercase">{selectedProduct.name}</p>

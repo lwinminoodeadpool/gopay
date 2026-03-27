@@ -26,66 +26,48 @@ const BottomNav = () => {
     const navItems = [
         { id: 'parking', icon: MapPin, label: 'Parking', path: '/parking' },
         { id: 'charge', icon: PlugZap, label: 'Charge', path: '/charge' },
-        { id: 'home', icon: Home, label: 'Home', path: '/', isCenter: true },
+        { id: 'home', icon: Home, label: 'Home', path: '/' },
         { id: 'explore', icon: Compass, label: 'Explore', path: '/explore' },
         { id: 'profile', icon: User, label: 'Profile', path: '/profile' },
     ];
 
     return (
-        <div className="fixed bottom-0 w-full max-w-md bg-secondary border-t border-gray-100 px-6 py-3 pb-8 shadow-lg z-50 rounded-t-2xl">
-            <div className="flex justify-between items-center relative">
-                {navItems.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = activeTab === item.id;
+        <div className="fixed bottom-0 w-full max-w-md bg-secondary border-t border-gray-100 flex justify-around items-center px-4 py-3 pb-8 shadow-lg z-50 rounded-t-2xl">
+            {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeTab === item.id;
 
-                    if (item.isCenter) {
-                        return (
-                            <button
-                                key={item.id}
-                                onClick={() => handleNavigation(item.path)}
-                                className="flex flex-col items-center justify-center gap-1 group relative transition-all duration-300 w-16 -mt-8"
-                            >
-                                <div className="absolute -inset-2 bg-white rounded-full -z-20 shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:scale-105" />
-                                <div className="w-16 h-16 bg-ev-primary rounded-full flex items-center justify-center text-white shadow-lg z-10 transition-all duration-300 group-hover:bg-teal-700 group-hover:-translate-y-1 group-hover:shadow-[0_8px_16px_rgba(13,148,136,0.4)]">
-                                    <Icon size={32} className="stroke-[2px]" />
-                                </div>
-                                <span
-                                    className={`font-bold transition-all duration-300 mt-1
-                                    ${isActive ? 'text-ev-primary text-[12px]' : 'text-gray-400 text-[11px] group-hover:text-teal-600 group-hover:text-[12px]'}`}
-                                >
-                                    {item.label}
-                                </span>
-                            </button>
-                        );
-                    } else {
-                        return (
-                            <button
-                                key={item.id}
-                                onClick={() => handleNavigation(item.path)}
-                                className="flex flex-col items-center justify-center gap-1 group relative transition-all duration-300 w-12"
-                            >
-                                {/* Highlight background pill */}
-                                <div
-                                    className={`absolute inset-0 bg-ev-secondary/20 rounded-xl transition-all duration-300 -z-10
-                ${isActive ? 'opacity-100 scale-125' : 'opacity-0 scale-50 group-hover:opacity-50 group-hover:scale-100'}`}
-                                />
+                return (
+                    <button
+                        key={item.id}
+                        onClick={() => handleNavigation(item.path)}
+                        className={`flex flex-col items-center justify-center gap-1 group relative transition-all duration-300 ease-in-out ${isActive ? 'w-16 -mt-8' : 'w-12 mt-0'}`}
+                    >
+                        {/* Cutout background (only visible when active) */}
+                        <div
+                            className={`absolute -inset-2 bg-white rounded-full -z-20 transition-all duration-300 shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.05)] ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`}
+                        />
 
-                                <Icon
-                                    size={24}
-                                    className={`transition-colors duration-300 drop-shadow-sm
-                  ${isActive ? 'text-ev-primary stroke-[2.5px]' : 'text-gray-400 group-hover:text-gray-600'}`}
-                                />
-                                <span
-                                    className={`text-[10px] font-medium transition-all duration-300
-                  ${isActive ? 'text-ev-primary translate-y-0.5' : 'text-gray-400 -translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0'}`}
-                                >
-                                    {item.label}
-                                </span>
-                            </button>
-                        );
-                    }
-                })}
-            </div>
+                        {/* Circle Background */}
+                        <div
+                            className={`flex items-center justify-center rounded-full transition-all duration-500 z-10 shadow-md ${isActive
+                                    ? 'w-16 h-16 bg-ev-primary text-white shadow-[0_8px_16px_rgba(250,204,21,0.4)] translate-y-0'
+                                    : 'w-10 h-10 bg-transparent text-gray-400 group-hover:-translate-y-1 group-hover:bg-gray-50'
+                                }`}
+                        >
+                            <Icon size={isActive ? 30 : 22} className={isActive ? 'stroke-[2px]' : 'stroke-[1.5px] group-hover:text-ev-primary'} />
+                        </div>
+
+                        {/* Label */}
+                        <span
+                            className={`font-bold transition-all duration-300 mt-1 whitespace-nowrap ${isActive ? 'text-ev-primary text-[11px]' : 'text-gray-400 text-[10px] group-hover:text-ev-primary'
+                                }`}
+                        >
+                            {item.label}
+                        </span>
+                    </button>
+                );
+            })}
         </div>
     );
 };

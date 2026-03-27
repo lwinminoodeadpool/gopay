@@ -27,9 +27,17 @@ const EVAccessories = () => {
                         if (typeof costStr === 'string') costStr = costStr.replace(/[^\d.]/g, '');
                         const price = parseFloat(costStr) || 0;
 
-                        const imageArr = Array.isArray(item.images) && item.images.length > 0
-                            ? item.images
-                            : [defaultImage];
+                        const photoField = item.Bill_Payments__access_photo__CST;
+                        const resolvePhoto = (raw) => {
+                            if (!raw || typeof raw !== 'string' || !raw.trim()) return defaultImage;
+                            const str = raw.trim();
+                            // Already a full URL or data URI — use as-is
+                            if (str.startsWith('http') || str.startsWith('data:')) return str;
+                            // Otherwise treat as raw base64
+                            return `data:image/png;base64,${str}`;
+                        };
+                        const rawPhoto = Array.isArray(photoField) ? photoField[0] : photoField;
+                        const imageArr = [resolvePhoto(rawPhoto)];
 
                         return {
                             id: item.id ?? item._id ?? String(index),
@@ -101,7 +109,12 @@ const EVAccessories = () => {
 
                             {/* Product image */}
                             <div className="h-32 rounded-2xl bg-gray-50 w-full flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-500 overflow-hidden shrink-0">
-                                <img src={item.image} alt={item.name} className="w-full h-full object-contain p-2" />
+                                <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    className="w-full h-full object-contain p-2"
+                                    onError={(e) => { e.currentTarget.src = '/assets/phone_holder.png'; }}
+                                />
                             </div>
 
                             <div className="flex-1 flex flex-col">

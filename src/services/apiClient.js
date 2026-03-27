@@ -6,7 +6,9 @@
  * All API calls across the app should import from this module.
  */
 
-const TOKEN_URL = '/kbzpay/baas/auth/v1.0/oauth2/token';
+const API_URL = import.meta.env.VITE_API_URL || 'https://uat-miniapp.kbzpay.com';
+
+const TOKEN_URL = `${API_URL}/baas/auth/v1.0/oauth2/token`;
 
 const CLIENT_ID = 'c7d8640f6a20cce91bb1f670a41c8ffb';
 const CLIENT_SECRET = 'b83dc4306aa20f8c349ce07ec3e7520e6b55723e5a52eeab';
@@ -85,10 +87,37 @@ export async function apiGet(path) {
     return res.json();
 }
 
+/**
+ * Performs an authenticated POST request against the KBZPay backend.
+ *
+ * @param {string} path  - Proxy-relative path, e.g. '/kbzpay/service/...'
+ * @param {object} body  - The JSON request payload
+ * @returns {Promise<any>} Parsed JSON response
+ */
+export async function apiPost(path, body = {}) {
+    const token = await getAccessToken();
+
+    const res = await fetch(path, {
+        method: 'POST',
+        headers: {
+            'access-token': token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+        throw new Error(`API POST ${path} failed (HTTP ${res.status})`);
+    }
+
+    return res.json();
+}
+
 // ─── Endpoint constants ───────────────────────────────────────────────────────
 
 export const ENDPOINTS = {
-    PARKING: '/kbzpay/service/Bill_Payments__copay/0.0.1/parking_fetch',
-    PRODUCTS: '/kbzpay/service/Bill_Payments__copay/0.0.1/fetch_product',
-    EV_STATIONS: '/kbzpay/service/Bill_Payments__copay/0.0.1/evparking_fetch',
+    PARKING: `${API_URL}/service/Bill_Payments__copay/0.0.1/parking_fetch`,
+    PRODUCTS: `${API_URL}/service/Bill_Payments__copay/0.0.1/fetch_product`,
+    EV_STATIONS: `${API_URL}/service/Bill_Payments__copay/0.0.1/evparking_fetch`,
+    AUTOLOGIN: `${API_URL}/service/Bill_Payments__copay/0.0.1/autologin`,
 };
