@@ -52,22 +52,22 @@ const Home = () => {
     return (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-6">
             {/* Top App Bar */}
-            <header className="flex justify-between items-center mb-8 px-2 pt-2">
-                <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-ev-primary text-secondary rounded-full flex items-center justify-center font-bold text-lg shadow-md border-2 border-white">
+            <header className="flex justify-between items-center mb-8 px-4 pt-4">
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-ev-primary text-white rounded-2xl flex items-center justify-center font-bold text-lg shadow-sm border border-blue-100">
                         {getInitials(userName)}
                     </div>
                     <div>
-                        <p className="text-xs text-gray-500 font-medium">Good Afternoon,</p>
-                        <h1 className="text-xl font-black text-primary tracking-tight">{userName}</h1>
+                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Welcome back</p>
+                        <h1 className="text-xl font-bold text-primary tracking-tight">{userName}</h1>
                     </div>
                 </div>
-                <div className="flex gap-3">
-                    <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-primary hover:bg-gray-50 transition-colors border border-gray-100">
+                <div className="flex gap-2">
+                    <button className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm text-gray-400 hover:text-blue-600 transition-all border border-gray-50 active:scale-95">
                         <Search size={20} />
                     </button>
-                    <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-primary relative hover:bg-gray-50 transition-colors border border-gray-100">
-                        <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-status-danger rounded-full border-2 border-white"></span>
+                    <button className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm text-gray-400 relative hover:text-blue-600 transition-all border border-gray-50 active:scale-95">
+                        <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-blue-500 rounded-full border-2 border-white animate-pulse"></span>
                         <Bell size={20} />
                     </button>
                 </div>

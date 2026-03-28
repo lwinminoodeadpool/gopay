@@ -68,50 +68,50 @@ const ActivityPage = () => {
     });
 
     return (
-        <div className="min-h-screen bg-background-soft pb-20 animate-in fade-in duration-500">
+        <div className="min-h-screen bg-white pb-20 animate-in fade-in duration-500">
             {/* Header */}
-            <header className="bg-white px-6 pt-12 pb-6 shadow-sm sticky top-0 z-10 border-b border-gray-50">
-                <div className="flex items-center justify-between">
+            <header className="bg-white px-6 pt-12 pb-6 sticky top-0 z-10 border-b border-slate-50">
+                <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => navigate(-1)}
-                            className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-primary border border-gray-100 active:scale-95 transition-all"
+                            className="w-10 h-10 bg-slate-50 rounded-2xl flex items-center justify-center text-primary hover:bg-blue-50 hover:text-blue-600 transition-all active:scale-95"
                         >
                             <ChevronLeft size={20} />
                         </button>
-                        <h1 className="text-xl font-black text-primary tracking-tight">Full Activity</h1>
+                        <h1 className="text-xl font-bold text-primary tracking-tight">Full Activity</h1>
                     </div>
 
-                    <div className="flex bg-gray-50 p-1 rounded-xl border border-gray-100">
+                    <div className="flex bg-slate-50 p-1 rounded-2xl border border-slate-100">
                         <button
                             onClick={() => setViewMode('list')}
-                            className={`px-3 py-1.5 rounded-lg text-[10px] font-black transition-all ${viewMode === 'list' ? 'bg-white text-primary shadow-sm' : 'text-gray-400'}`}
+                            className={`px-4 py-2 rounded-xl text-[10px] font-bold tracking-widest transition-all ${viewMode === 'list' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400'}`}
                         >
                             LIST
                         </button>
                         <button
                             onClick={() => setViewMode('table')}
-                            className={`px-3 py-1.5 rounded-lg text-[10px] font-black transition-all ${viewMode === 'table' ? 'bg-white text-primary shadow-sm' : 'text-gray-400'}`}
+                            className={`px-4 py-2 rounded-xl text-[10px] font-bold tracking-widest transition-all ${viewMode === 'table' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400'}`}
                         >
                             TABLE
                         </button>
                     </div>
                 </div>
 
-                <div className="flex gap-3 mb-6">
+                <div className="flex gap-3 mb-8">
                     <div className="flex-1 relative">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-blue-400" size={18} />
                         <input
                             type="text"
                             placeholder="Search activity..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-gray-50 border border-gray-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold text-primary focus:border-ev-primary focus:bg-white outline-none transition-all shadow-sm"
+                            className="w-full bg-slate-50 border border-slate-50 rounded-[20px] py-4.5 pl-12 pr-4 text-sm font-bold text-primary focus:border-blue-100 focus:bg-white focus:ring-4 focus:ring-blue-50/50 outline-none transition-all placeholder:text-gray-300"
                         />
                     </div>
                     <button
                         onClick={() => setShowFilterDrawer(true)}
-                        className={`w-14 h-14 rounded-2xl flex items-center justify-center border transition-all active:scale-95 ${timeRange !== 'all' || selectedTypes.length < 4 || startDate ? 'bg-ev-primary text-secondary border-ev-primary shadow-lg shadow-ev-primary/20' : 'bg-white text-primary border-gray-100'
+                        className={`w-14 h-14 rounded-[20px] flex items-center justify-center border transition-all active:scale-95 ${timeRange !== 'all' || selectedTypes.length < 4 || startDate ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-200' : 'bg-white text-primary border-slate-100 hover:bg-slate-50'
                             }`}
                     >
                         <ListFilter size={20} />
@@ -119,14 +119,14 @@ const ActivityPage = () => {
                 </div>
 
                 {/* Filter Chips */}
-                <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+                <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar px-1">
                     {categories.map((cat) => (
                         <button
                             key={cat.id}
                             onClick={() => setActiveFilter(cat.id)}
-                            className={`px-5 py-2.5 rounded-full text-xs font-black whitespace-nowrap transition-all border ${activeFilter === cat.id
-                                ? 'bg-ev-primary text-secondary border-ev-primary shadow-lg shadow-ev-primary/20 scale-105'
-                                : 'bg-white text-gray-400 border-gray-100 hover:border-gray-200'
+                            className={`px-6 py-3 rounded-[18px] text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all border ${activeFilter === cat.id
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-200 scale-105'
+                                : 'bg-white text-gray-400 border-slate-100 hover:border-blue-100 hover:text-blue-600'
                                 }`}
                         >
                             {cat.label}
@@ -144,64 +144,68 @@ const ActivityPage = () => {
                                 return (
                                     <div
                                         key={item.id}
-                                        className="bg-white rounded-3xl p-5 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.05)] border border-gray-100 flex justify-between items-center animate-in slide-in-from-bottom-2 duration-300"
+                                        className="bg-white rounded-[32px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-50 flex justify-between items-center animate-in slide-in-from-bottom-2 duration-500 hover:shadow-[0_15px_40px_rgba(0,84,166,0.06)] hover:border-blue-50 transition-all transition-transform active:scale-[0.98]"
                                         style={{ animationDelay: `${index * 50}ms` }}
                                     >
-                                        <div className="flex items-center gap-4">
-                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0
-                                                ${item.type === 'charge' ? 'bg-ev-primary/10 text-ev-primary' :
-                                                    item.type === 'topup' ? 'bg-status-success/10 text-status-success' :
-                                                        item.type === 'parking' ? 'bg-ev-secondary/10 text-ev-secondary' :
-                                                            'bg-gray-100 text-gray-600'}`
+                                        <div className="flex items-center gap-5">
+                                            <div className={`w-16 h-16 rounded-[24px] flex items-center justify-center shrink-0 shadow-sm
+                                                ${item.type === 'charge' ? 'bg-blue-600 text-white shadow-blue-100' :
+                                                    item.type === 'topup' ? 'bg-blue-50 text-blue-600' :
+                                                        item.type === 'parking' ? 'bg-slate-900 text-white' :
+                                                            'bg-slate-50 text-gray-500'}`
                                             }>
-                                                <Icon size={24} />
+                                                <Icon size={26} strokeWidth={1.5} />
                                             </div>
                                             <div>
-                                                <h3 className="font-black text-primary text-sm line-clamp-1">{item.title}</h3>
-                                                <div className="flex items-center gap-2 mt-1">
-                                                    <Calendar size={12} className="text-gray-300" />
-                                                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">{item.date} • {item.time}</p>
+                                                <h3 className="font-bold text-primary text-base line-clamp-1 uppercase tracking-tight">{item.title}</h3>
+                                                <div className="flex items-center gap-2 mt-2">
+                                                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{item.date}</span>
+                                                    <div className="w-1 h-1 bg-slate-200 rounded-full" />
+                                                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{item.time}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="text-right shrink-0 ml-2">
-                                            <span className={`font-black tracking-tight text-lg ${item.isNegative ? 'text-primary' : 'text-status-success'}`}>
-                                                {item.amount}
+                                        <div className="text-right shrink-0 ml-4">
+                                            <span className={`font-bold tracking-tighter text-xl ${item.isNegative ? 'text-primary' : 'text-blue-600'}`}>
+                                                {item.amount.split(' ')[0]} <span className="text-[10px] opacity-40">{item.amount.split(' ')[1]}</span>
                                             </span>
                                         </div>
                                     </div>
                                 );
                             })
                         ) : (
-                            <div className="bg-white rounded-[2rem] border border-gray-100 overflow-hidden shadow-sm animate-in fade-in duration-500">
+                            <div className="bg-white rounded-[32px] border border-slate-50 overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] animate-in fade-in duration-700">
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-left border-collapse">
                                         <thead>
-                                            <tr className="bg-gray-50/50">
-                                                <th className="px-4 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Type</th>
-                                                <th className="px-4 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Date</th>
-                                                <th className="px-4 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Time</th>
-                                                <th className="px-4 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 text-right">Amount</th>
+                                            <tr className="bg-slate-50/50">
+                                                <th className="px-6 py-5 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] border-b border-slate-100">Type</th>
+                                                <th className="px-6 py-5 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] border-b border-slate-100">Date</th>
+                                                <th className="px-6 py-5 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] border-b border-slate-100 text-right">Amount</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-gray-50">
+                                        <tbody className="divide-y divide-slate-50">
                                             {filteredHistory.map((item) => (
-                                                <tr key={item.id} className="hover:bg-gray-50/50 transition-colors">
-                                                    <td className="px-4 py-4">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0
-                                                                ${item.type === 'charge' ? 'bg-ev-primary/10 text-ev-primary' :
-                                                                    item.type === 'topup' ? 'bg-status-success/10 text-status-success' :
-                                                                        'bg-gray-100 text-gray-500'}`
+                                                <tr key={item.id} className="hover:bg-blue-50/20 transition-colors group">
+                                                    <td className="px-6 py-5">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110
+                                                                ${item.type === 'charge' ? 'bg-blue-600 text-white' :
+                                                                    item.type === 'topup' ? 'bg-blue-50 text-blue-600' :
+                                                                        'bg-slate-100 text-slate-400'}`
                                                             }>
-                                                                <item.icon size={14} />
+                                                                <item.icon size={16} />
                                                             </div>
-                                                            <span className="text-xs font-black text-primary capitalize">{item.type}</span>
+                                                            <span className="text-xs font-bold text-primary capitalize tracking-tight">{item.type}</span>
                                                         </div>
                                                     </td>
-                                                    <td className="px-4 py-4 text-xs font-bold text-gray-500">{item.date}</td>
-                                                    <td className="px-4 py-4 text-xs font-bold text-gray-400">{item.time}</td>
-                                                    <td className={`px-4 py-4 text-xs font-black text-right ${item.isNegative ? 'text-primary' : 'text-status-success'}`}>
+                                                    <td className="px-6 py-5">
+                                                        <div className="flex flex-col">
+                                                            <span className="text-xs font-bold text-primary">{item.date}</span>
+                                                            <span className="text-[10px] font-bold text-gray-300 uppercase mt-0.5">{item.time}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td className={`px-6 py-5 text-sm font-bold text-right ${item.isNegative ? 'text-primary' : 'text-blue-600'}`}>
                                                         {item.amount}
                                                     </td>
                                                 </tr>
@@ -225,21 +229,24 @@ const ActivityPage = () => {
             {/* Filter Drawer */}
             {showFilterDrawer && (
                 <div className="fixed inset-0 z-[100] flex items-end justify-center">
-                    <div className="absolute inset-0 bg-primary/40 backdrop-blur-sm" onClick={() => setShowFilterDrawer(false)} />
-                    <div className="relative w-full max-w-md bg-secondary rounded-t-[3rem] shadow-2xl animate-in slide-in-from-bottom duration-500 p-8 pt-4">
-                        <div className="w-16 h-1.5 bg-gray-200 rounded-full mx-auto mb-8" />
+                    <div className="absolute inset-0 max-w-md left-1/2 -translate-x-1/2 bg-blue-900/40 backdrop-blur-md" onClick={() => setShowFilterDrawer(false)} />
+                    <div className="relative w-full max-w-md bg-white rounded-t-[48px] shadow-2xl animate-in slide-in-from-bottom duration-700 p-10 pt-4 border-t border-white/50">
+                        <div className="w-16 h-1.5 bg-slate-100 rounded-full mx-auto mb-8" />
 
-                        <div className="flex items-center justify-between mb-8">
-                            <h2 className="text-2xl font-black text-primary">Advanced Filter</h2>
-                            <button onClick={() => setShowFilterDrawer(false)} className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-400">
+                        <div className="flex items-center justify-between mb-10">
+                            <div>
+                                <h2 className="text-3xl font-bold text-primary tracking-tight">Filters</h2>
+                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Refine your history</p>
+                            </div>
+                            <button onClick={() => setShowFilterDrawer(false)} className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-gray-400 border border-slate-100 hover:text-primary transition-all active:scale-90">
                                 <X size={20} />
                             </button>
                         </div>
 
                         {/* Category Selection */}
-                        <div className="mb-8">
+                        <div className="mb-10">
                             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4">Transaction Types</p>
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-2 gap-4">
                                 {[
                                     { id: 'charge', label: 'Charging' },
                                     { id: 'parking', label: 'Parking' },
@@ -249,42 +256,42 @@ const ActivityPage = () => {
                                     <button
                                         key={type.id}
                                         onClick={() => toggleType(type.id)}
-                                        className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${selectedTypes.includes(type.id)
-                                            ? 'bg-ev-primary/5 border-ev-primary text-primary'
-                                            : 'bg-white border-gray-100 text-gray-400'
+                                        className={`flex items-center justify-between p-5 rounded-[24px] border-2 transition-all ${selectedTypes.includes(type.id)
+                                            ? 'bg-blue-50/50 border-blue-600 text-blue-600'
+                                            : 'bg-white border-slate-50 text-gray-400'
                                             }`}
                                     >
-                                        <span className="text-sm font-bold">{type.label}</span>
-                                        {selectedTypes.includes(type.id) && <Check size={16} className="text-ev-primary" />}
+                                        <span className="text-xs font-bold uppercase tracking-tight">{type.label}</span>
+                                        {selectedTypes.includes(type.id) && <Check size={18} className="stroke-[3px]" />}
                                     </button>
                                 ))}
                             </div>
                         </div>
 
                         {/* Time Period selection */}
-                        <div className="mb-8">
+                        <div className="mb-10">
                             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4">Time Period</p>
-                            <div className="grid grid-cols-2 gap-4 mb-4">
+                            <div className="grid grid-cols-2 gap-5 mb-5">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-primary px-1">START DATE</label>
+                                    <label className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block text-left">Start Date</label>
                                     <input
                                         type="date"
                                         value={startDate}
                                         onChange={(e) => setStartDate(e.target.value)}
-                                        className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-xs font-bold text-primary outline-none focus:border-ev-primary transition-all"
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 px-5 text-xs font-bold text-primary outline-none focus:border-blue-200 transition-all"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-primary px-1">END DATE</label>
+                                    <label className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block text-left">End Date</label>
                                     <input
                                         type="date"
                                         value={endDate}
                                         onChange={(e) => setEndDate(e.target.value)}
-                                        className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-xs font-bold text-primary outline-none focus:border-ev-primary transition-all"
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 px-5 text-xs font-bold text-primary outline-none focus:border-blue-200 transition-all"
                                     />
                                 </div>
                             </div>
-                            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+                            <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
                                 {[
                                     { id: 'all', label: 'All Time' },
                                     { id: 'today', label: 'Today' },
@@ -297,9 +304,9 @@ const ActivityPage = () => {
                                             setStartDate('');
                                             setEndDate('');
                                         }}
-                                        className={`px-6 py-3 rounded-xl text-xs font-black whitespace-nowrap transition-all border ${timeRange === range.id && !startDate
-                                            ? 'bg-primary text-white border-primary'
-                                            : 'bg-gray-50 text-gray-400 border-gray-100'
+                                        className={`px-8 py-4 rounded-[20px] text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all border-2 ${timeRange === range.id && !startDate
+                                            ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-200'
+                                            : 'bg-slate-50 text-gray-400 border-slate-50'
                                             }`}
                                     >
                                         {range.label}
@@ -309,7 +316,7 @@ const ActivityPage = () => {
                         </div>
 
                         {/* Actions */}
-                        <div className="flex gap-3">
+                        <div className="flex gap-4">
                             <button
                                 onClick={() => {
                                     setSelectedTypes(['charge', 'parking', 'topup', 'cafe']);
@@ -317,13 +324,13 @@ const ActivityPage = () => {
                                     setStartDate('');
                                     setEndDate('');
                                 }}
-                                className="flex-1 bg-gray-50 text-gray-500 py-4 rounded-2xl font-black text-sm active:scale-95 transition-all"
+                                className="flex-1 bg-slate-50 text-gray-400 py-6 rounded-[32px] font-bold text-xs uppercase tracking-widest active:scale-95 transition-all border border-slate-100"
                             >
                                 Reset
                             </button>
                             <button
                                 onClick={() => setShowFilterDrawer(false)}
-                                className="flex-[2] bg-ev-primary text-secondary py-4 rounded-2xl font-black text-sm shadow-lg shadow-ev-primary/20 active:scale-95 transition-all"
+                                className="flex-[2] bg-blue-600 text-white py-6 rounded-[32px] font-bold text-xs uppercase tracking-widest shadow-2xl shadow-blue-200 active:scale-95 transition-all"
                             >
                                 Apply Filters
                             </button>

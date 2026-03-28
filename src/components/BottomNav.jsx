@@ -32,7 +32,7 @@ const BottomNav = () => {
     ];
 
     return (
-        <div className="fixed bottom-0 w-full max-w-md bg-secondary border-t border-gray-100 flex justify-around items-center px-4 py-3 pb-8 shadow-lg z-50 rounded-t-2xl">
+        <div className="fixed bottom-0 w-full max-w-md bg-white/80 backdrop-blur-lg border-t border-gray-100 flex justify-around items-center px-4 py-3 pb-8 z-50 rounded-t-[32px] shadow-[0_-10px_25px_-5px_rgba(0,0,0,0.05)]">
             {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
@@ -41,26 +41,25 @@ const BottomNav = () => {
                     <button
                         key={item.id}
                         onClick={() => handleNavigation(item.path)}
-                        className={`flex flex-col items-center justify-center gap-1 group relative transition-all duration-300 ease-in-out ${isActive ? 'w-16 -mt-8' : 'w-12 mt-0'}`}
+                        className="flex flex-col items-center justify-center gap-1.5 min-w-[64px] relative py-1 transition-all duration-300 active:scale-90"
                     >
-                        {/* Cutout background (only visible when active) */}
+                        {/* Active Indicator Bar */}
                         <div
-                            className={`absolute -inset-2 bg-white rounded-full -z-20 transition-all duration-300 shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.05)] ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`}
+                            className={`absolute -top-3 w-8 h-1 bg-ev-primary rounded-full transition-all duration-500 ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
+                                }`}
                         />
 
-                        {/* Circle Background */}
                         <div
-                            className={`flex items-center justify-center rounded-full transition-all duration-500 z-10 shadow-md ${isActive
-                                    ? 'w-16 h-16 bg-ev-primary text-white shadow-[0_8px_16px_rgba(250,204,21,0.4)] translate-y-0'
-                                    : 'w-10 h-10 bg-transparent text-gray-400 group-hover:-translate-y-1 group-hover:bg-gray-50'
+                            className={`flex items-center justify-center rounded-2xl transition-all duration-500 ${isActive
+                                    ? 'w-11 h-11 bg-ev-primary shadow-[0_8px_20px_rgba(0,84,166,0.3)] text-white'
+                                    : 'w-10 h-10 bg-transparent text-gray-400'
                                 }`}
                         >
-                            <Icon size={isActive ? 30 : 22} className={isActive ? 'stroke-[2px]' : 'stroke-[1.5px] group-hover:text-ev-primary'} />
+                            <Icon size={isActive ? 22 : 24} className={isActive ? 'stroke-[2.5px]' : 'stroke-[1.8px]'} />
                         </div>
 
-                        {/* Label */}
                         <span
-                            className={`font-bold transition-all duration-300 mt-1 whitespace-nowrap ${isActive ? 'text-ev-primary text-[11px]' : 'text-gray-400 text-[10px] group-hover:text-ev-primary'
+                            className={`text-[10px] font-bold tracking-tight transition-colors duration-300 ${isActive ? 'text-ev-primary' : 'text-gray-400'
                                 }`}
                         >
                             {item.label}

@@ -47,50 +47,57 @@ const PromoBanners = () => {
     }, [activeIndex, banners.length]);
 
     return (
-        <section className="mb-8 w-full overflow-hidden">
-            <h2 className="text-xl font-bold text-primary mb-4 px-2">Featured Highlights</h2>
+        <section className="mb-10 w-full overflow-hidden">
+            <h2 className="text-lg font-bold text-primary mb-6 px-4 tracking-tight">Featured Highlights</h2>
 
             <div
                 ref={scrollContainerRef}
                 onScroll={handleScroll}
-                className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory px-4 -mx-2 hide-scrollbar"
+                className="flex gap-5 overflow-x-auto pb-6 snap-x snap-mandatory px-4 -mx-2 hide-scrollbar"
             >
                 {banners.map((banner) => (
                     <div
                         key={banner.id}
-                        className={`w-[85vw] max-w-[320px] h-40 flex-shrink-0 snap-center rounded-[2rem] overflow-hidden shadow-md relative group bg-gradient-to-br ${banner.color} border border-gray-100 flex items-center justify-center`}
+                        className={`w-[82vw] max-w-[320px] h-44 flex-shrink-0 snap-center rounded-[40px] overflow-hidden shadow-[0_15px_30px_-10px_rgba(0,0,0,0.08)] relative group bg-gradient-to-br from-[#0054A6] to-[#003A73] border border-blue-200/20 flex items-center justify-center transition-all duration-500 hover:shadow-[0_20px_40px_-10px_rgba(0,84,166,0.2)]`}
                     >
-                        {/* Fallback pattern if image is missing */}
-                        <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgcj0iMiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=')]"></div>
+                        {/* Minimalist pattern overlay */}
+                        <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=')]"></div>
 
                         <img
                             src={banner.image}
                             alt={banner.title}
-                            className="w-full h-full object-cover relative z-10 transition-transform duration-700 group-hover:scale-105"
+                            className="w-full h-full object-cover relative z-10 transition-transform duration-1000 group-hover:scale-110"
                             onError={(e) => {
-                                // Graceful fallback if image fails to load
                                 e.currentTarget.style.display = 'none';
-                                e.currentTarget.parentElement.innerHTML += `<div class="absolute inset-0 flex items-center justify-center z-20 p-6 text-center"><h3 class="text-white font-black text-2xl leading-none tracking-tight">${banner.title}</h3></div>`;
+                                if (!e.currentTarget.parentElement.querySelector('.fallback-text')) {
+                                    const fallback = document.createElement('div');
+                                    fallback.className = 'fallback-text absolute inset-0 flex items-center justify-center z-20 p-8 text-center';
+                                    fallback.innerHTML = `<h3 class="text-white font-bold text-2xl leading-tight tracking-tight">${banner.title}</h3>`;
+                                    e.currentTarget.parentElement.appendChild(fallback);
+                                }
                             }}
                         />
 
-                        {/* Soft overlay gradient to ensure text readability */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent z-10 opacity-80 mix-blend-multiply"></div>
+                        {/* Glassmorphism gradient overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent z-10 opacity-70"></div>
 
                         {/* Title text overlaid */}
-                        <div className="absolute bottom-4 left-5 right-5 z-20">
-                            <h3 className="text-white font-bold text-lg leading-tight truncate drop-shadow-md">{banner.title}</h3>
+                        <div className="absolute bottom-6 left-7 right-7 z-20">
+                            <h3 className="text-white font-bold text-lg leading-tight tracking-tight drop-shadow-md">{banner.title}</h3>
                         </div>
                     </div>
                 ))}
             </div>
 
-            {/* Pagination Indicators */}
-            <div className="flex justify-center gap-1.5 mt-3">
+            {/* Premium Pagination Indicators */}
+            <div className="flex justify-center items-center gap-2 mt-2">
                 {banners.map((_, i) => (
                     <div
                         key={i}
-                        className={`h-1.5 rounded-full transition-all duration-300 ${activeIndex === i ? 'w-6 bg-ev-primary' : 'w-1.5 bg-gray-200'}`}
+                        className={`transition-all duration-500 rounded-full ${activeIndex === i
+                                ? 'w-8 h-1.5 bg-blue-600 shadow-[0_2px_10px_rgba(0,84,166,0.3)]'
+                                : 'w-1.5 h-1.5 bg-slate-200'
+                            }`}
                     />
                 ))}
             </div>

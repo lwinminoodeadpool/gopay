@@ -49,75 +49,84 @@ const ChargingStationList = () => {
     }, []);
 
     return (
-        <section className="mb-8 relative min-h-[160px]">
-            <div className="flex justify-between items-end mb-4">
-                <h2 className="text-xl font-bold text-primary">Charging Stations</h2>
+        <section className="mb-10 px-2 overflow-hidden">
+            <div className="flex justify-between items-center mb-6 px-2">
+                <h2 className="text-lg font-bold text-primary tracking-tight">Charging Stations</h2>
                 {!loading && !error && totalCount > 2 && (
                     <button
                         onClick={() => navigate('/charge')}
-                        className="text-sm font-bold text-ev-primary hover:text-ev-primary/80 transition-colors"
+                        className="text-[11px] font-bold text-blue-600 uppercase tracking-widest hover:text-blue-700 transition-all border-b border-blue-100 pb-0.5"
                     >
-                        See All
+                        View All
                     </button>
                 )}
             </div>
 
             {loading && (
-                <div className="flex flex-col items-center justify-center py-10 text-gray-400 gap-2">
-                    <Loader2 size={24} className="animate-spin text-ev-primary" />
-                    <span className="text-xs font-bold">Checking stations...</span>
+                <div className="flex flex-col items-center justify-center py-12 bg-white rounded-[32px] border border-slate-50 gap-3">
+                    <Loader2 size={24} className="animate-spin text-blue-600" />
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Searching...</span>
                 </div>
             )}
 
             {error && (
-                <div className="flex items-center gap-2 p-4 bg-red-50 rounded-2xl border border-red-100 text-red-500 text-sm">
-                    <AlertCircle size={18} />
-                    <span>{error}</span>
+                <div className="flex items-center gap-3 p-5 bg-red-50/50 rounded-3xl border border-red-100/50 text-red-500">
+                    <AlertCircle size={20} />
+                    <span className="text-xs font-medium">{error}</span>
                 </div>
             )}
 
             {!loading && !error && stations.length === 0 && (
-                <div className="text-center py-8 text-gray-400 text-sm">
-                    No charging stations available.
+                <div className="text-center py-12 bg-slate-50/50 rounded-[32px] border border-dashed border-slate-200 text-gray-400 text-xs font-medium">
+                    No charging stations found.
                 </div>
             )}
 
             {!loading && !error && stations.length > 0 && (
-                <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory pt-2 pl-2 -ml-2 pr-2 hide-scrollbar">
+                <div className="flex gap-5 overflow-x-auto pb-6 snap-x snap-mandatory pt-2 px-2 -mx-2 hide-scrollbar">
                     {stations.map((station) => (
                         <div
                             key={station.id}
-                            className="min-w-[260px] bg-white rounded-3xl p-5 shadow-sm border border-gray-50 snap-center relative overflow-hidden group hover:shadow-md transition-all duration-300 transform hover:-translate-y-1"
+                            className="min-w-[280px] bg-white rounded-[40px] p-6 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.05)] border border-slate-100 snap-center relative group transition-all duration-500 hover:shadow-[0_20px_40px_-10px_rgba(0,84,166,0.12)] hover:border-blue-100"
                         >
-                            {/* Charger type badge */}
-                            <div className="absolute top-0 right-0 p-3">
-                                <div className={`p-2 rounded-bl-3xl rounded-tr-xl bg-gradient-to-br ${station.fast ? 'from-accent to-orange-400' : 'from-ev-secondary to-ev-primary'} text-white shadow-md`}>
-                                    <Zap size={16} fill="currentColor" />
+                            {/* Status indicator */}
+                            <div className="flex justify-between items-start mb-6">
+                                <div className="bg-blue-600 text-white p-2.5 rounded-2xl shadow-md transition-transform group-hover:scale-110">
+                                    <Zap size={18} fill="currentColor" strokeWidth={0} />
+                                </div>
+                                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[9px] font-extrabold uppercase tracking-widest ${station.fast
+                                        ? 'bg-orange-50 text-orange-600 border-orange-100'
+                                        : 'bg-blue-50 text-blue-600 border-blue-100'
+                                    }`}>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse"></span>
+                                    {station.fast ? 'Fast' : 'Standard'}
                                 </div>
                             </div>
 
-                            <h3 className="font-bold text-lg text-primary mr-10 truncate">{station.name}</h3>
+                            <h3 className="font-bold text-lg text-primary tracking-tight transition-colors group-hover:text-blue-800">{station.name}</h3>
 
-                            <div className="flex items-center gap-1 mt-1 text-gray-500 text-sm">
-                                <MapPin size={14} className="text-ev-primary" />
-                                <span className="truncate">{station.address}</span>
+                            <div className="flex items-center gap-2 mt-2 text-gray-400">
+                                <MapPin size={14} className="shrink-0" />
+                                <span className="text-[11px] font-medium truncate">{station.address}</span>
                             </div>
 
-                            <div className="mt-5 pt-3 border-t border-gray-50">
-                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wide mb-1 flex items-center gap-1">
-                                    <BatteryCharging size={12} /> Charger Type
-                                </p>
-                                <span className="inline-block bg-ev-primary/10 text-ev-primary text-sm font-black uppercase tracking-wider px-3 py-1.5 rounded-xl border border-ev-primary/20">
-                                    {station.power}
-                                </span>
-                            </div>
+                            <div className="mt-8 flex items-center justify-between">
+                                <div>
+                                    <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1.5">
+                                        Connector
+                                    </p>
+                                    <span className="text-xs font-black text-primary">
+                                        {station.power}
+                                    </span>
+                                </div>
 
-                            <button
-                                onClick={() => navigate('/charge')}
-                                className="mt-5 w-full py-2.5 rounded-xl text-sm font-bold transition-colors shadow-sm bg-ev-primary text-secondary hover:bg-teal-700"
-                            >
-                                View Details
-                            </button>
+                                <button
+                                    onClick={() => navigate('/charge')}
+                                    className="px-5 py-2.5 bg-blue-600 text-white rounded-2xl text-[11px] font-bold uppercase tracking-widest shadow-sm hover:bg-blue-700 hover:shadow-lg transition-all active:scale-95"
+                                >
+                                    Charge
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>

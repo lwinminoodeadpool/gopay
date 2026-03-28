@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  /* Parking & Traffic Theme (Light & Bright) */
+  /* Minimalist Blue & White Theme */
   --color-primary: #111827;
   --color-secondary: #ffffff;
-  --color-accent: #FACC15;
+  --color-accent: #0054A6;
 
-  --color-ev-primary: #FACC15;
-  --color-ev-secondary: #111827;
-  --color-ev-accent: #FEF3C7;
+  --color-ev-primary: #0054A6;
+  --color-ev-secondary: #ffffff;
+  --color-ev-accent: #EBF5FF;
 
-  --color-background-soft: #F4F5F7;
+  --color-background-soft: #F8FAFC;
 
-  --color-status-success: #22c55e;
+  --color-status-success: #10b981;
   --color-status-danger: #ef4444;
   --color-status-warning: #f59e0b;
-  --color-status-info: #3b82f6;
+  --color-status-info: #0054A6;
 
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 }
@@ -23,26 +23,26 @@
 @layer base {
   body {
     @apply bg-background-soft text-primary font-sans antialiased;
-    @apply flex justify-center min-h-screen bg-gray-100;
+    @apply flex justify-center min-h-screen bg-slate-50;
   }
 
   #root {
-    @apply w-full max-w-md bg-background-soft min-h-screen relative shadow-2xl overflow-x-hidden;
+    @apply w-full max-w-md bg-white min-h-screen relative shadow-xl overflow-x-hidden;
   }
 }
 
 @layer utilities {
 
-  /* Force text and icons on yellow buttons to be black, even if they have text-white */
+  /* Ensure white text on blue backgrounds */
   .bg-ev-primary,
   .bg-accent,
-  .bg-status-warning {
-    color: #111827 !important;
+  .bg-status-info {
+    color: #ffffff !important;
   }
 
   .bg-ev-primary *,
   .bg-accent *,
-  .bg-status-warning * {
-    color: #111827 !important;
+  .bg-status-info * {
+    color: #ffffff !important;
   }
 }

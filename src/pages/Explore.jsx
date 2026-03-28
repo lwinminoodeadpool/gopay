@@ -160,50 +160,50 @@ const Explore = () => {
     // --- SHARED COMPONENTS ---
 
     const TopAppBar = ({ title, showBack = false, onBack = () => setView('list') }) => (
-        <header className="bg-white px-6 pt-12 pb-6 shadow-sm sticky top-0 z-10 border-b border-gray-50 flex justify-between items-center mb-6">
+        <header className="bg-white px-6 pt-12 pb-6 sticky top-0 z-20 border-b border-slate-50 flex justify-between items-center mb-6">
             <div className="flex items-center gap-4">
                 {showBack ? (
                     <button
                         onClick={onBack}
-                        className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-primary border border-gray-100 active:scale-95 transition-all"
+                        className="w-10 h-10 bg-slate-50 rounded-2xl flex items-center justify-center text-primary hover:bg-blue-50 hover:text-blue-600 transition-all active:scale-95"
                     >
                         <ChevronLeft size={20} />
                     </button>
                 ) : (
-                    <div className="bg-ev-primary p-2 rounded-xl shadow-lg shadow-ev-primary/20">
-                        <ShoppingCart size={24} className="text-secondary" />
+                    <div className="bg-blue-600 p-2.5 rounded-2xl shadow-lg shadow-blue-200">
+                        <ShoppingCart size={22} className="text-white" />
                     </div>
                 )}
                 <div>
-                    <h1 className="text-xl font-black text-primary tracking-tight line-clamp-1">{title}</h1>
+                    <h1 className="text-xl font-bold text-primary tracking-tight line-clamp-1">{title}</h1>
                 </div>
             </div>
             <div className="flex gap-3">
                 <button
                     onClick={() => setIsSearchVisible(!isSearchVisible)}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center shadow-sm transition-all border ${isSearchVisible ? 'bg-ev-primary text-secondary border-ev-primary' : 'bg-white text-primary border-gray-100'}`}
+                    className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all border ${isSearchVisible ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-200' : 'bg-white text-primary border-slate-100 hover:bg-slate-50'}`}
                 >
-                    <Search size={20} />
+                    <Search size={18} />
                 </button>
                 <div className="relative">
                     <button
                         onClick={() => setShowNotifications(!showNotifications)}
-                        className={`w-10 h-10 rounded-full flex items-center justify-center shadow-sm relative transition-all border ${showNotifications ? 'bg-ev-primary text-secondary border-ev-primary' : 'bg-white text-primary border-gray-100'}`}
+                        className={`w-10 h-10 rounded-2xl flex items-center justify-center relative transition-all border ${showNotifications ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-200' : 'bg-white text-primary border-slate-100 hover:bg-slate-50'}`}
                     >
-                        <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-status-danger rounded-full border-2 border-white animate-pulse"></span>
-                        <Bell size={20} />
+                        <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
+                        <Bell size={18} />
                     </button>
                     {showNotifications && (
-                        <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-in fade-in zoom-in-95 duration-200 z-[60]">
-                            <div className="p-4 border-b border-gray-50 bg-gray-50/50 flex justify-between items-center">
-                                <h3 className="font-black text-xs text-primary uppercase tracking-widest">Alerts</h3>
-                                <button onClick={() => setShowNotifications(false)} className="text-gray-400"><X size={14} /></button>
+                        <div className="absolute right-0 mt-4 w-72 bg-white rounded-[28px] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-slate-50 overflow-hidden animate-in fade-in zoom-in-95 duration-300 z-[60]">
+                            <div className="p-5 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
+                                <h3 className="font-bold text-[10px] text-gray-400 uppercase tracking-widest">Notifications</h3>
+                                <button onClick={() => setShowNotifications(false)} className="text-gray-300 hover:text-primary"><X size={14} /></button>
                             </div>
-                            <div className="max-h-60 overflow-y-auto">
+                            <div className="max-h-80 overflow-y-auto">
                                 {notifications.map(n => (
-                                    <div key={n.id} className="p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0">
-                                        <p className="font-bold text-xs text-primary">{n.title}</p>
-                                        <p className="text-[10px] text-gray-500 mt-1">{n.message}</p>
+                                    <div key={n.id} className="p-5 hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 group">
+                                        <p className="font-bold text-xs text-primary group-hover:text-blue-600 transition-colors">{n.title}</p>
+                                        <p className="text-[10px] text-gray-500 mt-1 leading-relaxed">{n.message}</p>
                                     </div>
                                 ))}
                             </div>
@@ -223,19 +223,19 @@ const Explore = () => {
                 <div className="px-4">
                     {/* Search Bar Animation */}
                     {isSearchVisible && (
-                        <div className="mb-4 animate-in slide-in-from-top-4 duration-300">
+                        <div className="mb-6 animate-in slide-in-from-top-4 duration-500">
                             <div className="relative">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-blue-400" size={18} />
                                 <input
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search products..."
+                                    placeholder="Find premium accessories..."
                                     autoFocus
-                                    className="w-full bg-white border border-gray-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold text-primary shadow-inner focus:outline-none focus:ring-2 focus:ring-ev-primary/20 transition-all"
+                                    className="w-full bg-white border border-slate-100 rounded-[20px] py-4.5 pl-12 pr-12 text-sm font-bold text-primary shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all placeholder:text-gray-300"
                                 />
                                 {searchQuery && (
-                                    <button onClick={() => setSearchQuery('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                    <button onClick={() => setSearchQuery('')} className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-300 hover:text-blue-600">
                                         <X size={16} />
                                     </button>
                                 )}
@@ -262,43 +262,48 @@ const Explore = () => {
                     )}
 
                     {!loading && !error && (
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-5">
                             {filteredProducts.length > 0 ? filteredProducts.map(product => (
                                 <div
                                     key={product.id}
                                     onClick={() => openProduct(product)}
-                                    className="bg-white rounded-[2rem] p-3 shadow-sm border border-gray-100 flex flex-col group active:scale-[0.97] transition-all duration-300 relative overflow-hidden"
+                                    className="bg-white rounded-[32px] p-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] border border-slate-50 flex flex-col group active:scale-[0.98] transition-all duration-500 relative overflow-hidden hover:shadow-[0_20px_40px_-10px_rgba(0,84,166,0.1)] hover:border-blue-50"
                                 >
-                                    <div className="absolute top-3 left-3 z-10">
-                                        <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded-full text-white bg-primary shadow-sm">
-                                            {product.category === 'EV Charging' ? 'Fast' : 'Top'}
+                                    <div className="absolute top-4 left-4 z-10">
+                                        <span className="text-[8px] font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-lg text-white bg-blue-600 shadow-lg shadow-blue-200">
+                                            {product.category === 'EV Charging' ? 'Elite' : 'New'}
                                         </span>
                                     </div>
 
-                                    <div className="h-36 bg-gray-50 rounded-2xl mb-3 flex items-center justify-center group-hover:scale-105 transition-transform duration-500 overflow-hidden">
+                                    <div className="h-40 bg-slate-50 rounded-[24px] mb-4 flex items-center justify-center relative overflow-hidden transition-colors group-hover:bg-blue-50/30">
                                         <img
                                             src={product.images[0]}
-                                            className="w-full h-full object-contain p-4"
+                                            className="w-[85%] h-[85%] object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-700"
                                             alt={product.name}
-                                            onError={(e) => { e.currentTarget.src = '/assets/phone_holder.png'; }}
+                                            onError={(e) => { e.currentTarget.src = defaultPlaceholderImage; }}
                                         />
                                     </div>
-                                    <h3 className="font-bold text-sm text-primary leading-tight line-clamp-2 min-h-[40px] px-1">{product.name}</h3>
-                                    <div className="flex items-center justify-between mt-1 mb-2 px-1">
-                                        <div className="flex items-center gap-1">
-                                            <Star size={10} className="fill-accent text-accent" />
-                                            <span className="text-[10px] text-gray-400 font-bold">{product.rating}</span>
+                                    <h3 className="font-bold text-xs text-primary leading-snug line-clamp-2 min-h-[32px] px-1 group-hover:text-blue-600 transition-colors uppercase tracking-tight">{product.name}</h3>
+
+                                    <div className="flex items-center justify-between mt-2 mb-4 px-1">
+                                        <div className="flex items-center gap-1 text-orange-400">
+                                            <Star size={10} className="fill-current" />
+                                            <span className="text-[10px] font-bold">{product.rating}</span>
                                         </div>
-                                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border ${product.quantityNum < 5 ? 'text-status-danger border-status-danger/30 bg-status-danger/5' : 'text-status-success border-status-success/30 bg-status-success/5'}`}>
+                                        <span className={`text-[8px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${product.quantityNum < 5 ? 'text-red-500 bg-red-50' : 'text-blue-500 bg-blue-50'}`}>
                                             {product.stock}
                                         </span>
                                     </div>
-                                    <div className="mt-auto pt-2 border-t border-gray-50 flex items-center justify-between px-1">
-                                        <span className="font-black text-lg text-ev-primary">{product.price.toLocaleString()} <span className="text-[10px]">MMK</span></span>
+
+                                    <div className="mt-auto flex items-center justify-between mb-1">
+                                        <div className="flex flex-col">
+                                            <span className="text-[8px] text-gray-400 font-bold uppercase tracking-widest">Price</span>
+                                            <span className="font-bold text-base text-blue-600">{product.price.toLocaleString()} <span className="text-[10px] opacity-70">MMK</span></span>
+                                        </div>
+                                        <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-100 transform group-hover:rotate-12 transition-all">
+                                            <Plus size={16} />
+                                        </div>
                                     </div>
-                                    <button className="mt-3 w-full bg-gray-50 text-primary py-2 rounded-xl text-xs font-bold hover:bg-primary hover:text-white transition-all duration-300 transform active:scale-95">
-                                        Shop
-                                    </button>
                                 </div>
                             )) : (
                                 <div className="col-span-2 py-20 text-center flex flex-col items-center">
@@ -317,16 +322,15 @@ const Explore = () => {
     // 2. PRODUCT DETAIL
     if (view === 'detail') {
         return (
-            <div className="animate-in slide-in-from-right duration-500 pb-32">
-                <TopAppBar title="Details" showBack={true} />
+            <div className="animate-in slide-in-from-right duration-500 pb-32 bg-white min-h-screen">
+                <TopAppBar title="Product Details" showBack={true} />
 
-                <div className="px-4">
-                    <div className="bg-white rounded-[2.5rem] p-4 shadow-sm border border-gray-100 mb-6">
-                        <div className="h-72 bg-gray-50 rounded-3xl flex items-center justify-center p-8 relative overflow-hidden group">
-                            {/* Previous Image */}
+                <div className="px-6">
+                    <div className="bg-slate-50 rounded-[40px] p-8 mb-8 relative overflow-hidden group">
+                        <div className="h-80 flex items-center justify-center relative z-10">
                             <button
                                 onClick={() => setImgIndex(prev => (prev > 0 ? prev - 1 : selectedProduct.images.length - 1))}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-primary shadow-md z-10 active:scale-90 transition-all opacity-0 group-hover:opacity-100"
+                                className="absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-primary shadow-xl z-20 active:scale-90 transition-all opacity-0 group-hover:opacity-100 border border-slate-100"
                             >
                                 <ChevronLeft size={24} />
                             </button>
@@ -334,102 +338,97 @@ const Explore = () => {
                             <img
                                 key={imgIndex}
                                 src={selectedProduct.images[imgIndex]}
-                                className="w-full h-full object-contain drop-shadow-2xl animate-in fade-in zoom-in-95 duration-500"
+                                className="w-[90%] h-[90%] object-contain drop-shadow-2xl animate-in fade-in zoom-in-95 duration-700"
                                 alt={selectedProduct.name}
-                                onError={(e) => { e.currentTarget.src = '/assets/phone_holder.png'; }}
+                                onError={(e) => { e.currentTarget.src = defaultPlaceholderImage; }}
                             />
 
-                            {/* Next Image */}
                             <button
                                 onClick={() => setImgIndex(prev => (prev < selectedProduct.images.length - 1 ? prev + 1 : 0))}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-primary shadow-md z-10 active:scale-90 transition-all opacity-0 group-hover:opacity-100"
+                                className="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-primary shadow-xl z-20 active:scale-90 transition-all opacity-0 group-hover:opacity-100 border border-slate-100"
                             >
                                 <ChevronRight size={24} />
                             </button>
-
-                            {/* Dots */}
-                            <div className="absolute bottom-4 flex gap-2">
-                                {selectedProduct.images.map((_, i) => (
-                                    <div
-                                        key={i}
-                                        onClick={() => setImgIndex(i)}
-                                        className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${imgIndex === i ? 'w-8 bg-ev-primary' : 'w-1.5 bg-gray-300 hover:bg-gray-400'}`}
-                                    />
-                                ))}
-                            </div>
                         </div>
 
-                        {/* Thumbnails */}
-                        <div className="flex gap-3 mt-4 px-2 overflow-x-auto hide-scrollbar">
-                            {selectedProduct.images.map((img, i) => (
+                        {/* Pagination Dots */}
+                        <div className="flex justify-center gap-2 mt-4 relative z-20">
+                            {selectedProduct.images.map((_, i) => (
                                 <div
                                     key={i}
-                                    onClick={() => setImgIndex(i)}
-                                    className={`w-16 h-16 rounded-xl border-2 transition-all p-1 bg-gray-50 flex-shrink-0 cursor-pointer ${imgIndex === i ? 'border-ev-primary bg-ev-primary/5 scale-105' : 'border-transparent opacity-60 hover:opacity-100'}`}
-                                >
-                                    <img src={img} className="w-full h-full object-contain" alt="thumbnail" onError={(e) => { e.currentTarget.src = '/assets/phone_holder.png'; }} />
-                                </div>
+                                    className={`h-1.5 rounded-full transition-all duration-500 ${imgIndex === i ? 'w-8 bg-blue-600 shadow-lg shadow-blue-200' : 'w-1.5 bg-slate-200'}`}
+                                />
                             ))}
                         </div>
                     </div>
 
-                    <div className="px-2">
-                        <div className="flex justify-between items-start mb-4">
-                            <div>
-                                <span className="text-[10px] font-bold text-ev-primary uppercase tracking-widest bg-ev-secondary/20 px-3 py-1.5 rounded-xl">
+                    <div className="space-y-8 px-2">
+                        <div>
+                            <div className="flex justify-between items-center mb-4">
+                                <span className="text-[10px] font-bold text-blue-600 uppercase tracking-[0.2em] bg-blue-50 px-4 py-2 rounded-xl">
                                     {selectedProduct.category}
                                 </span>
-                                <h1 className="text-2xl font-black text-primary mt-3 tracking-tight">{selectedProduct.name}</h1>
+                                <div className="flex items-center gap-1.5 text-orange-400">
+                                    <Star size={16} className="fill-current" />
+                                    <span className="font-bold text-primary">{selectedProduct.rating}</span>
+                                    <span className="text-[10px] text-gray-400 font-bold ml-1">({selectedProduct.reviews})</span>
+                                </div>
                             </div>
-                            <div className="bg-accent/10 px-4 py-3 rounded-2xl text-right">
-                                <p className="text-xl font-black text-ev-primary">{selectedProduct.price.toLocaleString()} <span className="text-xs">MMK</span></p>
-                                <p className={`text-[10px] font-bold uppercase mt-1 ${selectedProduct.quantityNum < 5 ? 'text-status-danger' : 'text-status-success'}`}>{selectedProduct.stock}</p>
-                            </div>
+                            <h1 className="text-3xl font-bold text-primary tracking-tight leading-tight uppercase">{selectedProduct.name}</h1>
                         </div>
 
-                        <div className="flex items-center gap-4 py-4 border-y border-gray-100 mb-6">
-                            <div className="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-xl">
-                                <Star size={16} className="fill-accent text-accent" />
-                                <span className="font-black text-primary text-sm">{selectedProduct.rating}</span>
-                            </div>
-                            <span className="text-xs text-gray-400 font-medium">{selectedProduct.reviews} customer reviews</span>
-                        </div>
-
-                        <section className="mb-6">
-                            <h3 className="text-sm font-black text-primary uppercase tracking-widest mb-3">Product Overview</h3>
+                        <div className="bg-slate-50 rounded-[32px] p-6 border border-slate-100/50">
+                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2">Description</p>
                             <p className="text-sm text-gray-500 leading-relaxed font-medium">{selectedProduct.desc}</p>
-                        </section>
+                        </div>
 
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="bg-blue-50/50 p-5 rounded-3xl border border-blue-50">
+                                <p className="text-[9px] text-blue-400 font-bold uppercase tracking-widest mb-1">Availability</p>
+                                <p className="text-sm font-bold text-blue-600">{selectedProduct.stock}</p>
+                            </div>
+                            <div className="bg-slate-50 p-5 rounded-3xl border border-slate-50">
+                                <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1">Authentic</p>
+                                <p className="text-sm font-bold text-primary flex items-center gap-2">
+                                    <ShieldCheck size={14} className="text-blue-500" /> Premium
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Sticky Buy Bar (Smallest Version) */}
-                <div className="fixed bottom-[105px] w-full max-w-md left-1/2 -translate-x-1/2 bg-secondary border-t border-gray-100 pt-3 pb-4 px-4 flex items-center justify-between gap-3 z-50 shadow-[0_-15px_40px_rgba(0,0,0,0.08)] rounded-t-[2.5rem]">
-                    <div className="flex items-center gap-2 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
+                {/* Sticky Action Bar */}
+                <div className="fixed bottom-[110px] w-full max-w-md left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-xl border-t border-slate-50 pt-4 pb-6 px-6 flex items-center justify-between gap-6 z-50">
+                    <div className="flex flex-col">
+                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Total Price</span>
+                        <span className="text-2xl font-bold text-blue-600">{(selectedProduct.price * quantity).toLocaleString()} <span className="text-xs opacity-60">MMK</span></span>
+                    </div>
+
+                    <div className="flex items-center gap-4 bg-slate-50 p-1.5 rounded-2xl border border-slate-100">
                         <button
                             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                            className="w-7 h-7 rounded-lg bg-white shadow-sm flex items-center justify-center text-primary active:scale-90 border border-gray-100 hover:bg-gray-50 transition-all font-bold"
+                            className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-primary active:scale-90 hover:bg-slate-50 transition-all font-bold"
                         >
-                            <Minus size={12} strokeWidth={3} />
+                            <Minus size={14} strokeWidth={2.5} />
                         </button>
-                        <span className="font-black text-primary w-4 text-center text-sm">{quantity}</span>
+                        <span className="font-bold text-primary w-6 text-center text-lg">{quantity}</span>
                         <button
                             onClick={() => setQuantity(Math.min(selectedProduct.quantityNum, quantity + 1))}
                             disabled={quantity >= selectedProduct.quantityNum}
-                            className={`w-7 h-7 rounded-lg shadow-sm flex items-center justify-center active:scale-90 transition-all font-bold ${quantity >= selectedProduct.quantityNum
-                                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
-                                    : 'bg-accent text-primary'
+                            className={`w-10 h-10 rounded-xl shadow-sm flex items-center justify-center active:scale-90 transition-all font-bold ${quantity >= selectedProduct.quantityNum
+                                ? 'bg-slate-200 text-gray-400 cursor-not-allowed opacity-50'
+                                : 'bg-blue-600 text-white shadow-lg shadow-blue-100'
                                 }`}
                         >
-                            <Plus size={12} strokeWidth={3} />
+                            <Plus size={14} strokeWidth={2.5} />
                         </button>
                     </div>
+
                     <button
                         onClick={() => setView('confirm')}
-                        className="flex-1 bg-ev-primary text-secondary py-3 rounded-xl font-black shadow-lg shadow-ev-primary/20 flex flex-col items-center justify-center leading-none active:scale-[0.98] transition-all"
+                        className="w-14 h-14 bg-blue-600 text-white rounded-[20px] flex items-center justify-center shadow-2xl shadow-blue-200 active:scale-95 transition-all"
                     >
-                        <span className="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-1">Add to Cart</span>
-                        <span className="text-sm">{(selectedProduct.price * quantity).toLocaleString()} MMK</span>
+                        <ShoppingCart size={24} />
                     </button>
                 </div>
             </div>
@@ -441,68 +440,70 @@ const Explore = () => {
         const total = selectedProduct.price * quantity;
         return (
             <div className="fixed inset-0 z-[100] flex items-end justify-center">
-                <div className="absolute inset-0 max-w-md left-1/2 -translate-x-1/2 bg-primary/40 backdrop-blur-sm transition-all duration-500" onClick={() => setView('detail')} />
-                <div className="relative w-full max-w-md bg-secondary rounded-t-[3rem] shadow-2xl animate-in slide-in-from-bottom duration-500 overflow-hidden border-t-2 border-white/50 max-h-[90vh] overflow-y-auto">
-                    <div className="w-16 h-1.5 bg-gray-200 rounded-full mx-auto my-5" />
+                <div className="absolute inset-0 max-w-md left-1/2 -translate-x-1/2 bg-blue-900/40 backdrop-blur-md transition-all duration-500" onClick={() => setView('detail')} />
+                <div className="relative w-full max-w-md bg-white rounded-t-[48px] shadow-2xl animate-in slide-in-from-bottom duration-700 overflow-hidden border-t border-white/50 max-h-[92vh] overflow-y-auto">
+                    <div className="w-16 h-1.5 bg-slate-100 rounded-full mx-auto my-6" />
 
-                    <div className="px-8 pb-12">
-                        <div className="flex items-center justify-between mb-8">
-                            <h2 className="text-2xl font-black text-primary tracking-tight">Shopping Cart</h2>
-                            <button onClick={() => setView('detail')} className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 border border-gray-100"><X size={20} /></button>
+                    <div className="px-10 pb-12">
+                        <div className="flex items-center justify-between mb-10">
+                            <div>
+                                <h2 className="text-3xl font-bold text-primary tracking-tight">Checkout</h2>
+                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Review your order</p>
+                            </div>
+                            <button onClick={() => setView('detail')} className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-gray-400 border border-slate-100 hover:text-primary transition-all active:scale-90"><X size={20} /></button>
                         </div>
 
-                        <div className="space-y-6">
-                            <div className="flex items-center gap-5 p-5 bg-background-soft rounded-[2rem] border border-gray-100 shadow-sm relative overflow-hidden group">
-                                <div className="absolute inset-y-0 right-0 w-1 bg-ev-primary opacity-20" />
-                                <div className="w-16 h-16 bg-white rounded-2xl overflow-hidden border border-gray-100 flex-shrink-0 shadow-inner">
-                                    <img src={selectedProduct.images[0]} className="w-full h-full object-contain p-2" alt={selectedProduct.name} onError={(e) => { e.currentTarget.src = '/assets/phone_holder.png'; }} />
+                        <div className="space-y-8">
+                            <div className="flex items-center gap-6 p-6 bg-slate-50 rounded-[32px] border border-slate-100/50 relative overflow-hidden group">
+                                <div className="w-20 h-20 bg-white rounded-2xl overflow-hidden border border-slate-100 flex-shrink-0 shadow-sm p-2 transition-transform group-hover:scale-110 duration-500">
+                                    <img src={selectedProduct.images[0]} className="w-full h-full object-contain" alt={selectedProduct.name} onError={(e) => { e.currentTarget.src = defaultPlaceholderImage; }} />
                                 </div>
                                 <div className="flex-1 overflow-hidden">
-                                    <p className="font-black text-primary text-lg truncate leading-tight uppercase tracking-tight">{selectedProduct.name}</p>
-                                    <p className="text-xs text-gray-400 font-bold mt-1">Qty: {quantity} • MMK {selectedProduct.price.toLocaleString()}</p>
+                                    <p className="font-bold text-primary text-lg truncate leading-tight uppercase tracking-tight">{selectedProduct.name}</p>
+                                    <p className="text-[10px] text-blue-500 font-bold mt-1 uppercase tracking-widest">Qty: {quantity} • MMK {selectedProduct.price.toLocaleString()}</p>
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-[2rem] p-6 border border-gray-100 shadow-inner space-y-4">
-                                <div className="flex justify-between items-center text-xs">
-                                    <span className="text-gray-400 font-bold uppercase tracking-widest">Merchant</span>
-                                    <span className="font-black text-primary">Go Pay Smart Partner</span>
+                            <div className="bg-white rounded-[32px] p-8 border border-slate-100 shadow-sm space-y-6">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Merchant</span>
+                                    <span className="font-bold text-sm text-primary">Go Pay Marketplace</span>
                                 </div>
-                                <div className="flex justify-between items-center text-xs">
-                                    <span className="text-gray-400 font-bold uppercase tracking-widest">Balance</span>
-                                    <div className="flex items-center gap-2 font-black text-ev-primary">
-                                        <Wallet size={16} /> MMK {walletBalance.toLocaleString()}
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Wallet Body</span>
+                                    <div className="flex items-center gap-2 font-bold text-sm text-blue-600">
+                                        <Wallet size={16} /> {walletBalance.toLocaleString()} <span className="text-[8px] opacity-60">MMK</span>
                                     </div>
                                 </div>
 
-                                {/* Note Section */}
-                                <div className="pt-4 border-t border-gray-50">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">Order Note</label>
+                                <div className="pt-6 border-t border-slate-50">
+                                    <label className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3 block text-left">Special Instructions</label>
                                     <textarea
                                         value={orderNote}
                                         onChange={(e) => setOrderNote(e.target.value)}
-                                        placeholder="Add any specific requirements..."
-                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-xs font-bold text-primary focus:outline-none focus:ring-2 focus:ring-ev-primary/20 transition-all resize-none h-24"
+                                        placeholder="Optional..."
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-medium text-primary focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all resize-none h-24 placeholder:text-gray-300"
                                     />
                                 </div>
 
-                                <div className="h-px bg-gray-50 flex-1 my-2" />
+                                <div className="h-px bg-slate-100 flex-1 my-2" />
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Subtotal</span>
-                                    <span className="text-3xl font-black text-primary">{total.toLocaleString()} <span className="text-xs">MMK</span></span>
+                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">Grand Total</span>
+                                    <span className="text-3xl font-bold text-primary tracking-tighter">{total.toLocaleString()} <span className="text-xs opacity-40 uppercase tracking-widest">MMK</span></span>
                                 </div>
                             </div>
 
                             <button
                                 onClick={handleConfirmPayment}
-                                className="w-full bg-ev-primary text-secondary py-5 rounded-[2rem] font-black shadow-xl shadow-ev-primary/30 flex items-center justify-center gap-3 active:scale-[0.98] transition-all border-b-4 border-black/10"
+                                className="w-full bg-blue-600 text-white py-6 rounded-[32px] font-bold shadow-2xl shadow-blue-200 flex items-center justify-center gap-4 active:scale-[0.98] transition-all group overflow-hidden relative"
                             >
-                                <ShieldCheck size={22} strokeWidth={3} />
-                                Pay Now
+                                <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                                <ShieldCheck size={22} className="stroke-[2.5px]" />
+                                <span className="uppercase tracking-[0.2em] text-sm">Verify & Pay</span>
                             </button>
 
-                            <p className="text-center text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] opacity-40">
-                                Secure Checkout by KBZPay
+                            <p className="text-center text-[9px] text-gray-300 font-bold uppercase tracking-[0.3em] opacity-80">
+                                End-to-end Encrypted by GoPay
                             </p>
                         </div>
                     </div>
@@ -514,16 +515,16 @@ const Explore = () => {
     // 4. PROCESSING SCREEN
     if (view === 'processing') {
         return (
-            <div className="fixed inset-0 w-full max-w-md left-1/2 -translate-x-1/2 bg-secondary z-[200] flex flex-col items-center justify-center animate-in fade-in duration-500">
-                <div className="relative group">
-                    <div className="w-32 h-32 border-4 border-gray-50 rounded-full shadow-inner" />
-                    <Loader2 className="absolute top-0 w-32 h-32 text-ev-primary animate-spin" strokeWidth={3} />
+            <div className="fixed inset-0 w-full max-w-md left-1/2 -translate-x-1/2 bg-white z-[200] flex flex-col items-center justify-center animate-in fade-in duration-500">
+                <div className="relative">
+                    <div className="w-36 h-36 border-4 border-slate-50 rounded-full shadow-inner" />
+                    <Loader2 className="absolute top-0 w-36 h-36 text-blue-600 animate-spin stroke-[1.5px]" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <CreditCard size={32} className="text-gray-200" />
+                        <Wallet size={40} className="text-slate-200" />
                     </div>
                 </div>
-                <h2 className="text-2xl font-black text-primary mt-10 tracking-tight">Securing Payment...</h2>
-                <p className="text-gray-400 font-bold text-xs uppercase tracking-[0.2em] mt-3">Connecting to Wallet</p>
+                <h2 className="text-2xl font-bold text-primary mt-12 tracking-tight">Processing...</h2>
+                <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.3em] mt-4 opacity-60">Connecting to secure gateway</p>
             </div>
         );
     }
@@ -532,139 +533,135 @@ const Explore = () => {
     if (view === 'success') {
         const total = selectedProduct.price * quantity;
         return (
-            <div className="bg-secondary min-h-screen z-[300] flex flex-col items-center pt-24 px-8 animate-in fade-in zoom-in-95 duration-700">
-                <div className="w-24 h-24 bg-status-success rounded-[2rem] flex items-center justify-center shadow-2xl shadow-status-success/40 mb-10 rotate-12 transition-transform hover:rotate-0 duration-500">
-                    <CheckCircle2 size={48} className="text-secondary" strokeWidth={3} />
+            <div className="bg-white min-h-screen z-[300] flex flex-col items-center pt-28 px-10 animate-in fade-in zoom-in-95 duration-1000">
+                <div className="w-28 h-28 bg-blue-600 rounded-[40px] flex items-center justify-center shadow-2xl shadow-blue-200 mb-12 rotate-[-5deg] transform hover:rotate-0 transition-transform duration-700">
+                    <CheckCircle2 size={56} className="text-white stroke-[2.5px]" />
                 </div>
 
-                <h2 className="text-3xl font-black text-primary mb-3 tracking-tighter text-center">PAYMENT SUCCESS!</h2>
-                <p className="text-gray-400 text-center text-sm font-medium mb-12 max-w-[280px]">
-                    Your order is confirmed and the transaction was secure.
+                <h2 className="text-3xl font-bold text-primary mb-3 tracking-tighter text-center">ORDER SUCCESS!</h2>
+                <p className="text-gray-400 text-center text-sm font-medium mb-12 max-w-[280px] leading-relaxed">
+                    Your payment was verified. Your order will be delivered shortly.
                 </p>
 
-                <div className="w-full bg-white rounded-[2.5rem] p-8 space-y-5 mb-12 relative border border-gray-100 shadow-sm">
-                    {/* Decorative notches */}
-                    <div className="absolute top-1/2 -left-4 w-8 h-8 bg-secondary rounded-full -translate-y-1/2 shadow-inner" />
-                    <div className="absolute top-1/2 -right-4 w-8 h-8 bg-secondary rounded-full -translate-y-1/2 shadow-inner" />
-                    <div className="absolute left-1/4 right-1/4 top-1/2 h-[2px] bg-gray-50 border-b border-dashed border-gray-100" />
+                <div className="w-full bg-slate-50 rounded-[40px] p-10 space-y-6 mb-12 relative border border-slate-100 overflow-hidden">
+                    <div className="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
 
-                    <div className="flex justify-between items-center">
-                        <span className="text-gray-400 text-[10px] font-black uppercase tracking-widest">TX ID</span>
-                        <span className="text-primary text-xs font-black uppercase tracking-tight">{transactionId}</span>
+                    <div className="flex justify-between items-center text-left">
+                        <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Transaction Id</span>
+                        <span className="text-primary text-xs font-bold uppercase tracking-widest">{transactionId}</span>
                     </div>
-                    <div className="flex justify-between items-center py-4">
-                        <span className="text-gray-400 text-[10px] font-black uppercase tracking-widest">Amount</span>
-                        <span className="text-ev-primary text-2xl font-black leading-none">{total.toLocaleString()} <span className="text-xs">MMK</span></span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-gray-400 text-[10px] font-black uppercase tracking-widest">Account</span>
-                        <span className="text-primary text-xs font-black uppercase tracking-tight">John Doe (KPay)</span>
+
+                    <div className="h-px bg-slate-200/50" />
+
+                    <div className="flex justify-between items-center py-2 text-left">
+                        <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Paid Amount</span>
+                        <span className="text-blue-600 text-2xl font-bold tracking-tighter">{total.toLocaleString()} <span className="text-xs uppercase opacity-60">MMK</span></span>
                     </div>
                 </div>
 
                 <div className="w-full space-y-4">
                     <button
                         onClick={() => setView('receipt')}
-                        className="w-full bg-primary text-secondary py-5 rounded-[2rem] font-black flex items-center justify-center gap-3 shadow-xl active:scale-95 transition-all"
+                        className="w-full bg-primary text-white py-6 rounded-[32px] font-bold flex items-center justify-center gap-4 shadow-xl active:scale-95 transition-all group uppercase tracking-[0.2em] text-sm"
                     >
-                        View Receipt <ArrowRight size={20} />
+                        View Receipt <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                     <button
                         onClick={() => setView('list')}
-                        className="w-full text-ev-primary font-black text-xs uppercase tracking-widest py-3 active:opacity-50 transition-opacity"
+                        className="w-full text-blue-600 font-bold text-xs uppercase tracking-[0.3em] py-4 active:opacity-50 transition-opacity"
                     >
-                        Back to Explore
+                        Return Home
                     </button>
                 </div>
             </div>
         );
     }
 
-    // 6. DIGITAL RECEIPT (Modified to match Go Pay aesthetics)
+    // 6. DIGITAL RECEIPT
     if (view === 'receipt') {
         const total = selectedProduct.price * quantity;
         return (
-            <div className="bg-background-soft min-h-screen animate-in slide-in-from-bottom duration-500 flex flex-col">
+            <div className="bg-slate-50 min-h-screen animate-in slide-in-from-bottom duration-700 flex flex-col">
                 <TopAppBar title="Digital Receipt" showBack={true} onBack={() => setView('success')} />
 
-                <div className="px-4 pb-12 flex-1">
-                    <div className="bg-white rounded-[3rem] shadow-xl overflow-hidden relative border border-gray-100">
-                        <div className="h-3 bg-ev-primary w-full" />
+                <div className="px-6 pb-12 flex-1">
+                    <div className="bg-white rounded-[48px] shadow-2xl overflow-hidden relative border border-slate-50 mb-10">
+                        <div className="h-4 bg-blue-600 w-full" />
 
                         <div className="p-10">
                             <div className="flex flex-col items-center mb-12">
-                                <div className="w-20 h-20 bg-ev-primary/5 text-ev-primary rounded-[1.5rem] flex items-center justify-center mb-6 shadow-inner border border-ev-primary/10">
-                                    <ShieldCheck size={40} strokeWidth={2.5} />
+                                <div className="w-24 h-24 bg-blue-50 text-blue-600 rounded-[32px] flex items-center justify-center mb-6 shadow-sm border border-blue-100">
+                                    <ShieldCheck size={48} className="stroke-[2px]" />
                                 </div>
-                                <h3 className="text-2xl font-black text-primary tracking-tighter">ORDER COMPLETE</h3>
-                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.3em] mt-2 opacity-60">Verified by Go Pay</p>
+                                <h3 className="text-2xl font-bold text-primary tracking-tight">TRANSACTION VERIFIED</h3>
+                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.4em] mt-3 opacity-60">Secured via Go Pay</p>
                             </div>
 
-                            <div className="space-y-8">
-                                <div className="flex justify-between items-start pb-8 border-b border-dashed border-gray-200">
-                                    <div className="flex gap-4">
-                                        <div className="w-16 h-16 bg-gray-50 rounded-2xl overflow-hidden p-2 flex-shrink-0 border border-gray-100 shadow-inner">
-                                            <img src={selectedProduct.images[0]} className="w-full h-full object-contain" alt={selectedProduct.name} onError={(e) => { e.currentTarget.src = '/assets/phone_holder.png'; }} />
+                            <div className="space-y-10">
+                                <div className="flex justify-between items-center pb-10 border-b border-dashed border-slate-200">
+                                    <div className="flex gap-5 px-2">
+                                        <div className="w-16 h-16 bg-slate-50 rounded-2xl overflow-hidden p-3 flex-shrink-0 border border-slate-100">
+                                            <img src={selectedProduct.images[0]} className="w-full h-full object-contain" alt={selectedProduct.name} onError={(e) => { e.currentTarget.src = defaultPlaceholderImage; }} />
                                         </div>
-                                        <div className="flex flex-col justify-center">
-                                            <p className="text-lg font-black text-primary tracking-tight leading-tight uppercase">{selectedProduct.name}</p>
-                                            <p className="text-xs text-gray-400 font-bold mt-1">QTY: {quantity} • UNIT: {selectedProduct.price.toLocaleString()}</p>
+                                        <div className="flex flex-col justify-center text-left">
+                                            <p className="text-base font-bold text-primary tracking-tight leading-tight uppercase line-clamp-1">{selectedProduct.name}</p>
+                                            <p className="text-[10px] text-gray-400 font-bold mt-2 uppercase tracking-widest">Qty: {quantity} • Unit: {selectedProduct.price.toLocaleString()}</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="space-y-5">
+                                <div className="space-y-6 px-2">
                                     {[
-                                        { label: 'Platform', value: 'Go Pay Mini App' },
-                                        { label: 'Timeline', value: formatTime() },
-                                        { label: 'Payment', value: 'KBZPay Wallet', icon: <CreditCard size={14} className="text-status-info" /> },
-                                        { label: 'Ref Num', value: transactionId, mono: true }
+                                        { label: 'Merchant', value: 'Go Pay Store' },
+                                        { label: 'Date Time', value: formatTime() },
+                                        { label: 'Method', value: 'GoPay Wallet', icon: <div className="w-2 h-2 bg-blue-500 rounded-full" /> },
+                                        { label: 'Reference', value: transactionId, accent: true }
                                     ].map((item, idx) => (
                                         <div key={idx} className="flex justify-between items-center">
-                                            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{item.label}</span>
-                                            <span className={`text-xs font-black text-primary flex items-center gap-2 ${item.mono ? 'font-mono' : ''}`}>
+                                            <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">{item.label}</span>
+                                            <span className={`text-[11px] font-bold text-primary flex items-center gap-2 ${item.accent ? 'text-blue-600 font-mono' : ''}`}>
                                                 {item.icon}{item.value}
                                             </span>
                                         </div>
                                     ))}
                                 </div>
 
-                                <div className="bg-gray-50/50 p-6 rounded-[2rem] border border-gray-100 shadow-inner flex justify-between items-center">
-                                    <span className="text-xs font-black text-primary uppercase tracking-widest">Total MMK</span>
-                                    <span className="text-2xl font-black text-ev-primary tracking-tighter">{total.toLocaleString()}</span>
+                                <div className="bg-slate-50 p-8 rounded-[32px] border border-slate-100/50 flex justify-between items-center shadow-inner">
+                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Payment Amount</span>
+                                    <span className="text-3xl font-bold text-blue-600 tracking-tighter">{total.toLocaleString()} <span className="text-xs uppercase opacity-40">MMK</span></span>
                                 </div>
                             </div>
 
-                            <div className="mt-12 flex flex-col items-center opacity-40">
-                                <div className="w-28 h-28 bg-white p-3 rounded-2xl border-2 border-primary shadow-sm mb-4">
-                                    <div className="grid grid-cols-4 gap-1 h-full w-full">
-                                        {[...Array(16)].map((_, i) => <div key={i} className={`bg-primary rounded-sm ${Math.random() > 0.5 ? 'opacity-100' : 'opacity-20'}`} />)}
+                            <div className="mt-12 flex flex-col items-center opacity-30">
+                                <div className="w-24 h-24 bg-slate-100/50 p-4 rounded-3xl border border-slate-200">
+                                    <div className="grid grid-cols-5 gap-1.5 h-full w-full opacity-60">
+                                        {[...Array(25)].map((_, i) => <div key={i} className={`bg-primary rounded-[2px] ${Math.random() > 0.4 ? 'h-full' : 'h-1/2'}`} />)}
                                     </div>
                                 </div>
-                                <p className="text-[9px] text-center font-bold text-gray-400 uppercase tracking-widest max-w-[180px]">
-                                    Digital Signature Verified
+                                <p className="text-[8px] text-center font-bold text-gray-400 uppercase tracking-[0.3em] mt-5">
+                                    Blockchain Verified Receipt
                                 </p>
                             </div>
                         </div>
 
-                        {/* Zig Zag Bottom Simulation */}
-                        <div className="flex w-full overflow-hidden h-3">
-                            {[...Array(30)].map((_, i) => (
-                                <div key={i} className="min-w-[20px] h-20 bg-background-soft rounded-full -mt-2 mx-[-3px] border-t border-gray-100 shadow-inner" />
+                        {/* Serrated Edge Decoration */}
+                        <div className="flex w-full overflow-hidden h-2 opacity-50">
+                            {[...Array(40)].map((_, i) => (
+                                <div key={i} className="min-w-[12px] h-12 bg-slate-50 rounded-full -mt-1 mx-[-2px] border-t border-slate-200" />
                             ))}
                         </div>
                     </div>
 
-                    <div className="mt-8 flex gap-4">
+                    <div className="mt-2 flex gap-4 px-2 pb-10">
                         <button
-                            className="flex-1 bg-white border-2 border-primary text-primary py-4 rounded-[2rem] font-black flex items-center justify-center gap-2 active:scale-95 transition-all shadow-sm"
+                            className="flex-1 bg-white border border-slate-100 text-primary py-5 rounded-[28px] font-bold flex items-center justify-center gap-2 active:scale-95 transition-all text-xs uppercase tracking-widest shadow-sm"
                         >
-                            <Download size={18} /> SAVE
+                            <Download size={16} /> Save
                         </button>
                         <button
-                            className="flex-1 bg-primary text-secondary py-4 rounded-[2rem] font-black flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-primary/20"
+                            className="flex-1 bg-primary text-white py-5 rounded-[28px] font-bold flex items-center justify-center gap-2 active:scale-95 transition-all text-xs uppercase tracking-widest shadow-xl shadow-slate-200"
                         >
-                            <Share2 size={18} /> SHARE
+                            <Share2 size={16} /> Share
                         </button>
                     </div>
                 </div>

@@ -11,42 +11,42 @@ const history = [
 const PaymentHistory = () => {
     const navigate = useNavigate();
     return (
-        <section className="mb-8">
-            <div className="flex justify-between items-end mb-4">
-                <h2 className="text-xl font-bold text-primary">Recent Activity</h2>
+        <section className="mb-10 px-2 overflow-hidden">
+            <div className="flex justify-between items-center mb-6 px-2">
+                <h2 className="text-lg font-bold text-primary tracking-tight">Recent Activity</h2>
                 <button
                     onClick={() => navigate('/activity')}
-                    className="text-sm font-bold text-gray-400 hover:text-ev-primary transition-colors pr-2 active:scale-95"
+                    className="text-[11px] font-bold text-blue-600 uppercase tracking-widest hover:text-blue-700 transition-all border-b border-blue-100 pb-0.5"
                 >
-                    See All
+                    View All
                 </button>
             </div>
 
-            <div className="bg-white rounded-3xl p-5 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.05)] border border-gray-100">
-                <div className="flex flex-col">
+            <div className="bg-white rounded-[40px] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-50 relative overflow-hidden">
+                <div className="flex flex-col gap-2">
                     {history.map((item, index) => {
                         const Icon = item.icon;
                         return (
                             <div
                                 key={item.id}
-                                className={`flex justify-between items-center py-4 ${index !== history.length - 1 ? 'border-b border-gray-50' : ''}`}
+                                className={`flex justify-between items-center py-5 ${index !== history.length - 1 ? 'border-b border-slate-50' : ''} hover:bg-slate-50/50 -mx-4 px-4 rounded-2xl transition-colors group`}
                             >
-                                <div className="flex items-center gap-4">
-                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0
-                    ${item.type === 'charge' ? 'bg-ev-primary/10 text-ev-primary' :
-                                            item.type === 'topup' ? 'bg-status-success/10 text-status-success' :
-                                                'bg-gray-100 text-gray-600'}`
+                                <div className="flex items-center gap-5">
+                                    <div className={`w-14 h-14 rounded-[20px] flex items-center justify-center shrink-0 shadow-sm
+                    ${item.type === 'charge' ? 'bg-blue-600 text-white' :
+                                            item.type === 'topup' ? 'bg-blue-50 text-blue-600' :
+                                                'bg-slate-100 text-gray-400'}`
                                     }>
-                                        <Icon size={20} />
+                                        <Icon size={22} strokeWidth={1.5} />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-primary text-sm line-clamp-1">{item.title}</h3>
-                                        <p className="text-xs text-gray-400 mt-0.5">{item.date}</p>
+                                        <h3 className="font-bold text-primary text-sm uppercase tracking-tight group-hover:text-blue-800 transition-colors">{item.title}</h3>
+                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1.5">{item.date}</p>
                                     </div>
                                 </div>
-                                <div className="text-right shrink-0 ml-2">
-                                    <span className={`font-black tracking-tight ${item.isNegative ? 'text-primary' : 'text-status-success'}`}>
-                                        {item.amount}
+                                <div className="text-right shrink-0 ml-4">
+                                    <span className={`font-bold tracking-tighter text-lg ${item.isNegative ? 'text-primary' : 'text-blue-600'}`}>
+                                        {item.amount.split(' ')[0]} <span className="text-[9px] opacity-40">{item.amount.split(' ')[1]}</span>
                                     </span>
                                 </div>
                             </div>

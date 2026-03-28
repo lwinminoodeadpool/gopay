@@ -110,16 +110,16 @@ const ParkingPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-background-soft flex flex-col font-sans">
+        <div className="min-h-screen bg-white flex flex-col font-sans mb-20 animate-in fade-in duration-500">
             {/* Header */}
-            <header className="bg-white px-6 pt-12 pb-6 shadow-sm sticky top-0 z-10 border-b border-gray-50 flex items-center gap-4">
+            <header className="bg-white px-6 pt-12 pb-6 sticky top-0 z-10 border-b border-slate-50 flex items-center gap-4">
                 <button
                     onClick={() => navigate('/')}
-                    className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-primary border border-gray-100 active:scale-95 transition-all"
+                    className="w-10 h-10 bg-slate-50 rounded-2xl flex items-center justify-center text-primary hover:bg-blue-50 hover:text-blue-600 transition-all active:scale-95"
                 >
                     <ArrowLeft size={20} />
                 </button>
-                <h1 className="text-xl font-black text-primary tracking-tight">Parking Checkout</h1>
+                <h1 className="text-xl font-bold text-primary tracking-tight">Parking Checkout</h1>
             </header>
 
             <main className="flex-1 flex flex-col p-6 max-w-md w-full mx-auto relative">
@@ -128,113 +128,116 @@ const ParkingPage = () => {
                 <div className="absolute top-10 left-10 w-48 h-48 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -z-10 animate-pulse transition-all duration-1000"></div>
                 <div className="absolute top-20 right-10 w-48 h-48 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -z-10 animate-pulse animation-delay-2000 transition-all duration-1000"></div>
 
-                <div className="mb-8 mt-4 text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white shadow-lg shadow-blue-500/10 mb-4 border border-white/50 relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <Car className="text-blue-600 relative z-10" size={32} strokeWidth={1.5} />
+                <div className="mb-10 mt-6 text-center">
+                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-[28px] bg-blue-50 shadow-lg shadow-blue-100 mb-6 border border-blue-100 relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <Car className="text-blue-600 relative z-10" size={36} strokeWidth={1.5} />
                     </div>
-                    <h2 className="text-2xl font-black text-slate-800 mb-2">Check Your Parking</h2>
-                    <p className="text-slate-500 text-sm px-4 leading-relaxed">Enter your license plate number to view your current status and fee.</p>
+                    <h2 className="text-3xl font-bold text-primary mb-2 tracking-tight">Check Your Parking</h2>
+                    <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] px-4">Instant payment & status</p>
                 </div>
 
-                <div className="bg-white/70 backdrop-blur-xl p-5 rounded-[2rem] shadow-xl shadow-slate-200/50 border border-white mb-6 relative z-10">
-                    <div className="relative">
+                <div className="bg-white p-6 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-50 mb-8 relative z-10">
+                    <div className="relative group">
                         <input
                             type="text"
                             placeholder="e.g. 1P-3579"
                             value={plateNumber}
                             onChange={(e) => setPlateNumber(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && checkStatus()}
-                            className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 text-center text-2xl font-black text-slate-800 tracking-widest uppercase transition-all shadow-inner focus:outline-none focus:border-blue-500 focus:bg-white focus:shadow-blue-500/10 focus:ring-4 focus:ring-blue-500/10 placeholder:text-slate-300 placeholder:font-medium placeholder:tracking-normal"
+                            className="w-full bg-slate-50 border-2 border-slate-50 rounded-[24px] px-6 py-5 text-center text-3xl font-bold text-primary tracking-widest uppercase transition-all focus:outline-none focus:border-blue-100 focus:bg-white focus:ring-4 focus:ring-blue-50/50 placeholder:text-gray-200 placeholder:font-bold placeholder:tracking-normal placeholder:text-xs"
                         />
                         <button
                             onClick={checkStatus}
                             disabled={loading || !plateNumber}
-                            className="absolute right-2 top-2 bottom-2 bg-ev-primary hover:bg-teal-700 active:scale-95 text-secondary rounded-xl px-4 transition-all duration-200 disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed flex items-center justify-center shadow-md shadow-ev-primary/20"
+                            className="absolute right-2 top-2 bottom-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-[20px] px-6 transition-all duration-300 disabled:opacity-30 disabled:active:scale-100 disabled:cursor-not-allowed flex items-center justify-center shadow-lg shadow-blue-200/50"
                         >
                             {loading ? (
                                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                             ) : (
-                                <Search size={20} />
+                                <Search size={22} strokeWidth={2.5} />
                             )}
                         </button>
                     </div>
 
                     {error && (
-                        <div className="mt-4 p-4 bg-red-50 text-red-600 rounded-2xl text-sm font-medium flex items-center gap-3 animate-in fade-in slide-in-from-top-2 border border-red-100">
-                            <AlertCircle size={18} className="shrink-0" />
-                            <p>{error}</p>
+                        <div className="mt-6 p-5 bg-red-50 text-red-600 rounded-[20px] text-xs font-bold flex items-center gap-4 animate-in fade-in slide-in-from-top-2 border border-red-100 shadow-sm">
+                            <AlertCircle size={20} className="shrink-0" />
+                            <p className="tracking-tight uppercase">{error}</p>
                         </div>
                     )}
                 </div>
 
                 {/* Status Cards */}
                 {parkingData && !paymentSuccess && (
-                    <div className="animate-in slide-in-from-bottom-6 fade-in duration-500 flex-1 flex flex-col relative z-10 mt-2">
-                        <div className="bg-white rounded-[2rem] p-6 shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden flex-1 flex flex-col">
-                            {/* Top accent line */}
-                            <div className={`absolute top-0 left-0 right-0 h-1.5 ${parkingData.status === 'ENTERED' ? 'bg-amber-500' : 'bg-ev-primary'}`}></div>
-
-                            <div className="flex justify-between items-start mb-8 mt-2">
+                    <div className="animate-in slide-in-from-bottom-8 fade-in duration-700 flex-1 flex flex-col relative z-10 mt-2">
+                        <div className="bg-white rounded-[40px] p-8 shadow-[0_15px_50px_rgba(0,0,0,0.06)] border border-slate-50 relative overflow-hidden flex-1 flex flex-col">
+                            {/* Status Indicator */}
+                            <div className="flex justify-between items-start mb-10">
                                 <div>
-                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Status</p>
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-3 h-3 rounded-full ${parkingData.status === 'ENTERED' ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)] animate-pulse' : 'bg-ev-primary shadow-[0_0_8px_rgba(13,148,136,0.6)]'}`}></div>
-                                        <h3 className={`text-xl font-black ${parkingData.status === 'ENTERED' ? 'text-amber-600' : 'text-ev-primary'}`}>
-                                            {parkingData.status === 'ENTERED' ? 'Currently Parked' : 'Checked Out'}
-                                        </h3>
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <div className={`w-2 h-2 rounded-full animate-ping ${parkingData.status === 'ENTERED' ? 'bg-amber-500' : 'bg-blue-600'}`}></div>
+                                        <p className={`text-[10px] font-bold uppercase tracking-[0.2em] ${parkingData.status === 'ENTERED' ? 'text-amber-600' : 'text-blue-600'}`}>
+                                            {parkingData.status === 'ENTERED' ? 'In Session' : 'Completed'}
+                                        </p>
                                     </div>
+                                    <h3 className="text-3xl font-bold text-primary tracking-tighter">
+                                        {parkingData.status === 'ENTERED' ? 'Currently Parked' : 'Visit Detail'}
+                                    </h3>
                                 </div>
-                                <div className="bg-slate-50 px-4 py-2 rounded-xl border border-slate-100 shadow-sm inline-flex items-center justify-center">
-                                    <p className="font-black text-slate-800 font-mono text-lg tracking-wider">{parkingData.plateNumber}</p>
+                                <div className="bg-slate-50 px-6 py-3 rounded-2xl border border-slate-100 shadow-sm">
+                                    <p className="font-bold text-primary font-mono text-xl tracking-[0.1em]">{parkingData.plateNumber}</p>
                                 </div>
                             </div>
 
-                            <div className="space-y-4 mb-8 flex-1">
-                                <div className="flex bg-slate-50/80 rounded-2xl p-4 items-center gap-5 border border-slate-100 hover:border-slate-200 transition-colors">
-                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${parkingData.status === 'ENTERED' ? 'bg-amber-100 text-amber-600' : 'bg-ev-primary/10 text-ev-primary'}`}>
-                                        <Clock size={24} />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-bold text-slate-400 mb-0.5">Total Duration</p>
-                                        <p className="text-2xl font-black text-slate-800 tracking-tight">
-                                            {parkingData.status === 'ENTERED' ? parkingData.currentDurationMinutes : (parkingData.durationMinutes || parkingData.duration)} <span className="text-base font-bold text-slate-400 ml-1">mins</span>
-                                        </p>
+                            <div className="space-y-4 mb-10 flex-1">
+                                <div className="bg-slate-50/50 rounded-[28px] p-6 border border-slate-50 hover:border-blue-100 transition-all group">
+                                    <div className="flex items-center gap-5">
+                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${parkingData.status === 'ENTERED' ? 'bg-white text-amber-500' : 'bg-blue-600 text-white'}`}>
+                                            <Clock size={24} strokeWidth={1.5} />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Duration</p>
+                                            <p className="text-2xl font-bold text-primary tracking-tight">
+                                                {parkingData.status === 'ENTERED' ? parkingData.currentDurationMinutes : (parkingData.durationMinutes || parkingData.duration)} <span className="text-sm text-gray-400 font-medium">mins</span>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="flex bg-slate-50/80 rounded-2xl p-4 items-center gap-5 border border-slate-100 hover:border-slate-200 transition-colors">
-                                    <div className="w-12 h-12 rounded-full bg-ev-primary/10 flex items-center justify-center text-ev-primary shrink-0">
-                                        <CreditCard size={24} />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-bold text-slate-400 mb-0.5">Total Fee</p>
-                                        <p className="text-3xl font-black text-slate-800 tracking-tight">
-                                            {parkingData.status === 'ENTERED' ? parkingData.currentPrice : parkingData.price} <span className="text-base font-bold text-slate-400 ml-1">KS</span>
-                                        </p>
+                                <div className="bg-slate-50/50 rounded-[28px] p-6 border border-slate-50 hover:border-blue-100 transition-all group">
+                                    <div className="flex items-center gap-5">
+                                        <div className="w-14 h-14 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-100 shrink-0">
+                                            <CreditCard size={24} strokeWidth={1.5} />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Estimated Cost</p>
+                                            <p className="text-2xl font-bold text-primary tracking-tight italic">
+                                                {parkingData.status === 'ENTERED' ? parkingData.currentPrice : parkingData.price} <span className="text-sm font-bold text-blue-600 ml-1">KS</span>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             {parkingData.status === 'ENTERED' ? (
-                                <div className="bg-amber-50/80 rounded-2xl p-5 text-center border border-amber-100 mt-auto">
-                                    <p className="text-amber-800 text-sm font-semibold leading-relaxed">
-                                        You are currently parked. Scan your car at the exit gate to finish your session and pay.
+                                <div className="bg-amber-50 rounded-[24px] p-6 text-center border border-amber-100 mt-auto">
+                                    <p className="text-amber-800 text-[11px] font-bold uppercase tracking-widest leading-relaxed">
+                                        Active session detected.<br />Pay at exit gate.
                                     </p>
                                 </div>
                             ) : (
                                 <button
                                     onClick={handlePayment}
                                     disabled={loading}
-                                    className="w-full bg-ev-primary hover:bg-teal-700 active:scale-95 text-secondary font-black py-4 rounded-2xl shadow-lg shadow-ev-primary/30 transition-all flex items-center justify-center gap-2 mt-auto text-lg"
+                                    className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold py-6 rounded-[32px] shadow-2xl shadow-blue-200 transition-all flex items-center justify-center gap-3 mt-auto text-sm uppercase tracking-widest"
                                 >
-                                    <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                                     {loading ? (
-                                        <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin relative z-10"></div>
+                                        <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                                     ) : (
-                                        <span className="relative z-10 flex items-center gap-2">
-                                            Pay Now <span className="opacity-70 text-sm">{parkingData.price} KS</span>
-                                        </span>
+                                        <>
+                                            Pay Now <div className="w-1.5 h-1.5 rounded-full bg-white/40" /> {parkingData.price} KS
+                                        </>
                                     )}
                                 </button>
                             )}
@@ -244,66 +247,67 @@ const ParkingPage = () => {
 
                 {/* Success State */}
                 {paymentSuccess && !loading && (
-                    <div className="animate-in slide-in-from-bottom-8 fade-in duration-500 flex-1 flex flex-col justify-center items-center text-center p-8 bg-white rounded-[2.5rem] shadow-2xl shadow-emerald-500/10 border border-emerald-100 mb-6 mt-4 relative overflow-hidden z-10">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-ev-primary/20 rounded-full mix-blend-multiply blur-3xl -z-10"></div>
-                        <div className="absolute bottom-0 left-0 w-32 h-32 bg-ev-primary/20 rounded-full mix-blend-multiply blur-3xl -z-10"></div>
-
-                        <div className="w-24 h-24 bg-gradient-to-br from-ev-primary/20 to-ev-primary/5 rounded-full flex items-center justify-center text-ev-primary mb-8 shadow-inner border border-ev-primary/20 relative">
-                            <div className="absolute inset-0 rounded-full animate-ping bg-ev-primary/20"></div>
-                            <CheckCircle2 size={48} className="relative z-10 drop-shadow-sm" />
+                    <div className="animate-in zoom-in-95 fade-in duration-700 flex-1 flex flex-col justify-center items-center text-center p-12 bg-white rounded-[48px] shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-slate-50 mb-8 mt-6 relative overflow-hidden z-10">
+                        <div className="w-24 h-24 bg-blue-50 rounded-[32px] flex items-center justify-center text-blue-600 mb-10 shadow-lg shadow-blue-50 relative">
+                            <div className="absolute inset-0 rounded-[32px] animate-ping bg-blue-100 opacity-20"></div>
+                            <CheckCircle2 size={48} strokeWidth={1.5} className="relative z-10" />
                         </div>
-                        <h2 className="text-3xl font-black text-slate-800 mb-3 tracking-tight">Payment Successful!</h2>
-                        <p className="text-slate-500 mb-10 leading-relaxed font-medium">Your parking session has been finalized. Thank you for using Smart Parking!</p>
+                        <h2 className="text-4xl font-bold text-primary mb-3 tracking-tighter">Payment Confirmed</h2>
+                        <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-12">Thank you for using Go Pay</p>
+
                         <button
                             onClick={() => navigate('/')}
-                            className="bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white font-black py-4 px-8 rounded-2xl w-full shadow-lg shadow-slate-800/20 transition-all duration-200"
+                            className="bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold py-6 px-10 rounded-[32px] w-full shadow-2xl shadow-blue-200 transition-all text-xs uppercase tracking-widest"
                         >
-                            Back to Home
+                            Finish & Return
                         </button>
                     </div>
                 )}
 
                 {/* Available Parking List Section */}
-                <div className="mt-12 mb-4 animate-in slide-in-from-bottom-8 fade-in duration-500 relative z-10 w-full">
-                    <h2 className="text-xl font-black text-slate-800 mb-4 px-2 tracking-tight">Available Go Pay Parking</h2>
+                <div className="mt-16 mb-4 animate-in slide-in-from-bottom-10 fade-in duration-800 relative z-10 w-full">
+                    <div className="flex items-center justify-between mb-8 px-2">
+                        <h2 className="text-2xl font-bold text-primary tracking-tight">Nearby Parking</h2>
+                        <p className="text-[10px] font-bold text-blue-600 bg-blue-50 px-4 py-2 rounded-full uppercase tracking-widest">Live</p>
+                    </div>
 
                     {/* Search Bar */}
-                    <div className="relative mb-6">
-                        <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                            <Search className="h-5 w-5 text-slate-400" />
+                    <div className="relative mb-10">
+                        <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                            <Search className="h-5 w-5 text-blue-400" />
                         </div>
                         <input
                             type="text"
-                            placeholder="Search parking by name or address..."
+                            placeholder="Search location..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-white/80 backdrop-blur-sm border-2 border-slate-100 rounded-2xl py-4 pr-4 pl-14 text-slate-800 focus:outline-none focus:border-ev-primary focus:ring-4 focus:ring-ev-primary/10 transition-all shadow-sm shadow-slate-200/50 placeholder:text-slate-400 font-medium"
+                            className="w-full bg-slate-50 border-2 border-slate-50 rounded-[24px] py-5 pr-6 pl-14 text-primary focus:outline-none focus:border-blue-100 focus:bg-white focus:ring-8 focus:ring-blue-50/30 transition-all placeholder:text-gray-300 font-bold text-sm"
                         />
                     </div>
 
                     {listLoading && (
-                        <div className="flex flex-col items-center justify-center py-12 text-slate-400 bg-white/60 backdrop-blur-md rounded-[2rem] border border-white">
-                            <Loader2 size={32} className="animate-spin mb-3 text-ev-primary" />
-                            <span className="text-sm font-medium">Finding parking spots…</span>
+                        <div className="flex flex-col items-center justify-center py-20 text-gray-300 bg-slate-50/50 rounded-[40px] border border-slate-50">
+                            <Loader2 size={40} className="animate-spin mb-4 text-blue-600/30" />
+                            <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Locating spots...</span>
                         </div>
                     )}
 
                     {listError && (
-                        <div className="flex flex-col items-center justify-center p-6 bg-red-50/80 rounded-[2rem] border border-red-100 text-red-500 mb-4 text-center text-sm font-medium">
-                            <AlertCircle size={28} className="mb-2 opacity-80" />
-                            <span>{listError}</span>
+                        <div className="flex flex-col items-center justify-center p-10 bg-red-50 rounded-[32px] border border-red-100 text-red-500 mb-10 text-center">
+                            <AlertCircle size={32} className="mb-4 opacity-50" />
+                            <span className="text-xs font-bold uppercase tracking-widest">{listError}</span>
                         </div>
                     )}
 
                     {!listLoading && !listError && filteredParking.length === 0 && (
-                        <div className="text-center py-12 bg-white/60 backdrop-blur-md rounded-[2rem] border border-white text-slate-500 text-sm font-medium flex flex-col items-center justify-center">
-                            <Car size={36} className="mb-4 text-slate-300" />
-                            <p>No parking spots match your search.</p>
+                        <div className="text-center py-20 bg-slate-50/50 rounded-[40px] border border-slate-50 text-gray-300 flex flex-col items-center justify-center">
+                            <Car size={48} strokeWidth={1} className="mb-6 opacity-20" />
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em]">No matches found</p>
                         </div>
                     )}
 
                     {!listLoading && !listError && filteredParking.length > 0 && (
-                        <div className="flex flex-col gap-4 pb-8">
+                        <div className="flex flex-col gap-6 pb-20">
                             {filteredParking.map((spot, index) => {
                                 const name = spot.Bill_Payments__name__CST ?? spot.name ?? spot.parking_name ?? `Spot #${index + 1}`;
                                 const address = spot.Bill_Payments__address__CST ?? spot.address ?? spot.location ?? '';
@@ -312,23 +316,23 @@ const ParkingPage = () => {
                                 return (
                                     <div
                                         key={spot._id ?? spot.id ?? index}
-                                        className="flex items-center justify-between bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md hover:border-ev-primary/30 transition-all cursor-pointer group"
+                                        className="flex items-center justify-between bg-white p-6 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-50 hover:shadow-[0_15px_45px_rgba(0,84,166,0.08)] hover:border-blue-100 transition-all cursor-pointer group"
                                     >
-                                        <div className="flex items-center gap-4 min-w-0 pr-4">
-                                            <div className="bg-ev-primary/10 w-12 h-12 rounded-xl flex items-center justify-center text-ev-primary shrink-0 group-hover:bg-ev-primary group-hover:text-white transition-colors">
-                                                <MapPin size={22} />
+                                        <div className="flex items-center gap-6 min-w-0 pr-4">
+                                            <div className="bg-blue-50 w-16 h-16 rounded-[24px] flex items-center justify-center text-blue-600 shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all transform group-hover:rotate-6 shadow-sm">
+                                                <MapPin size={24} strokeWidth={1.5} />
                                             </div>
                                             <div className="min-w-0">
-                                                <p className="font-bold text-slate-800 text-[15px] truncate">{name}</p>
+                                                <p className="font-bold text-primary text-lg truncate tracking-tight">{name}</p>
                                                 {address && (
-                                                    <p className="text-xs text-slate-500 truncate mt-1 font-medium">{address}</p>
+                                                    <p className="text-[10px] text-gray-400 truncate mt-1.5 font-bold uppercase tracking-widest">{address}</p>
                                                 )}
                                             </div>
                                         </div>
 
                                         {price && (
-                                            <div className="bg-slate-50 border border-slate-100 px-3.5 py-1.5 rounded-xl shrink-0">
-                                                <span className="text-xs font-black text-ev-primary">{price} MMK/hr</span>
+                                            <div className="bg-blue-600 px-5 py-3 rounded-2xl shrink-0 shadow-lg shadow-blue-100 group-hover:scale-110 transition-transform">
+                                                <span className="text-[10px] font-bold text-white uppercase tracking-widest whitespace-nowrap">{price} KS</span>
                                             </div>
                                         )}
                                     </div>
